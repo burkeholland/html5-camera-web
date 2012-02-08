@@ -1,0 +1,65 @@
+<!DoctypE html>
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+		<title>HTML5 Camera</title>
+		<link rel="icon" type="image/png" href="favicon.ico">
+		<link rel="stylesheet" type="text/css" href="css/vintagejs.css" media="all" />
+		<link rel="stylesheet" href="css/site.css" type="text/css" media="screen" title="no title" charset="utf-8">
+		<link href="http://cdn.kendostatic.com/2012.1.124/styles/kendo.common.min.css" type="text/css" rel="stylesheet" />
+		<link href="http://cdn.kendostatic.com/2012.1.124/styles/kendo.metro.min.css" type="text/css" rel="stylesheet" />
+	</head>
+	<body>
+		<div id="main">
+			<header class="k-content">
+				<div id="pictureButton">
+					<button onclick="app.startCountdown(3)" id="takePicture" class="k-button"><img src="css/images/camera.png"><span>Take Picture</span></button>
+				</div>
+				<div id="countdown">
+					<h1 class="countdown">3</h1><h1 class="countdown">2</h1><h1 class="countdown">1</h1>
+				</div>
+			</header>
+			<section id="videoPreview">
+				<div id="container">
+					<div id="videoContainer">
+						<div id="video">
+							<video id="stream" height="400" width="500" autoplay>Sad panda does not have video</video>
+						</div>
+					</div>
+					<div id="tv">
+						<img src="css/images/tv.png" />
+					</div>
+					<div id="canvasContainer">
+						<canvas width="480" height="400" id="canvas"></canvas>
+					</div>
+				</div>
+			</section>
+			<section id="videoDrawer"></section>
+			<div id="custom">
+				<h1>Customize</h1>
+				<img id="customize-image">
+				<input id="slider" />
+			</div>
+		</div>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" ></script>
+	<script src="http://cdn.kendostatic.com/2012.1.124/js/kendo.all.min.js"></script>
+	<script src="js/vintage.js"></script>
+	<script src="js/app.js"></script>
+	<script>
+		$(function() {
+			app.init();
+		});
+	</script>
+	<div id="templates">
+		<div class="image">
+			<img width="200" height="150" />
+			<div class="caption k-content"></div>
+		</div>
+		<div id="sorry" class="k-content">
+				<h1>Soooo.....this is awkward. You have to be running Chrome Dev or Canary to use this site and you need to enable media streaming under chrome://flags.</h1>
+				<h1>It's not you, it's me.</h1>
+				<iframe width="640" height="480" src="http://www.youtube.com/embed/U8TnhNxKNlU" frameborder="0" allowfullscreen></iframe>
+		</div>
+	</div>
+	</body>
+</html>

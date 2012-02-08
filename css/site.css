@@ -1,0 +1,123 @@
+
+
+header {
+
+}
+
+h1 {
+	font-size: 3em;
+}
+
+#pictureButton {
+	height: 50px;
+	float: left;
+	margin-left: 10px;
+	width: 200px;
+	height: 50px;
+}
+
+.countdown {
+	font-size: 3em;
+	margin-left: 100px;
+	opacity: .2;
+}
+
+#main {
+	display: none;
+}
+
+#videoPreview {
+	margin-top: 20px;
+	float: left;
+	height: 600px;
+	width: 800px;
+}
+
+#container {
+	height: 425px;
+	position: relative;
+}
+
+#tv,
+#videoContainer, 
+#canvasContainer {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+
+#videoContainer {
+    z-index: 10;
+}
+
+#tv {
+	margin-left: 5px;
+	z-index: 20;
+}
+
+
+#video {
+	margin-left: 65px;
+	padding-right: 145px;
+	padding-top: 50px;
+}
+
+#canvas {
+	margin-top: 10px;
+	margin-left: 70px;
+}
+
+#takePicture img {
+	padding-bottom: 15px;
+	padding-right: 5px;
+	vertical-align: middle;
+	margin: 10px 5px 5px 5px;
+}
+
+#takePicture span {
+	padding-top: 10px;
+	font-size: 1.5em;
+}
+
+#takePicture {
+	padding-right: 10px;
+}
+
+header h1 {
+	display: inline;
+}
+
+#videoDrawer {
+	margin-top: 20px;
+	width: 100%;
+	text-align: center;
+}
+
+#templates {
+	display: none;
+}
+
+header {
+	margin-top: 20px;
+}
+
+#sorry {
+	text-align: center;
+}
+
+#sorry .no-webrtc {
+	display: block;
+}
+
+#main .no-webrtc {
+	display: none;
+}
+
+.image {
+	margin: 10px 10px 10px 10px;
+	padding: 10px;
+	-webkit-box-shadow: 1px 0px 10px 2px rgba(33, 33, 33, .5);
+	-moz-box-shadow: 1px 0px 10px 2px rgba(33, 33, 33, .5);
+	box-shadow: 1px 0px 10px 2px rgba(33, 33, 33, .5);
+	float: left;
+}
