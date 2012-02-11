@@ -8,6 +8,14 @@ self.app = do ($) ->
 			
 			if navigator.webkitGetUserMedia
 			
+				navigator.webkitGetUserMedia("video", 
+				(stream) ->
+					video = document.getElementById("stream")
+					video.src = window.webkitURL.createObjectURL(stream)
+				(err) -> console.log("Your thing is not a thing."))
+			
+			else 
+				
 				$("<div />")
 					.kendoWindow({
 						modal: true,
@@ -17,14 +25,6 @@ self.app = do ($) ->
 					.append($("#templates").find("#sorry").clone())
 					.data("kendoWindow")
 						.center().open()
-			
-			else 
-				
-				navigator.webkitGetUserMedia("video", 
-				(stream) ->
-					video = document.getElementById("stream")
-					video.src = window.webkitURL.createObjectURL(stream)
-				(err) -> console.log("Your thing is not a thing."))
 			
 		customize = (sender) ->
 		

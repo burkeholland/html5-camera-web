@@ -1,18 +1,16 @@
 (function() {
   var $, self;
+
   self = this;
+
   $ = jQuery;
+
   self.app = (function($) {
     var customize, effects, fadeInOut, img, pub, startCamera;
     effects = ["none", "default", "sepia", "grayscale", "green"];
     img = "";
     startCamera = function() {
       if (navigator.webkitGetUserMedia) {
-        return $("<div />").kendoWindow({
-          modal: true,
-          title: "Soooo.....this is awkward."
-        }).closest(".k-window").find(".k-window-actions").remove().end().end().append($("#templates").find("#sorry").clone()).data("kendoWindow").center().open();
-      } else {
         return navigator.webkitGetUserMedia("video", function(stream) {
           var video;
           video = document.getElementById("stream");
@@ -20,6 +18,11 @@
         }, function(err) {
           return console.log("Your thing is not a thing.");
         });
+      } else {
+        return $("<div />").kendoWindow({
+          modal: true,
+          title: "Soooo.....this is awkward."
+        }).closest(".k-window").find(".k-window-actions").remove().end().end().append($("#templates").find("#sorry").clone()).data("kendoWindow").center().open();
       }
     };
     customize = function(sender) {
@@ -98,4 +101,5 @@
       }
     };
   })($);
+
 }).call(this);
