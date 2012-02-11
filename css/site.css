@@ -113,3 +113,25 @@ header {
 	box-shadow: 1px 0px 10px 2px rgba(33, 33, 33, .5);
 	float: left;
 }
+
+#droptarget
+{
+	border: 1px solid #959595;
+	height: 198px;
+	font-size: 36px;
+	border-radius: 37px;
+	text-align: center;
+	line-height: 198px;
+	color: #a1a1a1;
+	text-shadow: 0 1px 1px #fff;
+	margin: 0 0 30px 250px;
+	cursor: default;
+
+	background: #dddddd;
+	background: -moz-linear-gradient(top, #dddddd 0%, #c1c1c1 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#dddddd), color-stop(100%,#c1c1c1));
+	background: -webkit-linear-gradient(top, #dddddd 0%,#c1c1c1 100%);
+	background: -o-linear-gradient(top, #dddddd 0%,#c1c1c1 100%);
+	background: -ms-linear-gradient(top, #dddddd 0%,#c1c1c1 100%);
+	background: linear-gradient(top, #dddddd 0%,#c1c1c1 100%);
+}
