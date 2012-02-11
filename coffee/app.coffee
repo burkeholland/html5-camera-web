@@ -6,18 +6,20 @@ self.app = do ($) ->
 		
 		startCamera = () ->
 			
-			if !navigator.webkitGetUserMedia
+			if navigator.webkitGetUserMedia
 			
-				$("#main").hide()
-				
-				sorry = $("#templates").find("#sorry").clone()
-			
-				$("body").append(sorry)
+				$("<div />")
+					.kendoWindow({
+						modal: true,
+						title: "Soooo.....this is awkward."
+					})
+					.closest(".k-window").find(".k-window-actions").remove().end().end()
+					.append($("#templates").find("#sorry").clone())
+					.data("kendoWindow")
+						.center().open()
 			
 			else 
 				
-				$("#main").show()
-			
 				navigator.webkitGetUserMedia("video", 
 				(stream) ->
 					video = document.getElementById("stream")

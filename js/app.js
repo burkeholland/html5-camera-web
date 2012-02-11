@@ -1,22 +1,18 @@
 (function() {
   var $, self;
-
   self = this;
-
   $ = jQuery;
-
   self.app = (function($) {
     var customize, effects, fadeInOut, img, pub, startCamera;
     effects = ["none", "default", "sepia", "grayscale", "green"];
     img = "";
     startCamera = function() {
-      var sorry;
-      if (!navigator.webkitGetUserMedia) {
-        $("#main").hide();
-        sorry = $("#templates").find("#sorry").clone();
-        return $("body").append(sorry);
+      if (navigator.webkitGetUserMedia) {
+        return $("<div />").kendoWindow({
+          modal: true,
+          title: "Soooo.....this is awkward."
+        }).closest(".k-window").find(".k-window-actions").remove().end().end().append($("#templates").find("#sorry").clone()).data("kendoWindow").center().open();
       } else {
-        $("#main").show();
         return navigator.webkitGetUserMedia("video", function(stream) {
           var video;
           video = document.getElementById("stream");
@@ -102,5 +98,4 @@
       }
     };
   })($);
-
 }).call(this);
