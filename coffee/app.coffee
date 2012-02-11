@@ -25,13 +25,14 @@ self.app = do ($) ->
 				(err) -> console.log("Your thing is not a thing."))
 			
 		customize = (sender) ->
+		
+			content = kendo.template($("#customizeTemplate").html())
+		
+			$("#customize").html(content(sender.src))
 			
-			$("#custom").find("img").attr("src", sender.src)
+			win = $("#customize").data("kendoWindow")
 			
-			win = $("#custom").data("kendoWindow")
-			
-			win.open()
-			win.center()
+			win.open().center()
 			
 		fadeInOut = (num) ->
 			
@@ -51,13 +52,13 @@ self.app = do ($) ->
 			init: () ->
 			
 				# create the customize window
-				$("#custom").kendoWindow({
-					visible: false,
-					modal: true
-				})
+				$("#customize").kendoWindow({ visible: false, modal: true })
 		
 				# attach event listeners to the video drawer
 				$("#videoDrawer").delegate("img", "click", -> customize(this))
+		
+				# compile templates
+				content = kendo.template($("#customizeTemplate").html())
 		
 				# fire up the camera
 				startCamera()
@@ -93,6 +94,7 @@ self.app = do ($) ->
 				caption = div.find(".caption")
 				
 				image.attr("src", img)
+				image.kendoDraggable({ hint: -> $("#draggable").clone() })
 				
 				caption.html(effect)
 						

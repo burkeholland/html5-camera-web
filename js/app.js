@@ -27,11 +27,11 @@
       }
     };
     customize = function(sender) {
-      var win;
-      $("#custom").find("img").attr("src", sender.src);
-      win = $("#custom").data("kendoWindow");
-      win.open();
-      return win.center();
+      var content, win;
+      content = kendo.template($("#customizeTemplate").html());
+      $("#customize").html(content(sender.src));
+      win = $("#customize").data("kendoWindow");
+      return win.open().center();
     };
     fadeInOut = function(num) {
       var counters, index;
@@ -50,13 +50,15 @@
     };
     return pub = {
       init: function() {
-        $("#custom").kendoWindow({
+        var content;
+        $("#customize").kendoWindow({
           visible: false,
           modal: true
         });
         $("#videoDrawer").delegate("img", "click", function() {
           return customize(this);
         });
+        content = kendo.template($("#customizeTemplate").html());
         return startCamera();
       },
       startCountdown: function(startVal) {
@@ -84,6 +86,11 @@
         image = div.find("img");
         caption = div.find(".caption");
         image.attr("src", img);
+        image.kendoDraggable({
+          hint: function() {
+            return $("#draggable").clone();
+          }
+        });
         caption.html(effect);
         $("#videoDrawer").append(div);
         options = {};
