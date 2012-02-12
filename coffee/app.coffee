@@ -30,11 +30,10 @@ self.app = do ($) ->
 		
 			content = kendo.template($("#customizeTemplate").html())
 		
-			$("#customize").html(content(sender.src))
-			
-			win = $("#customize").data("kendoWindow")
-			
-			win.open().center()
+			$("#customize")
+				.html(content(sender.src))
+				.data("kendoWindow")
+					.center().open()
 			
 		fadeInOut = (num) ->
 			

@@ -1,10 +1,7 @@
 (function() {
   var $, self;
-
   self = this;
-
   $ = jQuery;
-
   self.app = (function($) {
     var customize, effects, fadeInOut, img, pub, startCamera;
     effects = ["none", "default", "sepia", "grayscale", "green"];
@@ -26,11 +23,9 @@
       }
     };
     customize = function(sender) {
-      var content, win;
+      var content;
       content = kendo.template($("#customizeTemplate").html());
-      $("#customize").html(content(sender.src));
-      win = $("#customize").data("kendoWindow");
-      return win.open().center();
+      return $("#customize").html(content(sender.src)).data("kendoWindow").center().open();
     };
     fadeInOut = function(num) {
       var counters, index;
@@ -101,5 +96,4 @@
       }
     };
   })($);
-
 }).call(this);
