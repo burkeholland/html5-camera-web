@@ -21,19 +21,15 @@
 			</header>
 
 			<section id="videoPreview">
-				<div id="container">
-					<div id="videoContainer">
-						<div id="video">
-							<video id="stream" height="400" width="500" autoplay>Sad panda does not have video</video>
-						</div>
-					</div>
-					<div id="tv">
-							<img src="css/images/tv.png" />
-					</div>
-					<div id="canvasContainer">
-						<canvas width="480" height="400" id="canvas"></canvas>
-					</div>
+				<div id="canvasContainer">
+					<canvas width="480" height="400" id="canvas"></canvas>
 				</div>
+				<div id="video">
+					<video id="stream" height="400" width="500" autoplay>
+						Sad panda does not have video
+					</video>
+				</div>
+				<div id="canvas-overlay"></div>
 			</section>
 			<section id="videoDrawer"></section>
 			<script type="text/kendo-x-template" id="customizeTemplate">
@@ -41,6 +37,7 @@
 			</script>
 			<div id="customize"></div>
 		</div>
+
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 	<script src="http://cdn.kendostatic.com/2012.1.124/js/kendo.all.min.js"></script>
 	<script src="js/vintage.js"></script>
