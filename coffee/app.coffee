@@ -53,7 +53,7 @@ self.app = do ($) ->
 			
 		fadeInOut = (num) ->
 			
-			counters = $("#countdown h1")
+			counters = $("#countdown span")
 			index = counters.length - num
 			
 			$(counters[index]).css("opacity", "1").animate( { opacity: .1 }, 1000, -> 

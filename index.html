@@ -11,31 +11,36 @@
 	</head>
 	<body>
 		<div id="main">
-			<header class="k-content">
-				<div id="pictureButton">
-					<button onclick="app.startCountdown(3)" id="takePicture" class="k-button"><img src="css/images/camera.png"><span>Take Picture</span></button>
-				</div>
-				<div id="countdown">
-					<h1 class="countdown">3</h1><h1 class="countdown">2</h1><h1 class="countdown">1</h1>
-				</div>
+			<header>
+				<h1>HTML5 Camera</h1>
 			</header>
 
 			<section id="videoPreview">
-				<div id="container">
-					<div id="videoContainer">
-						<div id="video">
-							<video id="stream" height="400" width="500" autoplay>Sad panda does not have video</video>
-						</div>
+				<div id="canvasContainer">
+					<canvas width="480" height="400" id="canvas"></canvas>
+				</div>
+
+				<div id="video">
+					<video id="stream" height="400" width="500" autoplay>
+						Sad panda does not have video
+					</video>
+				</div>
+
+				<div id="canvas-overlay"></div>
+
+				<div id="controls">
+					<div id="pictureButton">
+						<button onclick="app.startCountdown(3)" id="takePicture" class="k-button"><img src="css/images/camera.png"><span>Take Picture</span></button>
 					</div>
-					<div id="tv">
-							<img src="css/images/tv.png" />
-					</div>
-					<div id="canvasContainer">
-						<canvas width="480" height="400" id="canvas"></canvas>
+
+					<div id="countdown">
+						<span>3</span> <span>2</span> <span>1</span>
 					</div>
 				</div>
 			</section>
+
 			<section id="videoDrawer"></section>
+
 			<script type="text/kendo-x-template" id="customizeTemplate">
 				<div class="left">
 					<img src="${ data }" />
@@ -87,6 +92,7 @@
 					</div>
 				</div>
 			</script>
+
 			<div id="customize"></div>
 		</div>
 		<script src="js/jquery.min.js"></script>

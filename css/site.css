@@ -1,7 +1,10 @@
-
-
 h1 {
 	font-size: 3em;
+}
+
+#controls {
+	padding-top: 20px;
+	clear: left;
 }
 
 #pictureButton {
@@ -12,7 +15,7 @@ h1 {
 	height: 50px;
 }
 
-.countdown {
+#countdown span {
 	font-size: 3em;
 	margin-left: 100px;
 	opacity: .2;
@@ -20,35 +23,29 @@ h1 {
 
 #videoPreview {
 	margin-top: 20px;
+	display: block;
 	float: left;
-	height: 600px;
-	width: 800px;
-}
-
-#container {
-	height: 425px;
+	padding-top: 515px;
+	width: 775px;
 	position: relative;
 }
 
-#tv,
-#videoContainer, 
+#canvas-overlay,
+#video,
 #canvasContainer {
+	top: 0;
     width: 100%;
-    height: 100%;
+    height: 500px;
     position: absolute;
 }
 
-#videoContainer {
-    z-index: 10;
-}
-
-#tv {
+#canvas-overlay {
+	background-image: url("images/tv.png");
 	margin-left: 5px;
 	z-index: 20;
 }
 
-
-#video {
+video {
 	margin-left: 65px;
 	padding-right: 145px;
 	padding-top: 50px;
@@ -75,13 +72,7 @@ h1 {
 	padding-right: 10px;
 }
 
-header h1 {
-	display: inline;
-}
-
 #videoDrawer {
-	margin-top: 20px;
-	width: 100%;
 	text-align: center;
 }
 
@@ -89,20 +80,8 @@ header h1 {
 	display: none;
 }
 
-header {
-	margin-top: 20px;
-}
-
 #sorry {
 	text-align: center;
-}
-
-#sorry .no-webrtc {
-	display: block;
-}
-
-#main .no-webrtc {
-	display: none;
 }
 
 .image {
