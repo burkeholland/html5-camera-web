@@ -29,7 +29,7 @@
     };
     fadeInOut = function(num) {
       var counters, index;
-      counters = $("#countdown h1");
+      counters = $("#countdown span");
       index = counters.length - num;
       return $(counters[index]).css("opacity", "1").animate({
         opacity: .1

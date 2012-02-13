@@ -2,6 +2,11 @@ h1 {
 	font-size: 3em;
 }
 
+#controls {
+	padding-top: 20px;
+	clear: left;
+}
+
 #pictureButton {
 	height: 50px;
 	float: left;
@@ -10,7 +15,7 @@ h1 {
 	height: 50px;
 }
 
-.countdown {
+#countdown span {
 	font-size: 3em;
 	margin-left: 100px;
 	opacity: .2;
@@ -20,7 +25,7 @@ h1 {
 	margin-top: 20px;
 	display: block;
 	float: left;
-	height: 515px;
+	padding-top: 515px;
 	width: 775px;
 	position: relative;
 }
@@ -28,8 +33,9 @@ h1 {
 #canvas-overlay,
 #video,
 #canvasContainer {
+	top: 0;
     width: 100%;
-    height: 100%;
+    height: 500px;
     position: absolute;
 }
 
@@ -66,22 +72,12 @@ video {
 	padding-right: 10px;
 }
 
-header h1 {
-	display: inline;
-}
-
 #videoDrawer {
-	margin-top: 20px;
-	width: 100%;
 	text-align: center;
 }
 
 #templates {
 	display: none;
-}
-
-header {
-	margin-top: 20px;
 }
 
 #sorry {
