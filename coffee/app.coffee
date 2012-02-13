@@ -32,6 +32,21 @@ self.app = do ($) ->
 		
 			$("#customize").html(content(sender.src))
 			
+			$(".slider").kendoSlider({
+				min: 0,
+				max: 1,
+				largeStep: .1,
+				change: (value) -> 
+					updateImage(this.element.data, value)
+			})
+			
+			$(".slider-rgb").kendoSlider({
+				min: 0
+				max: 255
+				largeStep: 10,
+				smallStep: 1
+			})
+			
 			win = $("#customize").data("kendoWindow")
 			
 			win.open().center()
@@ -48,7 +63,23 @@ self.app = do ($) ->
 				else
 					pub.takePicture()
 			)
-		
+			
+		updateImage = (effect, value) ->
+			
+			if effect == "vignette:black"
+				alert(effect)
+			# if (effect == "vignette:white")
+			#
+			# if (effect == "noise")
+			#
+			# if (effect == "screen:red")
+			#
+			# if (effect == "screen:green")
+			#
+			# if (effect == "screen:blue")
+			#
+			# if (effect == "screen:strength")
+				
 		pub = 
 		
 			init: () ->

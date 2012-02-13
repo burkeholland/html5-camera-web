@@ -6,7 +6,7 @@
   $ = jQuery;
 
   self.app = (function($) {
-    var customize, effects, fadeInOut, img, pub, startCamera;
+    var customize, effects, fadeInOut, img, pub, startCamera, updateImage;
     effects = ["none", "default", "sepia", "grayscale", "green"];
     img = "";
     startCamera = function() {
@@ -29,6 +29,20 @@
       var content, win;
       content = kendo.template($("#customizeTemplate").html());
       $("#customize").html(content(sender.src));
+      $(".slider").kendoSlider({
+        min: 0,
+        max: 1,
+        largeStep: .1,
+        change: function(value) {
+          return updateImage(this.element.data, value);
+        }
+      });
+      $(".slider-rgb").kendoSlider({
+        min: 0,
+        max: 255,
+        largeStep: 10,
+        smallStep: 1
+      });
       win = $("#customize").data("kendoWindow");
       return win.open().center();
     };
@@ -46,6 +60,9 @@
           return pub.takePicture();
         }
       });
+    };
+    updateImage = function(effect, value) {
+      if (effect === "vignette:black") return alert(effect);
     };
     return pub = {
       init: function() {

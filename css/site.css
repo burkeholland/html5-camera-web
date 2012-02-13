@@ -135,3 +135,30 @@ header {
 	background: -ms-linear-gradient(top, #dddddd 0%,#c1c1c1 100%);
 	background: linear-gradient(top, #dddddd 0%,#c1c1c1 100%);
 }
+
+#customize {
+	width: 800px;
+}
+
+.left {
+	width: 480px;
+	float: left;
+}
+
+.right {
+	margin-left: 490px;
+}
+
+.form-row: {
+	clear: both;
+}
+
+.form-left {
+	width: 100px;
+	float: left;
+	margin-left: 10px;
+}
+
+.form-right {
+	margin: 10px 0px 30px 10px
+}
