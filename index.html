@@ -30,7 +30,7 @@
 
 				<div id="controls">
 					<div id="pictureButton">
-						<button onclick="app.startCountdown(3)" id="takePicture" class="k-button"><img src="css/images/camera.png"><span>Take Picture</span></button>
+						<button onclick="app.startCountdown(1)" id="takePicture" class="k-button"><img src="css/images/camera.png"><span>Take Picture</span></button>
 					</div>
 
 					<div id="countdown">
@@ -43,19 +43,23 @@
 
 			<script type="text/kendo-x-template" id="customizeTemplate">
 				<div class="left">
-					<img src="${ data }" />
+					<img src="${ data }" id="preview" data-vintageSource="${ data }"/>
 				</div>
 				<div class="right">
 					<h3>Adjust Edges</h3>
 					<div class="form-row">
-						<div class="form-left" data-effect="vignette:black">Black</div><div class="form-right"><input class="slider" id="sliderBlack" /></div>						
+						<div class="form-left">Black</div><div class="form-right">
+							<input class="slider" id="sliderBlack" data-option="vignette.black" data-max="1" data-min="0" data-smallStep=".05" data-largeStep=".1"/>
+						</div>						
 					</div>
 					<div class="form-row">
-						<div class="form-left">White</div><div class="form-right"><input class="slider" id="sliderWhite" /></div>
+						<div class="form-left">White</div><div class="form-right">
+							<input class="slider" id="sliderWhite" data-option="vignette.white" data-max="1" data-min="0" data-smallStep=".05" data-largeStep=".1"/>
+						</div>
 					</div>
 					<h3>Noise</h3>
 					<div class="form-row">
-						<input id="sliderNoise" class="slider" />
+						<input id="sliderNoise" class="slider" data-max="1" data-min="0" data-smallStep=".05" data-largeStep=".1" data-option="noise" />
 					</div>
 					<h3>Screen</h3>
 					<div class="form-row">
@@ -63,7 +67,7 @@
 							Red:
 						</div>
 						<div class="form-right">
-							<input id="sliderBlue" class="slider-rgb" />
+							<input id="sliderBlue" class="slider" data-max="255" data-smallStep="1" data-largeStep="10" data-min="0" data-option="screen.red" />
 						</div>
 					</div>
 					<div class="form-row">
@@ -71,7 +75,7 @@
 							Green:
 						</div>
 						<div class="form-right">
-							<input id="sliderGreen" class="slider-rgb" />
+							<input id="sliderGreen" class="slider" data-option="screen.green" data-max="255" data-smallStep="1" data-largeStep="10" data-min="0" />
 						</div>
 					</div>
 					<div class="form-row">
@@ -79,7 +83,7 @@
 							Blue:
 						</div>
 						<div class="form-right">
-							<input id="sliderBlue" class="slider-rgb" />
+							<input id="sliderBlue" class="slider" data-option="screen.blue" data-max="255" data-smallStep="1" data-largeStep="10" data-min="0"/>
 						</div>
 					</div>
 					<div class="strength">
@@ -87,7 +91,7 @@
 							Strength:
 						</div>
 						<div class="form-right">
-							<input class="slider" id="sliderStrength" />
+							<input class="slider" id="sliderStrength" data-option="screen.strength" data-max="1" data-min="0" data-smallStep=".05" data-largeStep=".1" />
 						</div>
 					</div>
 				</div>

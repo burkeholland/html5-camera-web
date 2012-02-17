@@ -4,6 +4,24 @@ self.app = do ($) ->
 		effects = ["none", "default", "sepia", "grayscale", "green"]
 		img = ""
 		
+		vintageDefaults = 
+			vignette: 
+				black:	0
+				white:	0
+			noise: 				false
+			screen: 			
+				blue: false
+				green: false
+				red: false
+			desaturate: 		false
+			allowMultiEffect: 	true
+			mime: 				'image/jpeg'
+			viewFinder: 		false
+			curves: 			false
+			blur: 				false
+			callback: ->
+				$('#saveImage').removeClass('disabled');
+					
 		startCamera = () ->
 			
 			if navigator.webkitGetUserMedia
@@ -26,26 +44,39 @@ self.app = do ($) ->
 					.data("kendoWindow")
 						.center().open()
 			
-		customize = (sender) ->
+		customize = () ->
+		
+			$image = $(this)
 		
 			content = kendo.template($("#customizeTemplate").html())
 		
-			$("#customize").html(content(sender.src))
+			$("#customize").html(content($image.attr("src")))
 			
-			$(".slider").kendoSlider({
-				min: 0,
-				max: 1,
-				largeStep: .1,
-				change: (value) -> 
-					updateImage(this.element.data, value)
-			})
+			vintage = $image.data("vintage");
 			
-			$(".slider-rgb").kendoSlider({
-				min: 0
-				max: 255
-				largeStep: 10,
-				smallStep: 1
-			})
+			$(".slider").each( -> 
+			
+				$slider = $(this)
+			
+				optionValue = vintage ? 0
+				options = $slider.data("option").split(".")
+			
+				if $.isObject
+					$.each(options, ->
+						optionValue = optionValue[this]
+					)
+				
+				$slider.kendoSlider({
+					min: $slider.data("min") ? 0,
+					max: $slider.data("max") ? 10,
+					smallStep: parseFloat($slider.data("smallstep")) ? 1,
+					largeStep: parseFloat($slider.data("largestep")) ? 5,
+					value: optionValue,
+					tickPlacement: "none",
+					change: (value) -> 
+						updateImage($image, vintage, options, value)
+				})
+			)
 			
 			win = $("#customize").data("kendoWindow")
 			
@@ -64,21 +95,19 @@ self.app = do ($) ->
 					pub.takePicture()
 			)
 			
-		updateImage = (effect, value) ->
+		updateImage = ($image, vintage, options, e) ->
 			
-			if effect == "vignette:black"
-				alert(effect)
-			# if (effect == "vignette:white")
-			#
-			# if (effect == "noise")
-			#
-			# if (effect == "screen:red")
-			#
-			# if (effect == "screen:green")
-			#
-			# if (effect == "screen:blue")
-			#
-			# if (effect == "screen:strength")
+			effect = vintageDefaults
+			
+			if options[0] == "vignette"
+				effect.vignette[options[1]] = e.value
+			else if options[0] == "screen"
+				effect.screen[options[1]] = e.value
+			else
+				effect[options[0]] = e.value
+			
+			img = ("#preview");
+			$(img).vintage(effect)
 				
 		pub = 
 		
@@ -88,7 +117,7 @@ self.app = do ($) ->
 				$("#customize").kendoWindow({ visible: false, modal: true })
 		
 				# attach event listeners to the video drawer
-				$("#videoDrawer").delegate("img", "click", -> customize(this))
+				$("#videoDrawer").delegate("img", "click", -> customize.call(this))
 		
 				# compile templates
 				content = kendo.template($("#customizeTemplate").html())
@@ -123,10 +152,12 @@ self.app = do ($) ->
 			applyEffect: (effect) ->
 				
 				div = $("#templates").find(".image").clone()
+				
 				image = div.find("img")
 				caption = div.find(".caption")
 				
 				image.attr("src", img)
+				
 				image.kendoDraggable({ hint: -> $("#draggable").clone() })
 				
 				caption.html(effect)
@@ -135,8 +166,11 @@ self.app = do ($) ->
 				
 				options = {}
 				if effect != "none"
-					$(image).vintage({ preset: effect })
-					
+					$(image).vintage({ 
+						preset: effect, 
+						callback: ->
+							$(image).data("vintage", this)
+					})
 				
 			 	
 	 	

@@ -116,7 +116,7 @@ video {
 }
 
 #customize {
-	width: 800px;
+	width: 900px;
 }
 
 .left {
@@ -133,7 +133,7 @@ video {
 }
 
 .form-left {
-	width: 100px;
+	width: 50px;
 	float: left;
 	margin-left: 10px;
 }

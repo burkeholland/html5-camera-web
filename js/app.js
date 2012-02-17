@@ -6,9 +6,30 @@
   $ = jQuery;
 
   self.app = (function($) {
-    var customize, effects, fadeInOut, img, pub, startCamera, updateImage;
+    var customize, effects, fadeInOut, img, pub, startCamera, updateImage, vintageDefaults;
     effects = ["none", "default", "sepia", "grayscale", "green"];
     img = "";
+    vintageDefaults = {
+      vignette: {
+        black: 0,
+        white: 0
+      },
+      noise: false,
+      screen: {
+        blue: false,
+        green: false,
+        red: false
+      },
+      desaturate: false,
+      allowMultiEffect: true,
+      mime: 'image/jpeg',
+      viewFinder: false,
+      curves: false,
+      blur: false,
+      callback: function() {
+        return $('#saveImage').removeClass('disabled');
+      }
+    };
     startCamera = function() {
       if (navigator.webkitGetUserMedia) {
         return navigator.webkitGetUserMedia("video", function(stream) {
@@ -25,23 +46,33 @@
         }).closest(".k-window").find(".k-window-actions").remove().end().end().append($("#templates").find("#sorry").clone()).data("kendoWindow").center().open();
       }
     };
-    customize = function(sender) {
-      var content, win;
+    customize = function() {
+      var $image, content, vintage, win;
+      $image = $(this);
       content = kendo.template($("#customizeTemplate").html());
-      $("#customize").html(content(sender.src));
-      $(".slider").kendoSlider({
-        min: 0,
-        max: 1,
-        largeStep: .1,
-        change: function(value) {
-          return updateImage(this.element.data, value);
+      $("#customize").html(content($image.attr("src")));
+      vintage = $image.data("vintage");
+      $(".slider").each(function() {
+        var $slider, optionValue, options, _ref, _ref2, _ref3, _ref4;
+        $slider = $(this);
+        optionValue = vintage != null ? vintage : 0;
+        options = $slider.data("option").split(".");
+        if ($.isObject) {
+          $.each(options, function() {
+            return optionValue = optionValue[this];
+          });
         }
-      });
-      $(".slider-rgb").kendoSlider({
-        min: 0,
-        max: 255,
-        largeStep: 10,
-        smallStep: 1
+        return $slider.kendoSlider({
+          min: (_ref = $slider.data("min")) != null ? _ref : 0,
+          max: (_ref2 = $slider.data("max")) != null ? _ref2 : 10,
+          smallStep: (_ref3 = parseFloat($slider.data("smallstep"))) != null ? _ref3 : 1,
+          largeStep: (_ref4 = parseFloat($slider.data("largestep"))) != null ? _ref4 : 5,
+          value: optionValue,
+          tickPlacement: "none",
+          change: function(value) {
+            return updateImage($image, vintage, options, value);
+          }
+        });
       });
       win = $("#customize").data("kendoWindow");
       return win.open().center();
@@ -61,8 +92,18 @@
         }
       });
     };
-    updateImage = function(effect, value) {
-      if (effect === "vignette:black") return alert(effect);
+    updateImage = function($image, vintage, options, e) {
+      var effect;
+      effect = vintageDefaults;
+      if (options[0] === "vignette") {
+        effect.vignette[options[1]] = e.value;
+      } else if (options[0] === "screen") {
+        effect.screen[options[1]] = e.value;
+      } else {
+        effect[options[0]] = e.value;
+      }
+      img = "#preview";
+      return $(img).vintage(effect);
     };
     return pub = {
       init: function() {
@@ -72,7 +113,7 @@
           modal: true
         });
         $("#videoDrawer").delegate("img", "click", function() {
-          return customize(this);
+          return customize.call(this);
         });
         content = kendo.template($("#customizeTemplate").html());
         return startCamera();
@@ -112,7 +153,10 @@
         options = {};
         if (effect !== "none") {
           return $(image).vintage({
-            preset: effect
+            preset: effect,
+            callback: function() {
+              return $(image).data("vintage", this);
+            }
           });
         }
       }
