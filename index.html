@@ -26,11 +26,9 @@
 					</video>
 				</div>
 
-				<div id="canvas-overlay"></div>
-
 				<div id="controls">
 					<div id="pictureButton">
-						<button onclick="app.startCountdown(1)" id="takePicture" class="k-button"><img src="css/images/camera.png"><span>Take Picture</span></button>
+						<button id="takePicture" data-event="/camera/takePicture" class="k-button"><img src="css/images/camera.png"><span>Take Picture</span></button>
 					</div>
 
 					<div id="countdown">
@@ -99,25 +97,15 @@
 
 			<div id="customize"></div>
 		</div>
-		<script src="js/jquery.min.js"></script>
-		<script src="js/kendo.all.min.js"></script>
-		<script src="js/vintage.js"></script>
-		<script src="js/app.js"></script>
-		<script>
-			$(function() {
-				app.init();
-			});
-		</script>
+		
+		<script data-main="js/main" src="js/libs/require/require.js"></script>
+		
 		<div id="templates">
 			<div class="image">
 				<img width="200" height="150" />
 				<div class="caption k-content"></div>
 			</div>
-			<div id="sorry" class="k-content">
-				<p>You have to be running <strong>Chrome Dev or Canary</strong> to use this site and you need to <strong>enable media streaming under chrome://flags</strong>.</p>
-				<p>It's not you, it's me.</p>
-				<iframe width="640" height="480" src="http://www.youtube.com/embed/U8TnhNxKNlU" frameborder="0" allowfullscreen></iframe>
-			</div>
+			
 		</div>
 	</body>
 </html>
