@@ -30,6 +30,8 @@ define([
 					optionValue = optionValue[this]
 				)
 			
+			$preview = $("#preview")
+			
 			$slider.kendoSlider({
 				min: $slider.data("min") ? 0,
 				max: $slider.data("max") ? 10,
@@ -38,7 +40,7 @@ define([
 				value: optionValue,
 				tickPlacement: "none",
 				change: (value) -> 
-					updateImage($image, vintage, options, value)
+					$.publish("/image/update", [ $preview, options, value.value ])
 			})
 		)
 		
@@ -60,12 +62,13 @@ define([
 			$window = $("<div id='customize'></div>").kendoWindow( 
 				visible: false
 				modal: true 
+				title: "Customize Your Image"
 				animation: 
 					open:
-						effects: "slideIn:up fadeIn"
+						effects: "slideIn:right fadeIn"
 						duration: 500
 					close:
-						effects: "slide:up fadeOut"
+						effects: "slide:right fadeOut"
 						duration: 500
 			).data("kendoWindow").center()
 )

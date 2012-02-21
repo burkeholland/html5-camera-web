@@ -9,7 +9,7 @@
  *
  *
  * @author Robert Fleischmann
- * @version 1.0.0
+ * @version 1.1.0
  */
 jQuery.fn.vintage = function (options) {
 
@@ -21,128 +21,38 @@ jQuery.fn.vintage = function (options) {
         b = [53, 53, 53, 54, 54, 54, 55, 55, 55, 56, 57, 57, 57, 58, 58, 58, 59, 59, 59, 60, 61, 61, 61, 62, 62, 63, 63, 63, 64, 65, 65, 65, 66, 66, 67, 67, 67, 68, 69, 69, 69, 70, 70, 71, 71, 72, 73, 73, 73, 74, 74, 75, 75, 76, 77, 77, 78, 78, 79, 79, 80, 81, 81, 82, 82, 83, 83, 84, 85, 85, 86, 86, 87, 87, 88, 89, 89, 90, 90, 91, 91, 93, 93, 94, 94, 95, 95, 96, 97, 98, 98, 99, 99, 100, 101, 102, 102, 103, 104, 105, 105, 106, 106, 107, 108, 109, 109, 110, 111, 111, 112, 113, 114, 114, 115, 116, 117, 117, 118, 119, 119, 121, 121, 122, 122, 123, 124, 125, 126, 126, 127, 128, 129, 129, 130, 131, 132, 132, 133, 134, 134, 135, 136, 137, 137, 138, 139, 140, 140, 141, 142, 142, 143, 144, 145, 145, 146, 146, 148, 148, 149, 149, 150, 151, 152, 152, 153, 153, 154, 155, 156, 156, 157, 157, 158, 159, 160, 160, 161, 161, 162, 162, 163, 164, 164, 165, 165, 166, 166, 167, 168, 168, 169, 169, 170, 170, 171, 172, 172, 173, 173, 174, 174, 175, 176, 176, 177, 177, 177, 178, 178, 179, 180, 180, 181, 181, 181, 182, 182, 183, 184, 184, 184, 185, 185, 186, 186, 186, 187, 188, 188, 188, 189, 189, 189, 190, 190, 191, 191, 192, 192, 193, 193, 193, 194, 194, 194, 195, 196, 196, 196, 197, 197, 197, 198, 199];
 
     /**
-     * default options for the aging effects
+     * default options
      */
     var defaultOptions = {
-        vignette: {
-            black: 0.6,
-            white: 0.1
-        },
-        noise: 20,
-        screen: {
-            red: 227,
-            green: 12,
-            blue: 169,
-            strength: 0.1
-        },
-        desaturate: false,
-        allowMultiEffect: false,
-        mime: 'image/jpeg',
-        viewFinder: false
-    };
-    
-    /**
-     * green options for the aging effects
-     */
-    var greenOptions = {
-        vignette: {
-            black: 0.6,
-            white: 0.1
-        },
-        noise: 20,
-        screen: {
-            red: 255,
-            green:255,
-            blue: 0,
-            strength: 0.1
-        },
-        desaturate: false,
-        allowMultiEffect: false,
-        mime: 'image/jpeg',
-        viewFinder: false
-    };
-    
-    /**
-     * grayscale options for the aging effects
-     */
-    var grayscaleOptions = {
-        vignette: {
-            black: 0.7,
-            white: 0.2
-        },
-        noise: 25,
-        screen: false,
-        desaturate: 1,
-        allowMultiEffect: false,
-        mime: 'image/jpeg',
-        viewFinder: false
-    };
-    
-    /**
-     * sepia options for the aging effects
-     */
-    var sepiaOptions = {
-        vignette: {
-            black: 0.6,
-            white: 0.1
-        },
-        noise: 25,
-        screen: {
-            red: 141,
-            green: 107,
-            blue: 3,
-            strength: 0.47
-        },
-        desaturate: 0.7,
-        allowMultiEffect: false,
-        mime: 'image/jpeg',
-        viewFinder: false
-    };
 
-    /**
-     * custom options for the aging effects: do nothing that is not indended
-     */
-    var customOptions = {
+        //effect settings
+        curves: false,
+        screen: false,
+        blur: false,
+        desaturate: false,
         vignette: false,
         noise: false,
-        screen: false,
-        desaturate: false,
+        viewFinder: false,
+
+        //general settings
         allowMultiEffect: true,
         mime: 'image/jpeg',
-        viewFinder: false
+        callback: false
     };
 
     /**
      * Load default preset options or custom configuration
      */
-    options = options || {};
-    options.preset = options.preset || 'default';
-    switch (options.preset) {
-        case 'custom':
-            options = jQuery.extend(customOptions, options);
-            break;
-        case 'green':
-            options = jQuery.extend(greenOptions, options);
-            break;
-        case 'sepia':
-            options = jQuery.extend(sepiaOptions, options);
-            break;
-        case 'grayscale':
-            options = jQuery.extend(grayscaleOptions, options);
-            break;
-        default:
-            options = jQuery.extend(defaultOptions, options);
-            break;
-    }
-
-    
+    options = jQuery.extend(defaultOptions, options) || defaultOptions;
 
     return this.each(function () {
 
         var obj = jQuery(this),
             ctx,
             canvas,
-            loader;
+            loader,
+            imageData,
+            stack = new Array();
 
         /**
          * Check if the object is an image
@@ -183,7 +93,7 @@ jQuery.fn.vintage = function (options) {
          * To finish the process, the image data is converted into a base64 string which will overwrite the src attribute of the source image
          */
         var process = function () {
-            
+
             canvas = jQuery('<canvas></canvas>').get(0);
 
             if (!canvas.getContext) {
@@ -197,9 +107,7 @@ jQuery.fn.vintage = function (options) {
                 //create image object
                 var image = new Image();
                 //set image source
-                image.src = obj.data('vintageSource') || obj.attr('src');
-				//set the vintageSource
-				$(obj).data("vintageSource", image.src); 
+                image.src = obj.data('vintagesource') || obj.attr('src');
                 //bind onload function to manipulate the image
                 image.onload = function () {
 
@@ -208,34 +116,165 @@ jQuery.fn.vintage = function (options) {
                     canvas.height = this.height;
 
                     //draw image
-                    ctx.drawImage(this, 0, 0, this.width, this.height, 0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(this, 0, 0, canvas.width, canvas.height);
 
-                    if (options.vignette !== false) {
-                        addVignetteEffect();
+                    imageData = ctx.getImageData(0,0,canvas.width,canvas.height);
+
+                    //prepare routine
+                    if (options.curves !== false) {
+                        stack.push(adjustCurves);
                     }
 
-                    manipulatePixels(function () {
-                        //replace source with BASE64 code
-                        obj.attr('src', canvas.toDataURL(options.mime));
-                        loader.remove();
-                        if (typeof(options.callback) == 'function') {
-                            options.callback();
-                        }
-                    });
+                    if (options.screen !== false) {
+                        stack.push(screenLayer);
+                    }
+
+                    if (options.blur !== false) {
+                        stack.push(blurImage);
+                    }
+
+                    if (options.desaturate !== false) {
+                        stack.push(desaturate);
+                    }
+
+                    if (options.vignette !== false) {
+                        stack.push(addVignette);
+                    }
+
+                    if (options.noise !== false) {
+                        stack.push(addNoise);
+                    }
+
+                    if (options.viewFinder !== false) {
+                        stack.push(addViewfinder);
+                    }
+
+                    if (options.finalize !== false) {
+                        stack.push(function () {
+                            ctx.putImageData(imageData,0,0);
+                            //replace source with BASE64 code
+                            obj.attr('src', canvas.toDataURL(options.mime));
+                            loader.remove();
+                            runFunctions();
+                        });
+                    }
+                    
+                    if (options.callback !== false) {
+                        stack.push(options.callback);
+                    }
+
+                    runFunctions();
+
                 };
             }
         };
 
+        var adjustCurves = function ()
+        {
+            for (var i=0; i < imageData.data.length; i+=4) {
+                imageData.data[i  ] = r[imageData.data[i  ]];
+                imageData.data[i+1] = g[imageData.data[i+1]];
+                imageData.data[i+2] = b[imageData.data[i+2]];
+            }
+            runFunctions();
+        }
+
+        var screenLayer = function ()
+        {
+            for (var i=0; i < imageData.data.length; i+=4) {
+				if (options.screen.red)
+                	imageData.data[i  ] = 255 - ((255 - imageData.data[i  ]) * (255 - options.screen.red * options.screen.strength) / 255);
+                if (options.screen.green)
+					imageData.data[i+1] = 255 - ((255 - imageData.data[i+1]) * (255 - options.screen.green * options.screen.strength) / 255);
+                if (options.screen.blue)
+					imageData.data[i+2] = 255 - ((255 - imageData.data[i+2]) * (255 - options.screen.blue * options.screen.strength) / 255);
+            }
+            runFunctions();
+        }
+
+        var blurImage = function ()
+        {
+            ctx.putImageData(imageData,0,0);
+            var bluredImageData = imageData;
+            
+            var maxDistance = Math.sqrt(Math.pow(canvas.width/2,2) + Math.pow(canvas.height/2,2));
+            
+            for (var y=0; y < canvas.height; y++) {
+                for (var x=0; x < canvas.width; x++) {
+                    
+                    var blur = Math.sqrt(Math.pow(x-canvas.width/2, 2) + Math.pow(y-canvas.height/2,2)) / maxDistance;
+
+                    //i want a 9x9 matrix or smaller on edges
+                    var px = x-2,
+                        py = y-2,
+                        dx = 5,
+                        dy = 5;
+
+                    if (px < 0) {
+                        dx += px;
+                        px = 0;
+                    }
+
+                    if (py < 0) {
+                        dy += py;
+                        py = 0;
+                    }
+
+                    if ((px+dx) > canvas.width) {
+                        dx += canvas.width-(px+dx);
+                    }
+
+                    if ((py+dy) > canvas.height) {
+                        dy += canvas.height-(py+dy);
+                    }
+
+                    var partialData = ctx.getImageData(px,py,dx,dy);
+
+                    //get median
+                    var pixelData = [0,0,0];
+                    for (var j=0; j<partialData.data.length; j+=4) {
+                        pixelData[0] += partialData.data[j  ] / (partialData.data.length/4);
+                        pixelData[1] += partialData.data[j+1] / (partialData.data.length/4);
+                        pixelData[2] += partialData.data[j+2] / (partialData.data.length/4);
+                    }
+
+                    var idx = (y*canvas.width+x)*4;
+                    bluredImageData.data[idx  ] = Math.floor(blur*pixelData[0] + (1-blur)*imageData.data[idx  ]);
+                    bluredImageData.data[idx+1] = Math.floor(blur*pixelData[1] + (1-blur)*imageData.data[idx+1]);
+                    bluredImageData.data[idx+2] = Math.floor(blur*pixelData[2] + (1-blur)*imageData.data[idx+2]);
+
+                }
+            }
+            imageData = bluredImageData;
+            ctx.putImageData(imageData,0,0);
+            runFunctions();
+        }
+
+        var desaturate = function ()
+        {
+            for (var i=0; i < imageData.data.length; i+=4) {
+                var average = ( imageData.data[i] + imageData.data[i+1] + imageData.data[i+2] ) / 3;
+
+                imageData.data[i  ] += Math.round( ( average - imageData.data[i  ] ) * options.desaturate );
+                imageData.data[i+1] += Math.round( ( average - imageData.data[i+1] ) * options.desaturate );
+                imageData.data[i+2] += Math.round( ( average - imageData.data[i+2] ) * options.desaturate );
+            }
+            runFunctions();
+        }
+
         /**
          * Adds a vignette effect to the canvas with a lighten effect in the middle and a darken effect on the edges
          */
-        var addVignetteEffect = function () {
+        var addVignette = function () {
             var gradient;
             var outerRadius = Math.sqrt( Math.pow(canvas.width/2, 2) + Math.pow(canvas.height/2, 2) );
+
+            ctx.putImageData(imageData,0,0);
+
             ctx.globalCompositeOperation = 'source-over';
             gradient = ctx.createRadialGradient(canvas.width/2, canvas.height/2, 0, canvas.width/2, canvas.height/2, outerRadius);
             gradient.addColorStop(0, 'rgba(0,0,0,0)');
-            gradient.addColorStop(0.65, 'rgba(0,0,0,0)');
+            gradient.addColorStop(0.5, 'rgba(0,0,0,0)');
             gradient.addColorStop(1, 'rgba(0,0,0,' + options.vignette.black + ')');
             ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -243,100 +282,71 @@ jQuery.fn.vintage = function (options) {
             ctx.globalCompositeOperation = 'lighter';
             gradient = ctx.createRadialGradient(canvas.width/2, canvas.height/2, 0, canvas.width/2, canvas.height/2, outerRadius);
             gradient.addColorStop(0, 'rgba(255,255,255,' + options.vignette.white + ')');
-            gradient.addColorStop(0.65, 'rgba(255,255,255,0)');
+            gradient.addColorStop(0.5, 'rgba(255,255,255,0)');
             gradient.addColorStop(1, 'rgba(0,0,0,0)');
             ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            imageData = ctx.getImageData(0,0,canvas.width,canvas.height);
+
+            runFunctions();
         };
 
-        /**
-         * the manipulatePixels routine loops through the imageData array of the canvas.
-         * Depending on the option settings the curves are adjusted, all pixels are multiplied negativly with a color layer (similar to the photoshop blending mode "screen",
-         * and a noise effect is added.
-         */
-        var manipulatePixels = function (callback) {
-
-            var imageData = ctx.getImageData(0,0,canvas.width,canvas.height);
-
+        var addNoise = function ()
+        {
             for (var i=0; i < imageData.data.length; i+=4) {
-                
-                //adjust curves
-                if (options.desaturate !== false) {
+                var noise = Math.round(options.noise - Math.random() * options.noise/2);
 
-                    var average = ( r[imageData.data[i]] + g[imageData.data[i+1]] + b[imageData.data[i+2]] ) / 3;
-                    
-                    imageData.data[i  ] += Math.round( ( average - imageData.data[i  ] ) * options.desaturate );
-                    imageData.data[i+1] += Math.round( ( average - imageData.data[i+1] ) * options.desaturate );
-                    imageData.data[i+2] += Math.round( ( average - imageData.data[i+2] ) * options.desaturate );
-
-                } else {
-                    imageData.data[i  ] = r[imageData.data[i  ]];
-                    imageData.data[i+1] = g[imageData.data[i+1]];
-                    imageData.data[i+2] = b[imageData.data[i+2]];
+                var dblHlp = 0;
+                for(var k=0; k<3; k++){
+                    dblHlp = noise + imageData.data[i+k];
+                    imageData.data[i+k] = ((dblHlp > 255) ? 255 : ((dblHlp < 0) ? 0 : dblHlp));
                 }
-
-                // screen layer mode with solid color rbg(227,12,169) and 10% opacity
-                if (options.screen !== false) {
-                    imageData.data[i  ] = 255 - ((255 - imageData.data[i  ]) * (255 - options.screen.red * options.screen.strength) / 255);
-                    imageData.data[i+1] = 255 - ((255 - imageData.data[i+1]) * (255 - options.screen.green * options.screen.strength) / 255);
-                    imageData.data[i+2] = 255 - ((255 - imageData.data[i+2]) * (255 - options.screen.blue * options.screen.strength) / 255);
-                }
-
-                //add noise
-                if (options.noise > 0) {
-                    var noise = Math.round(options.noise - Math.random() * options.noise/2);
-
-                    var dblHlp = 0;
-                    for(var k=0; k<3; k++){
-                        dblHlp = noise + imageData.data[i+k];
-                        imageData.data[i+k] = ((dblHlp > 255)? 255 : ((dblHlp < 0)? 0 : dblHlp));
-                    }
-                }
-
-
             }
+            
+            runFunctions();
+        }
 
-            if (options.viewFinder !== false) {
-                var img = new Image();
-                img.src = options.viewFinder;
-                img.onload = function () {
+        var addViewfinder = function ()
+        {
+            var img = new Image();
+            img.src = options.viewFinder;
+            img.onload = function () {
 
-                    var viewFinderCanvas = jQuery('<canvas></canvas>').get(0);
-                    var viewFinderCtx = viewFinderCanvas.getContext('2d');
+                var viewFinderCanvas = jQuery('<canvas></canvas>').get(0);
+                var viewFinderCtx = viewFinderCanvas.getContext('2d');
 
-                    viewFinderCanvas.width = canvas.width;
-                    viewFinderCanvas.height = canvas.height;
+                viewFinderCanvas.width = canvas.width;
+                viewFinderCanvas.height = canvas.height;
 
-                    viewFinderCtx.drawImage(this, 0, 0, this.width, this.height, 0, 0, canvas.width, canvas.height);
+                viewFinderCtx.drawImage(this, 0, 0, this.width, this.height, 0, 0, canvas.width, canvas.height);
+                var viewFinderImageData = viewFinderCtx.getImageData(0, 0, canvas.width, canvas.height);
 
-                    var viewFinderImageData = viewFinderCtx.getImageData(0, 0, canvas.width, canvas.height);
-
-                    for (var a = 0; a < imageData.data.length; a+=4) {
-
-                        //red channel
-                        var red = ( imageData.data[a  ] * viewFinderImageData.data[a  ]) / 255;
-                        imageData.data[a  ] = red > 255 ? 255 : red < 0 ? 0 : red;
-
-                        //green channel
-                        var green = ( imageData.data[a+1] * viewFinderImageData.data[a+1]) / 255;
-                        imageData.data[a+1] = green > 255 ? green : green < 0 ? 0 : green;
-
-                        //blue channel
-                        var blue = ( imageData.data[a+2] * viewFinderImageData.data[a+2]) / 255;
-                        imageData.data[a+2] = blue > 255 ? 255 : blue < 0 ? 0 : blue;
-                    }
-                    //put manipulated image data
-                    ctx.putImageData(imageData, 0, 0);
-                    callback();
+                for (var a = 0; a < imageData.data.length; a+=4) {
+                    //red channel
+                    var red = ( imageData.data[a  ] * viewFinderImageData.data[a  ]) / 255;
+                    imageData.data[a  ] = red > 255 ? 255 : red < 0 ? 0 : red;
+                    //green channel
+                    var green = ( imageData.data[a+1] * viewFinderImageData.data[a+1]) / 255;
+                    imageData.data[a+1] = green > 255 ? green : green < 0 ? 0 : green;
+                    //blue channel
+                    var blue = ( imageData.data[a+2] * viewFinderImageData.data[a+2]) / 255;
+                    imageData.data[a+2] = blue > 255 ? 255 : blue < 0 ? 0 : blue;
                 }
-            } else {
-                //put manipulated image data
-                ctx.putImageData(imageData, 0, 0);
-                callback();
+                runFunctions();
             }
+        }
 
-        };
-
+        var runFunctions = function ()
+        {
+            if (stack.length <= 0) {
+                return;
+            }
+            
+            var leFunction = stack[0];
+            stack.splice(0,1);
+            leFunction();
+        }
 
         /**
          * Run vintage effec

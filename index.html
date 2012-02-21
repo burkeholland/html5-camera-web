@@ -7,32 +7,33 @@
 		<link rel="stylesheet" href="css/vintagejs.css">
 		<link rel="stylesheet" href="css/site.css">
 		<link rel="stylesheet" href="css/kendo.common.min.css">
-		<link rel="stylesheet" href="css/kendo.default.min.css">
+		<link rel="stylesheet" href="css/kendo.silver.min.css">
+		<link rel="stylesheet" href="css/bootstrap.css">
 	</head>
 	<body>
-		<div id="main">
-			<header>
-				<h1>HTML5 Camera</h1>
-			</header>
-
-			
-			<div id="pictureButton">
-				<button id="takePicture" data-event="/camera/takePicture" class="k-button"><img src="css/images/camera.png"><span>Take Picture</span></button>
+		
+		<header class="k-header" id="header">
+			<h1>HTML5 Camera</h1>
+		</header>
+		
+		<div id="main" class="container">
+			<div id="photoBooth" >
+				<div id="pictureButton">
+					<button id="takePicture" data-event="/camera/takePicture" class="k-button"><img src="css/images/camera.png"><span>Take Picture</span></button>
+				</div>
+				<div id="video">
+					<video id="stream" height="400" width="500" autoplay>
+						Sad panda does not have video
+					</video>
+				</div>
+		
+				<div id="countdown">
+					<span>3</span> <span>2</span> <span>1</span>
+				</div>
 			</div>
-	
-			<div id="video">
-				<video id="stream" height="400" width="500" autoplay>
-					Sad panda does not have video
-				</video>
-			</div>
+			<div id="videoDrawer"></div>
+	    </div>
 
-			<div id="countdown">
-				<span>3</span> <span>2</span> <span>1</span>
-			</div>
-
-			<section id="videoDrawer"></section>
-			
-		</div>
 		
 		<script data-main="js/main" src="js/libs/require/require.js"></script>
 		

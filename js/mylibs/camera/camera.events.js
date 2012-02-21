@@ -23,11 +23,11 @@
       imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
       ctx.putImageData(imgData, 0, 0);
       src = canvas.toDataURL("image/jpeg");
-      _ref = ["none", "default", "sepia", "green", "grayscale"];
+      _ref = ["none", "vintage", "sepia", "green", "grayscale"];
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         effect = _ref[_i];
-        _results.push(applyEffect(effect, src, $container));
+        _results.push(applyEffect(effect, src));
       }
       return _results;
     };
@@ -61,14 +61,14 @@
         $video = $("#" + videoId);
         $container = $("#" + containerId);
         $countdown = $("#" + countdownId);
-        $.subscribe("/camera/turnOn", function(pub) {
+        $.subscribe("/camera/turnOn", function() {
           return turnOn();
         });
-        $.subscribe('/camera/takePicture', function(pub) {
+        $.subscribe('/camera/takePicture', function() {
           return countdown(3);
         });
         return $button.on("click", function() {
-          return $.publish($(this).data("event"), [pub]);
+          return $.publish($(this).data("event"));
         });
       }
     };

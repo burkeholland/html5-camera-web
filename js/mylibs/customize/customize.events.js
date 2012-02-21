@@ -10,7 +10,7 @@
       $window.element.empty().append(content($image.attr("src")));
       vintage = $image.data("vintage");
       $(content).find(".slider").each(function() {
-        var $slider, optionValue, options, _ref, _ref2, _ref3, _ref4;
+        var $preview, $slider, optionValue, options, _ref, _ref2, _ref3, _ref4;
         $slider = $(this);
         optionValue = vintage != null ? vintage : 0;
         options = $slider.data("option").split(".");
@@ -19,6 +19,7 @@
             return optionValue = optionValue[this];
           });
         }
+        $preview = $("#preview");
         return $slider.kendoSlider({
           min: (_ref = $slider.data("min")) != null ? _ref : 0,
           max: (_ref2 = $slider.data("max")) != null ? _ref2 : 10,
@@ -27,7 +28,7 @@
           value: optionValue,
           tickPlacement: "none",
           change: function(value) {
-            return updateImage($image, vintage, options, value);
+            return $.publish("/image/update", [$preview, options, value.value]);
           }
         });
       });
@@ -41,6 +42,7 @@
         return $window = $("<div id='customize'></div>").kendoWindow({
           visible: false,
           modal: true,
+          title: "Customize Your Image",
           animation: {
             open: {
               effects: "slideIn:up fadeIn",

@@ -1,8 +1,9 @@
 define([
   'jQuery',	# lib/jquery/jquery
   'Kendo', 	# lib/underscore/underscore
-  'mylibs/camera/camera.events'
-], ($, kendo, events) ->
+  'mylibs/camera/camera.events',
+  'text!mylibs/camera/views/awkward.html'
+], ($, kendo, events, awkward) ->
 	
 	pub =
 		

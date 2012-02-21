@@ -1,6 +1,6 @@
 (function() {
 
-  define(['jQuery', 'Kendo', 'mylibs/camera/camera.events'], function($, kendo, events) {
+  define(['jQuery', 'Kendo', 'mylibs/camera/camera.events', 'text!mylibs/camera/views/awkward.html'], function($, kendo, events, awkward) {
     var pub;
     return pub = {
       init: function(videoId, buttonId, countdownId, containerId) {

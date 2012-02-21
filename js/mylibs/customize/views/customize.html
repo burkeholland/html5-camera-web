@@ -1,53 +1,54 @@
-<div class="left">
-	<img src="${ data }" id="preview" data-vintageSource="${ data }"/>
-</div>
-<div class="right">
-	<h3>Adjust Edges</h3>
-	<div class="form-row">
-		<div class="form-left">Black</div><div class="form-right">
-			<input class="slider" id="sliderBlack" data-option="vignette.black" data-max="1" data-min="0" data-smallStep=".05" data-largeStep=".1"/>
-		</div>						
+<div class="row">
+	<div class="span6">
+		<img src="${ data }" id="preview" data-vintageSource="${ data }"/>
 	</div>
-	<div class="form-row">
-		<div class="form-left">White</div><div class="form-right">
-			<input class="slider" id="sliderWhite" data-option="vignette.white" data-max="1" data-min="0" data-smallStep=".05" data-largeStep=".1"/>
+	<div class="span4">
+		<h3>Adjust Edges</h3>
+		<div>
+			<div>Black<div>
+			<input class="slider" style="width: 400px;" id="sliderBlack" data-option="vignette.black" data-max="1" data-min="0" data-smallStep=".05" data-largeStep=".1"/>						
 		</div>
-	</div>
-	<h3>Noise</h3>
-	<div class="form-row">
-		<input id="sliderNoise" class="slider" data-max="1" data-min="0" data-smallStep=".05" data-largeStep=".1" data-option="noise" />
-	</div>
-	<h3>Screen</h3>
-	<div class="form-row">
-		<div class="form-left">
-			Red:
+		<div class="form-row">
+			<div class="form-left">White</div><div class="form-right">
+				<input class="slider" style="width: 400px;" id="sliderWhite" data-option="vignette.white" data-max="1" data-min="0" data-smallStep=".05" data-largeStep=".1"/>
+			</div>
 		</div>
-		<div class="form-right">
-			<input id="sliderBlue" class="slider" data-max="255" data-smallStep="1" data-largeStep="10" data-min="0" data-option="screen.red" />
+		<h3>Noise</h3>
+		<div class="form-row">
+			<input id="sliderNoise" style="width: 400px;" class="slider" data-max="1" data-min="0" data-smallStep=".05" data-largeStep=".1" data-option="noise" />
 		</div>
-	</div>
-	<div class="form-row">
-		<div class="form-left">
-			Green:
+		<h3>Screen</h3>
+		<div class="form-row">
+			<div class="form-left">
+				Red:
+			</div>
+			<div class="form-right">
+				<input id="sliderBlue" style="width: 400px;" class="slider" data-max="255" data-smallStep="1" data-largeStep="10" data-min="0" data-option="screen.red" />
+			</div>
 		</div>
-		<div class="form-right">
-			<input id="sliderGreen" class="slider" data-option="screen.green" data-max="255" data-smallStep="1" data-largeStep="10" data-min="0" />
+		<div class="form-row">
+			<div class="form-left">
+				Green:
+			</div>
+			<div class="form-right">
+				<input id="sliderGreen" style="width: 400px;" class="slider" data-option="screen.green" data-max="255" data-smallStep="1" data-largeStep="10" data-min="0" />
+			</div>
 		</div>
-	</div>
-	<div class="form-row">
-		<div class="form-left">
-			Blue:
+		<div class="form-row">
+			<div class="form-left">
+				Blue:
+			</div>
+			<div class="form-right">
+				<input id="sliderBlue" class="slider" style="width: 400px;" data-option="screen.blue" data-max="255" data-smallStep="1" data-largeStep="10" data-min="0"/>
+			</div>
 		</div>
-		<div class="form-right">
-			<input id="sliderBlue" class="slider" data-option="screen.blue" data-max="255" data-smallStep="1" data-largeStep="10" data-min="0"/>
-		</div>
-	</div>
-	<div class="strength">
-		<div class="form-left">
-			Strength:
-		</div>
-		<div class="form-right">
-			<input class="slider" id="sliderStrength" data-option="screen.strength" data-max="1" data-min="0" data-smallStep=".05" data-largeStep=".1" />
+		<div class="strength">
+			<div class="form-left">
+				Strength:
+			</div>
+			<div class="form-right">
+				<input class="slider" style="width: 400px;" id="sliderStrength" data-option="screen.strength" data-max="1" data-min="0" data-smallStep=".05" data-largeStep=".1" />
+			</div>
 		</div>
 	</div>
 </div>

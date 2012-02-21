@@ -53,26 +53,27 @@ define([
 		src = canvas.toDataURL("image/jpeg")
 		
 		# apply the default presets
-		applyEffect effect, src, $container for effect in ["none", "default", "sepia", "green", "grayscale"]
-		
+		applyEffect effect, src for effect in ["none", "vintage", "sepia", "green", "grayscale"]
+
 	applyEffect = (effect, src) ->
-		
+
 		# get the template
 		div = $(snapshot)
-		
+
 		# get the image element from the template assigning the source
 		image = div.find("img")
 					.attr("src", src)	# assign the source
 					.on("click", -> $.publish("/customize", [ effect, this ]) )	# bind the click event
-		
+
 		# apply the effect to the image
 		if effect != "none"
 			effects.applyPreset(image, effect)
-		
+
 		# append the image to the container
 		div.find(".caption").text(effect).
 			end().appendTo($container)
 	
+		
 	countdown = (num) ->
 		
 		# get the counters element 
@@ -99,18 +100,18 @@ define([
 			$countdown = $("##{countdownId}")
 			
 			# subscribe to the turn on event
-			$.subscribe("/camera/turnOn", (pub) ->
+			$.subscribe("/camera/turnOn", () ->
 				turnOn()
 			)
 			
 			# subscribe to the take picture event
-			$.subscribe('/camera/takePicture', (pub) ->
+			$.subscribe('/camera/takePicture', () ->
 				countdown(3)
 			)
 			
 			# attach events to the controls element
 			$button.on("click", ->
-				$.publish($(this).data("event"), [pub])
+				$.publish($(this).data("event"))
 			)
 	
 )

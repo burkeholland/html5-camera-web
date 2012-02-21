@@ -1,55 +1,49 @@
 @import url(http://fonts.googleapis.com/css?family=Vast+Shadow);
 
 body {
-	background: url("images/wood.jpg");
+	background: url("images/squares.jpg");
+	background-attachment:fixed;
 }
 
 header {
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 60px;
 	width: 100%;
 	text-align: center;
+	opacity: .8;
 }
 
 h1 {
+	font-family: "Vast Shadow";
 	font-size: 3em;
 }
 
-#pictureButton {
-	height: 50px;
-	margin-left: 10px;
-	width: 200px;
-	height: 50px;
+#main {
+	margin-top: 75px;
+	text-align: center;
 }
+
+.row {
+	height: 100%;
+}
+
+@media screen{
+  body>div#header{
+   position: fixed;
+  }
+ }
 
 #countdown span {
-	font-size: 3em;
-	margin-left: 100px;
-	opacity: .2;
+	font-size: 5em;
+	opacity: .1;
+	margin: 20px 50px 20px 50px
 }
 
-video {
-	padding-right: 145px;
-	padding-top: 50px;
-}
-
-#takePicture img {
-	padding-bottom: 15px;
-	padding-right: 5px;
-	vertical-align: middle;
-	margin: 10px 5px 5px 5px;
-}
-
-#takePicture span {
-	padding-top: 10px;
-	font-size: 1.5em;
-}
-
-#takePicture {
-	padding-right: 10px;
-}
-
-#videoDrawer {
-	text-align: center;
-	z-index: 10014;
+#video {
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
 
 #sorry {
@@ -58,60 +52,23 @@ video {
 
 .snapshot {
 	background: white;
-	margin: 10px 10px 10px 10px;
+	margin: 4px;
 	padding: 10px;
+	width: 200px;
+	height: 200px;
 	-webkit-box-shadow: 1px 0px 10px 2px rgba(33, 33, 33, .5);
 	-moz-box-shadow: 1px 0px 10px 2px rgba(33, 33, 33, .5);
 	box-shadow: 1px 0px 10px 2px rgba(33, 33, 33, .5);
-	float: left;
 	cursor: pointer;
+	float: left;
 }
 
-#droptarget
-{
-	border: 1px solid #959595;
-	height: 198px;
-	font-size: 36px;
-	border-radius: 37px;
+.caption {
 	text-align: center;
-	line-height: 198px;
-	color: #a1a1a1;
-	text-shadow: 0 1px 1px #fff;
-	margin: 0 0 30px 250px;
-	cursor: default;
-
-	background: #dddddd;
-	background: -moz-linear-gradient(top, #dddddd 0%, #c1c1c1 100%);
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#dddddd), color-stop(100%,#c1c1c1));
-	background: -webkit-linear-gradient(top, #dddddd 0%,#c1c1c1 100%);
-	background: -o-linear-gradient(top, #dddddd 0%,#c1c1c1 100%);
-	background: -ms-linear-gradient(top, #dddddd 0%,#c1c1c1 100%);
-	background: linear-gradient(top, #dddddd 0%,#c1c1c1 100%);
 }
 
 #customize {
 	width: 900px;
-}
-
-.left {
-	float: left;
-}
-
-.right {
-	margin-left: 490px;
-}
-
-.form-row: {
-	clear: both;
-}
-
-.form-left {
-	float: left;
-	margin-left: 10px;
-}
-
-.form-right {
-	margin: 10px 0px 30px 10px
 }
 
 #pictureButton {
@@ -120,4 +77,8 @@ video {
 
 #countdown {
 	clear: left;
+}
+
+#videoDrawer {
+	width: 940px;
 }
