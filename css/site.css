@@ -1,15 +1,20 @@
+@import url(http://fonts.googleapis.com/css?family=Vast+Shadow);
+
+body {
+	background: url("images/wood.jpg");
+}
+
+header {
+	width: 100%;
+	text-align: center;
+}
+
 h1 {
 	font-size: 3em;
 }
 
-#controls {
-	padding-top: 20px;
-	clear: left;
-}
-
 #pictureButton {
 	height: 50px;
-	float: left;
 	margin-left: 10px;
 	width: 200px;
 	height: 50px;
@@ -21,39 +26,9 @@ h1 {
 	opacity: .2;
 }
 
-#videoPreview {
-	margin-top: 20px;
-	display: block;
-	float: left;
-	padding-top: 515px;
-	width: 775px;
-	position: relative;
-}
-
-#canvas-overlay,
-#video,
-#canvasContainer {
-	top: 0;
-    width: 100%;
-    height: 500px;
-    position: absolute;
-}
-
-#canvas-overlay {
-	background-image: url("images/tv.png");
-	margin-left: 5px;
-	z-index: 20;
-}
-
 video {
-	margin-left: 65px;
 	padding-right: 145px;
 	padding-top: 50px;
-}
-
-#canvas {
-	margin-top: 10px;
-	margin-left: 70px;
 }
 
 #takePicture img {
@@ -74,23 +49,22 @@ video {
 
 #videoDrawer {
 	text-align: center;
-}
-
-#templates {
-	display: none;
+	z-index: 10014;
 }
 
 #sorry {
 	text-align: center;
 }
 
-.image {
+.snapshot {
+	background: white;
 	margin: 10px 10px 10px 10px;
 	padding: 10px;
 	-webkit-box-shadow: 1px 0px 10px 2px rgba(33, 33, 33, .5);
 	-moz-box-shadow: 1px 0px 10px 2px rgba(33, 33, 33, .5);
 	box-shadow: 1px 0px 10px 2px rgba(33, 33, 33, .5);
 	float: left;
+	cursor: pointer;
 }
 
 #droptarget
@@ -120,7 +94,6 @@ video {
 }
 
 .left {
-	width: 480px;
 	float: left;
 }
 
@@ -133,11 +106,18 @@ video {
 }
 
 .form-left {
-	width: 50px;
 	float: left;
 	margin-left: 10px;
 }
 
 .form-right {
 	margin: 10px 0px 30px 10px
+}
+
+#pictureButton {
+	clear: left;
+}
+
+#countdown {
+	clear: left;
 }

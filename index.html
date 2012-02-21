@@ -7,7 +7,7 @@
 		<link rel="stylesheet" href="css/vintagejs.css">
 		<link rel="stylesheet" href="css/site.css">
 		<link rel="stylesheet" href="css/kendo.common.min.css">
-		<link rel="stylesheet" href="css/kendo.metro.min.css">
+		<link rel="stylesheet" href="css/kendo.default.min.css">
 	</head>
 	<body>
 		<div id="main">
@@ -15,97 +15,26 @@
 				<h1>HTML5 Camera</h1>
 			</header>
 
-			<section id="videoPreview">
-				<div id="canvasContainer">
-					<canvas width="480" height="400" id="canvas"></canvas>
-				</div>
+			
+			<div id="pictureButton">
+				<button id="takePicture" data-event="/camera/takePicture" class="k-button"><img src="css/images/camera.png"><span>Take Picture</span></button>
+			</div>
+	
+			<div id="video">
+				<video id="stream" height="400" width="500" autoplay>
+					Sad panda does not have video
+				</video>
+			</div>
 
-				<div id="video">
-					<video id="stream" height="400" width="500" autoplay>
-						Sad panda does not have video
-					</video>
-				</div>
-
-				<div id="controls">
-					<div id="pictureButton">
-						<button id="takePicture" data-event="/camera/takePicture" class="k-button"><img src="css/images/camera.png"><span>Take Picture</span></button>
-					</div>
-
-					<div id="countdown">
-						<span>3</span> <span>2</span> <span>1</span>
-					</div>
-				</div>
-			</section>
+			<div id="countdown">
+				<span>3</span> <span>2</span> <span>1</span>
+			</div>
 
 			<section id="videoDrawer"></section>
-
-			<script type="text/kendo-x-template" id="customizeTemplate">
-				<div class="left">
-					<img src="${ data }" id="preview" data-vintageSource="${ data }"/>
-				</div>
-				<div class="right">
-					<h3>Adjust Edges</h3>
-					<div class="form-row">
-						<div class="form-left">Black</div><div class="form-right">
-							<input class="slider" id="sliderBlack" data-option="vignette.black" data-max="1" data-min="0" data-smallStep=".05" data-largeStep=".1"/>
-						</div>						
-					</div>
-					<div class="form-row">
-						<div class="form-left">White</div><div class="form-right">
-							<input class="slider" id="sliderWhite" data-option="vignette.white" data-max="1" data-min="0" data-smallStep=".05" data-largeStep=".1"/>
-						</div>
-					</div>
-					<h3>Noise</h3>
-					<div class="form-row">
-						<input id="sliderNoise" class="slider" data-max="1" data-min="0" data-smallStep=".05" data-largeStep=".1" data-option="noise" />
-					</div>
-					<h3>Screen</h3>
-					<div class="form-row">
-						<div class="form-left">
-							Red:
-						</div>
-						<div class="form-right">
-							<input id="sliderBlue" class="slider" data-max="255" data-smallStep="1" data-largeStep="10" data-min="0" data-option="screen.red" />
-						</div>
-					</div>
-					<div class="form-row">
-						<div class="form-left">
-							Green:
-						</div>
-						<div class="form-right">
-							<input id="sliderGreen" class="slider" data-option="screen.green" data-max="255" data-smallStep="1" data-largeStep="10" data-min="0" />
-						</div>
-					</div>
-					<div class="form-row">
-						<div class="form-left">
-							Blue:
-						</div>
-						<div class="form-right">
-							<input id="sliderBlue" class="slider" data-option="screen.blue" data-max="255" data-smallStep="1" data-largeStep="10" data-min="0"/>
-						</div>
-					</div>
-					<div class="strength">
-						<div class="form-left">
-							Strength:
-						</div>
-						<div class="form-right">
-							<input class="slider" id="sliderStrength" data-option="screen.strength" data-max="1" data-min="0" data-smallStep=".05" data-largeStep=".1" />
-						</div>
-					</div>
-				</div>
-			</script>
-
-			<div id="customize"></div>
+			
 		</div>
 		
 		<script data-main="js/main" src="js/libs/require/require.js"></script>
 		
-		<div id="templates">
-			<div class="image">
-				<img width="200" height="150" />
-				<div class="caption k-content"></div>
-			</div>
-			
-		</div>
 	</body>
 </html>

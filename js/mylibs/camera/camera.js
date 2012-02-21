@@ -3,16 +3,10 @@
   define(['jQuery', 'Kendo', 'mylibs/camera/camera.events'], function($, kendo, events) {
     var pub;
     return pub = {
-      init: function(id, $controls) {
+      init: function(videoId, buttonId, countdownId, containerId) {
+        events.init(videoId, buttonId, countdownId, containerId);
         if (navigator.webkitGetUserMedia) {
-          return navigator.webkitGetUserMedia("video", function(stream) {
-            var video;
-            events.init($controls);
-            video = document.getElementById(id);
-            return video.src = window.webkitURL.createObjectURL(stream);
-          }, function(err) {
-            return console.log("Your thing is not a thing.");
-          });
+          return $.publish("/camera/turnOn");
         } else {
           return $("<div />").kendoWindow({
             modal: true,

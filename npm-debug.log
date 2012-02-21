@@ -1,0 +1,52 @@
+info it worked if it ends with ok
+verbose cli [ 'node', '/usr/local/bin/npm', 'install', 'coffeescript-growl' ]
+info using npm@1.1.0-alpha-6
+info using node@v0.6.7
+verbose /usr/local/bin/node node symlink
+verbose config file /Users/burkeholland/.npmrc
+verbose config file /usr/local/etc/npmrc
+verbose config file /usr/local/lib/node_modules/npm/npmrc
+verbose caching /Users/burkeholland/Sites/html5video/node_modules/less/package.json
+verbose loadDefaults less@1.2.1
+verbose into /Users/burkeholland/Sites/html5video [ 'coffeescript-growl' ]
+verbose cache add coffeescript-growl
+verbose cache add [ 'coffeescript-growl', null ]
+silly cache add: name, spec, args [ undefined,
+silly cache add: name, spec, args   'coffeescript-growl',
+silly cache add: name, spec, args   [ 'coffeescript-growl', null ] ]
+verbose parsed url { pathname: 'coffeescript-growl',
+verbose parsed url   path: 'coffeescript-growl',
+verbose parsed url   href: 'coffeescript-growl' }
+info addNamed [ 'coffeescript-growl', '' ]
+verbose addNamed [ null, '' ]
+verbose GET coffeescript-growl
+verbose raw, before any munging coffeescript-growl
+verbose url resolving [ 'https://registry.npmjs.org/', './coffeescript-growl' ]
+verbose url resolved https://registry.npmjs.org/coffeescript-growl
+verbose etag "4PKVT915PDGT5BGB3J1BWVINT"
+silly get cb [ 304,
+silly get cb   { server: 'CouchDB/1.1.0 (Erlang OTP/R14B04)',
+silly get cb     etag: '"4PKVT915PDGT5BGB3J1BWVINT"',
+silly get cb     date: 'Mon, 20 Feb 2012 16:28:52 GMT',
+silly get cb     'content-length': '0' } ]
+verbose etag coffeescript-growl from cache
+ERR! Error: No compatible version found: coffeescript-growl
+ERR! No valid targets found.
+ERR! Perhaps not compatible with your version of node?
+ERR!     at installTargetsError (/usr/local/lib/node_modules/npm/lib/cache.js:429:10)
+ERR!     at /usr/local/lib/node_modules/npm/lib/cache.js:411:17
+ERR!     at Object.saved [as oncomplete] (/usr/local/lib/node_modules/npm/lib/utils/npm-registry-client/get.js:136:7)
+ERR! Report this *entire* log at:
+ERR!     <http://github.com/isaacs/npm/issues>
+ERR! or email it to:
+ERR!     <npm-@googlegroups.com>
+ERR! 
+ERR! System Darwin 11.2.0
+ERR! command "node" "/usr/local/bin/npm" "install" "coffeescript-growl"
+ERR! cwd /Users/burkeholland/Sites/html5video
+ERR! node -v v0.6.7
+ERR! npm -v 1.1.0-alpha-6
+ERR! message No compatible version found: coffeescript-growl
+ERR! message No valid targets found.
+ERR! message Perhaps not compatible with your version of node?
+verbose exit [ 1, true ]
