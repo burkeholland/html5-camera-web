@@ -4,14 +4,16 @@ define([
   'mylibs/camera/camera',
   'text!mylibs/camera/views/snapshot.html',
   'mylibs/effects/effects',
+  'mylibs/effects/presets',
   'libs/vintage/vintage'
-], ($, kendo, camera, snapshot, effects) ->
+], ($, kendo, camera, snapshot, effects, presets) ->
 	
 	# function globals
 	$button = {}
 	$video = {} 
 	$container = {}
 	$countdown = {}
+	effectsList = []
 	
 	turnOn = ->
 		
@@ -29,9 +31,6 @@ define([
 		
 	
 	captureImage = ->
-		
-		# empty the parent container
-		$container.empty()
 	
 		# create a canvas for drawing to
 		canvas = $("<canvas width='500' height='400'></canvas>").get(0)
@@ -52,8 +51,10 @@ define([
 		# save the image as a data url
 		src = canvas.toDataURL("image/jpeg")
 		
+		applyEffect("none", src)
+		
 		# apply the default presets
-		applyEffect effect, src for effect in ["none", "vintage", "sepia", "green", "grayscale"]
+		# applyEffect effect, src for effect in ["none", "vintage", "sepia", "green", "grayscale"]
 
 	applyEffect = (effect, src) ->
 
@@ -62,17 +63,25 @@ define([
 
 		# get the image element from the template assigning the source
 		image = div.find("img")
-					.attr("src", src)	# assign the source
+					.attr("src", src) # assign the source
+					.data("vintagesource", src)	# cache the original image
 					.on("click", -> $.publish("/customize", [ effect, this ]) )	# bind the click event
 
-		# apply the effect to the image
-		if effect != "none"
-			effects.applyPreset(image, effect)
+		if effectsList.length == 0
+			for own key of presets.effects
+				effectsList.push preset: key
+
+		# make the drop down a kendo ui dropdown
+		div.find(".presets").kendoDropDownList(
+			dataSource:
+				data: effectsList
+			dataTextField: "preset"
+			change: ->
+				effects.applyPreset(image, this.value())
+		)
 
 		# append the image to the container
-		div.find(".caption").text(effect).
-			end().appendTo($container)
-	
+		div.appendTo($container)
 		
 	countdown = (num) ->
 		

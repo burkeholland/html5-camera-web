@@ -35,10 +35,14 @@ h1 {
   }
  }
 
+#countdown {
+	margin-top: 30px;
+}
+
 #countdown span {
 	font-size: 5em;
 	opacity: .1;
-	margin: 20px 50px 20px 50px
+	margin: 0px 50px 0px 50px;
 }
 
 #video {
@@ -72,7 +76,7 @@ h1 {
 }
 
 #pictureButton {
-	clear: left;
+	font-size: 2em;
 }
 
 #countdown {

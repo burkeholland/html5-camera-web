@@ -45,7 +45,7 @@
         });
       },
       applyPreset: function($img, preset) {
-        return $img.vintage(presets[preset]);
+        return $img.vintage(presets.effects[preset]);
       }
     };
   });

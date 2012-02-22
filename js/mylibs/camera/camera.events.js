@@ -1,11 +1,13 @@
 (function() {
+  var __hasProp = Object.prototype.hasOwnProperty;
 
-  define(['jQuery', 'Kendo', 'mylibs/camera/camera', 'text!mylibs/camera/views/snapshot.html', 'mylibs/effects/effects', 'libs/vintage/vintage'], function($, kendo, camera, snapshot, effects) {
-    var $button, $container, $countdown, $video, applyEffect, captureImage, countdown, pub, turnOn;
+  define(['jQuery', 'Kendo', 'mylibs/camera/camera', 'text!mylibs/camera/views/snapshot.html', 'mylibs/effects/effects', 'mylibs/effects/presets', 'libs/vintage/vintage'], function($, kendo, camera, snapshot, effects, presets) {
+    var $button, $container, $countdown, $video, applyEffect, captureImage, countdown, effectsList, pub, turnOn;
     $button = {};
     $video = {};
     $container = {};
     $countdown = {};
+    effectsList = [];
     turnOn = function() {
       return navigator.webkitGetUserMedia("video", function(stream) {
         return $video.attr("src", window.webkitURL.createObjectURL(stream));
@@ -14,8 +16,7 @@
       });
     };
     captureImage = function() {
-      var canvas, ctx, effect, imgData, src, video, _i, _len, _ref, _results;
-      $container.empty();
+      var canvas, ctx, imgData, src, video;
       canvas = $("<canvas width='500' height='400'></canvas>").get(0);
       video = document.getElementById("stream");
       ctx = canvas.getContext("2d");
@@ -23,22 +24,33 @@
       imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
       ctx.putImageData(imgData, 0, 0);
       src = canvas.toDataURL("image/jpeg");
-      _ref = ["none", "vintage", "sepia", "green", "grayscale"];
-      _results = [];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        effect = _ref[_i];
-        _results.push(applyEffect(effect, src));
-      }
-      return _results;
+      return applyEffect("none", src);
     };
     applyEffect = function(effect, src) {
-      var div, image;
+      var div, image, key, _ref;
       div = $(snapshot);
-      image = div.find("img").attr("src", src).on("click", function() {
+      image = div.find("img").attr("src", src).data("vintagesource", src).on("click", function() {
         return $.publish("/customize", [effect, this]);
       });
-      if (effect !== "none") effects.applyPreset(image, effect);
-      return div.find(".caption").text(effect).end().appendTo($container);
+      if (effectsList.length === 0) {
+        _ref = presets.effects;
+        for (key in _ref) {
+          if (!__hasProp.call(_ref, key)) continue;
+          effectsList.push({
+            preset: key
+          });
+        }
+      }
+      div.find(".presets").kendoDropDownList({
+        dataSource: {
+          data: effectsList
+        },
+        dataTextField: "preset",
+        change: function() {
+          return effects.applyPreset(image, this.value());
+        }
+      });
+      return div.appendTo($container);
     };
     countdown = function(num) {
       var counters, index;

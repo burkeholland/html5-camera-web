@@ -20,11 +20,12 @@ define([
 			else 
 				
 				# browser is unsupported or webRTC is not enabled. show snarky overlay.
-				$("<div />")
-					.kendoWindow({
-						modal: true,
+				$window = $("<div />")
+					.kendoWindow(
+						visible: false
+						modal: true
 						title: "Soooo.....this is awkward."
-					})
+					 )
 					.closest(".k-window").find(".k-window-actions").remove().end().end()
 					.append(awkward)
 					.data("kendoWindow")

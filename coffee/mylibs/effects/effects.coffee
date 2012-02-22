@@ -52,5 +52,5 @@ define([
 					
 		applyPreset: ($img, preset) ->
 			
-			$img.vintage(presets[preset])
+			$img.vintage(presets.effects[preset])
 )
