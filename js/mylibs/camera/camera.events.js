@@ -8,12 +8,22 @@
     $container = {};
     $countdown = {};
     effectsList = [];
-    turnOn = function() {
-      return navigator.webkitGetUserMedia("video", function(stream) {
-        return $video.attr("src", window.webkitURL.createObjectURL(stream));
-      }, function(err) {
-        return console.log("Your thing is not a thing.");
-      });
+    turnOn = function(norm) {
+      var errback, hollaback;
+      hollaback = function(stream) {
+        return $video.attr("src", (window.URL && window.URL.createObjectURL ? window.URL.createObjectURL(stream) : stream));
+      };
+      errback = function() {
+        var video;
+        console.log("Your thing is not a thing.");
+        return video = document.getElementById("video");
+      };
+      if (navigator.getUserMedia) {
+        return navigator.getUserMedia(norm({
+          video: true,
+          audio: false
+        }), hollaback, errback);
+      }
     };
     captureImage = function() {
       var canvas, ctx, imgData, src, video;
@@ -73,8 +83,8 @@
         $video = $("#" + videoId);
         $container = $("#" + containerId);
         $countdown = $("#" + countdownId);
-        $.subscribe("/camera/turnOn", function() {
-          return turnOn();
+        $.subscribe("/camera/turnOn", function(norm) {
+          return turnOn(norm);
         });
         $.subscribe('/camera/takePicture', function() {
           return countdown(3);

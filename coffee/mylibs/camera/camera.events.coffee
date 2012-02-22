@@ -15,21 +15,28 @@ define([
 	$countdown = {}
 	effectsList = []
 	
-	turnOn = ->
+	turnOn = (norm) ->
 		
-		# try and get the stream
-		navigator.webkitGetUserMedia("video", 
-
+		hollaback = (stream) ->		  
 			# we have the stream
-			(stream) ->
+			$video.attr("src", (if (window.URL and window.URL.createObjectURL) then window.URL.createObjectURL(stream) else stream))
 			
-				# apply the stream to the video object
-				$video.attr("src", window.webkitURL.createObjectURL(stream))
+		errback = ->
 
-		# webRTC is supported, but we did trying to get the stream
-		(err) -> console.log("Your thing is not a thing."))
-		
-	
+			# webRTC is supported, but we did trying to get the stream
+			console.log("Your thing is not a thing.")
+
+			video = document.getElementById("video")
+
+		if navigator.getUserMedia
+
+			navigator.getUserMedia norm(
+
+				video: true
+				audio: false
+
+		 	), hollaback, errback
+
 	captureImage = ->
 	
 		# create a canvas for drawing to
@@ -109,8 +116,8 @@ define([
 			$countdown = $("##{countdownId}")
 			
 			# subscribe to the turn on event
-			$.subscribe("/camera/turnOn", () ->
-				turnOn()
+			$.subscribe("/camera/turnOn", (norm) ->
+				turnOn(norm)
 			)
 			
 			# subscribe to the take picture event
