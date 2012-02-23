@@ -65,10 +65,10 @@ define([
 				title: "Customize Your Image"
 				animation: 
 					open:
-						effects: "slideIn:right fadeIn"
+						effects: "slideIn:up fadeIn"
 						duration: 500
 					close:
-						effects: "slide:right fadeOut"
+						effects: "slide:up fadeOut"
 						duration: 500
 			).data("kendoWindow").center()
 )
