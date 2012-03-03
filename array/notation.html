@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+		<title>Raise It</title>
+		<link href="http://cdn.kendostatic.com/2011.3.1407/styles/kendo.common.min.css" type="text/css" rel="stylesheet" />
+		<link href="http://cdn.kendostatic.com/2011.3.1407/styles/kendo.default.min.css" type="text/css" rel="stylesheet" />
+
+	</head>
+
+	<style>
+	
+		#select {
+			margin: 10px 0px 10px;
+		}
+		
+		strong {
+			margin-right: 10px;
+		}
+
+	</style>
+	
+	<body>
+		<div class="k-content" id="select">
+			<strong>Effect:</strong><select id="effects"></select>
+		</div>
+		<div>
+			<img width="375" height="300" src="images/raise_the_roof.jpeg" data-vintagesource="images/raise_the_roof.jpeg"/>
+		</div>
+	</body>
+	
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" ></script>
+		<script src="http://cdn.kendostatic.com/2011.3.1407/js/kendo.all.min.js"></script>
+		<script src="presets.js"></script>
+		<script src="vintage.js"></script>
+		
+		
+		<script>
+		
+		  var __hasProp = Object.prototype.hasOwnProperty;
+		
+		// create a list of the preset objects
+		var key, _ref, _results;
+        _ref = presets.effects;
+        _results = [];
+        for (key in _ref) {
+          if (!__hasProp.call(_ref, key)) continue;
+          _results.push({
+            preset: key
+          });
+        }
+		
+		$("#effects").kendoDropDownList({
+			dataSource: _results,
+			change: function() {
+				applyEffect(this.value());
+			},
+			dataTextField: "preset"
+		});
+		
+		applyEffect = function(effect) {
+			$("img").vintage(presets.effects[effect]);
+		}
+		
+		</script>
+	
+</html>

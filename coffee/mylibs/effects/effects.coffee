@@ -1,8 +1,7 @@
 define([
   'jQuery',	# lib/jquery/jquery
   'Kendo', 	# lib/underscore/underscore
-  'mylibs/effects/presets',
-  'libs/vintage/vintage'
+  'mylibs/effects/presets'
 ], ($, kendo, presets) ->
 	
 	vintageDefaults = 
@@ -49,6 +48,11 @@ define([
 			$.subscribe("/image/update", ($image, effect, value) -> 
 				updateImage($image, effect, value)
 			)
+		
+		presets: ->
+			
+			preset: key for own key of presets.effects
+
 					
 		applyPreset: ($img, preset) ->
 			

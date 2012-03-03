@@ -1,6 +1,7 @@
 (function() {
+  var __hasProp = Object.prototype.hasOwnProperty;
 
-  define(['jQuery', 'Kendo', 'mylibs/effects/presets', 'libs/vintage/vintage'], function($, kendo, presets) {
+  define(['jQuery', 'Kendo', 'mylibs/effects/presets'], function($, kendo, presets) {
     var applyEffect, pub, updateImage, vintageDefaults;
     vintageDefaults = {
       vignette: {
@@ -43,6 +44,18 @@
         return $.subscribe("/image/update", function($image, effect, value) {
           return updateImage($image, effect, value);
         });
+      },
+      presets: function() {
+        var key, _ref, _results;
+        _ref = presets.effects;
+        _results = [];
+        for (key in _ref) {
+          if (!__hasProp.call(_ref, key)) continue;
+          _results.push({
+            preset: key
+          });
+        }
+        return _results;
       },
       applyPreset: function($img, preset) {
         return $img.vintage(presets.effects[preset]);

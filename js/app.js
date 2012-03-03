@@ -4,7 +4,7 @@
     var pub;
     return pub = {
       init: function() {
-        camera.init("stream", "takePicture", "countdown", "videoDrawer");
+        camera.init("stream", "controls", "countdown", "snapshots");
         customize.init("customize");
         return effects.init();
       }

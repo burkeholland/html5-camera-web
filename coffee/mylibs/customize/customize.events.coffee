@@ -33,12 +33,13 @@ define([
 			$preview = $("#preview")
 			
 			$slider.kendoSlider({
-				min: $slider.data("min") ? 0,
-				max: $slider.data("max") ? 10,
 				smallStep: parseFloat($slider.data("smallstep")) ? 1,
 				largeStep: parseFloat($slider.data("largestep")) ? 5,
 				value: optionValue,
 				tickPlacement: "none",
+				tooltip: {
+					format: "{0}"
+				},
 				change: (value) -> 
 					$.publish("/image/update", [ $preview, options, value.value ])
 			})
@@ -54,7 +55,7 @@ define([
 			# $container = $("##{containerId}")
 			
 			# subscribe to events
-			$.subscribe('/customize', ( effect, sender ) ->
+			$.subscribe('/customize', ( sender ) ->
 				customizeEffect( sender )
 			)
 			

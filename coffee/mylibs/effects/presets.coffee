@@ -7,6 +7,21 @@ define([
 
 		effects: 
 			
+			none: 
+				vignette: 
+					black: false
+					white: false
+				noise: false
+				screen:
+					red: false
+					green: false
+					blue: false
+					strenth: 0
+				desaturate: false
+				allowMultiEffect: true
+				mime: "image/jpeg"
+				viewFinder: false
+			
 			vintage:
 				vignette: 
 					black: 0.6

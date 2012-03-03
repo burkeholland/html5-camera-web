@@ -14,24 +14,32 @@
 		
 		<header class="k-header" id="header">
 			<h1>HTML5 Camera</h1>
+			<img class="kendo-logo" src="css/images/kendo.png">
 		</header>
 		
-		<div id="main" class="container">
-			<div id="photoBooth" >
-				<div id="pictureButton">
-					<button id="takePicture" data-event="/camera/takePicture" class="k-button" >Snap!</button>
-				</div>
-				<div id="video">
-					<video id="stream" height="400" width="500" autoplay>
-						Sad panda does not have video
-					</video>
-				</div>
-		
-				<div id="countdown">
-					<span>3</span> <span>2</span> <span>1</span>
+		<div id="main">
+			<div class="row">
+				<div id="controls">
+					<button id="takePicture" data-event="/camera/snapshot" class="k-button" >Snap!</button>
+					<button id="takePicturePB" data-event="/camera/photobooth" class="k-button">Photo Booth</button>
 				</div>
 			</div>
-			<div id="videoDrawer"></div>
+			<div class="container"
+				<div class="row">
+					<div id="snapshots" class="span2"><h2>Snapshots</h2></div>
+					<div id="video" class="span6">
+						<canvas id="screen" width="460" height="340">
+							Sad panda does not have a canvas
+						</canvas>
+						<div class="row">
+							<div id="countdown">
+								<span>3</span> <span>2</span> <span>1</span>
+							</div>
+						</div>
+					</div>
+					<div id="photobooth" class="span2"><h2>Photobooth</h2></div>
+				</div>
+			</div>
 	    </div>
 
 		

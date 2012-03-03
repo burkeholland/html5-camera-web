@@ -4,8 +4,7 @@ define([
   'mylibs/camera/camera',
   'text!mylibs/camera/views/snapshot.html',
   'mylibs/effects/effects',
-  'mylibs/effects/presets',
-  'libs/vintage/vintage'
+  'mylibs/effects/presets'
 ], ($, kendo, camera, snapshot, effects, presets) ->
 	
 	# function globals
@@ -37,7 +36,7 @@ define([
 
 		 	), hollaback, errback
 
-	captureImage = ->
+	captureImage = (callback) ->
 	
 		# create a canvas for drawing to
 		canvas = $("<canvas width='500' height='400'></canvas>").get(0)
@@ -58,13 +57,10 @@ define([
 		# save the image as a data url
 		src = canvas.toDataURL("image/jpeg")
 		
-		applyEffect("none", src)
+		return src;
 		
-		# apply the default presets
-		# applyEffect effect, src for effect in ["none", "vintage", "sepia", "green", "grayscale"]
-
-	applyEffect = (effect, src) ->
-
+	attachSnapshot = (src) ->
+		
 		# get the template
 		div = $(snapshot)
 
@@ -74,9 +70,17 @@ define([
 					.data("vintagesource", src)	# cache the original image
 					.on("click", -> $.publish("/customize", [ effect, this ]) )	# bind the click event
 
+		# append the image to the container
+		div.appendTo($container)
+		
+		div.kendoStop(true).kendoAnimate({ effects: "slideIn:down fadeIn", show: true, duration: 1000 });
+		
+		applyEffect(div, image)
+
+	applyEffect = (div, image) ->
+
 		if effectsList.length == 0
-			for own key of presets.effects
-				effectsList.push preset: key
+			
 
 		# make the drop down a kendo ui dropdown
 		div.find(".presets").kendoDropDownList(
@@ -86,11 +90,8 @@ define([
 			change: ->
 				effects.applyPreset(image, this.value())
 		)
-
-		# append the image to the container
-		div.appendTo($container)
 		
-	countdown = (num) ->
+	countdown = ( num, hollaback ) ->
 		
 		# get the counters element 
 		counters = $countdown.find("span")
@@ -100,17 +101,35 @@ define([
 		$(counters[index]).css("opacity", "1").animate( { opacity: .1 }, 1000, -> 
 			if num > 1
 				num--
-				countdown(num)
+				countdown( num, hollaback )
 			else
-				captureImage()
+				if $.isFunction( hollaback )
+					hollaback()
 		)
 	
+	startPhotoBooth = ->
+		
+	photoBooth = ( photoNumber ) ->
+		
+		if photoNumber > 0
+			
+			photoNumber--
+			
+			countdown(3, -> 
+				
+				images.push(captureImage())
+							
+				photoBooth(photoNumber)
+			
+			)
+			
+
+			
 	pub = 
 		
-		init: (videoId, buttonId, countdownId, containerId) ->
+		init: (videoId, buttonsId, countdownId, containerId) ->
 			
 			# jump into the DOM and get the jQuery objects for the associated ids
-			$button = $("##{buttonId}")
 			$video = $("##{videoId}")
 			$container = $("##{containerId}")
 			$countdown = $("##{countdownId}")
@@ -122,11 +141,17 @@ define([
 			
 			# subscribe to the take picture event
 			$.subscribe('/camera/takePicture', () ->
-				countdown(3)
+				countdown(3, captureImage(attachSnapshot))
 			)
 			
+			# subscribe to the photobooth event
+			$.subscribe("/camera/takePicturePB", () ->
+				photoBooth(3)
+			)
+				
+			
 			# attach events to the controls element
-			$button.on("click", ->
+			$("##{buttonsId}").on("click", "button", ->
 				$.publish($(this).data("event"))
 			)
 	

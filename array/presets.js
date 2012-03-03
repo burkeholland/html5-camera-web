@@ -1,19 +1,17 @@
-(function() {
-
-  define(['jQuery', 'Kendo'], function($, kendo) {
+presets = (function() {
     var pub;
     return pub = {
       effects: {
         none: {
           vignette: {
-            black: false,
-            white: false
+            black: 0,
+            white: 0
           },
-          noise: false,
+          noise: 0,
           screen: {
-            red: false,
-            green: false,
-            blue: false,
+            red: 0,
+            green: 0,
+            blue: 0,
             strenth: 0
           },
           desaturate: false,
@@ -90,7 +88,5 @@
           viewFinder: false
         }
       }
-    };
-  });
-
+	}
 }).call(this);

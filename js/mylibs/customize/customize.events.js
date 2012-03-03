@@ -10,7 +10,7 @@
       $window.element.empty().append(content($image.attr("src")));
       vintage = $image.data("vintage");
       $(content).find(".slider").each(function() {
-        var $preview, $slider, optionValue, options, _ref, _ref2, _ref3, _ref4;
+        var $preview, $slider, optionValue, options, _ref, _ref2;
         $slider = $(this);
         optionValue = vintage != null ? vintage : 0;
         options = $slider.data("option").split(".");
@@ -21,12 +21,13 @@
         }
         $preview = $("#preview");
         return $slider.kendoSlider({
-          min: (_ref = $slider.data("min")) != null ? _ref : 0,
-          max: (_ref2 = $slider.data("max")) != null ? _ref2 : 10,
-          smallStep: (_ref3 = parseFloat($slider.data("smallstep"))) != null ? _ref3 : 1,
-          largeStep: (_ref4 = parseFloat($slider.data("largestep"))) != null ? _ref4 : 5,
+          smallStep: (_ref = parseFloat($slider.data("smallstep"))) != null ? _ref : 1,
+          largeStep: (_ref2 = parseFloat($slider.data("largestep"))) != null ? _ref2 : 5,
           value: optionValue,
           tickPlacement: "none",
+          tooltip: {
+            format: "{0}"
+          },
           change: function(value) {
             return $.publish("/image/update", [$preview, options, value.value]);
           }
@@ -36,7 +37,7 @@
     };
     return pub = {
       init: function(containerId) {
-        $.subscribe('/customize', function(effect, sender) {
+        $.subscribe('/customize', function(sender) {
           return customizeEffect(sender);
         });
         return $window = $("<div id='customize'></div>").kendoWindow({

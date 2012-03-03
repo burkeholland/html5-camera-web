@@ -54,17 +54,40 @@ h1 {
 	text-align: center;
 }
 
-.snapshot {
-	background: white;
-	margin: 4px;
-	padding: 10px;
+#snapshots {
 	width: 200px;
-	height: 200px;
+	text-align: center;
+}
+
+#photobooth {
+	width: 200px;
+	text-align: center;
+}
+
+.snapshot {
+	margin-bottom: 10px;
+	display: none;
+	background: white;
+	padding: 10px;
+	width: 180px;
+	height: 180px;
 	-webkit-box-shadow: 1px 0px 10px 2px rgba(33, 33, 33, .5);
 	-moz-box-shadow: 1px 0px 10px 2px rgba(33, 33, 33, .5);
 	box-shadow: 1px 0px 10px 2px rgba(33, 33, 33, .5);
 	cursor: pointer;
-	float: left;
+}
+
+.photostrip {
+	-webkit-box-shadow: 1px 0px 10px 2px rgba(33, 33, 33, .5);
+	-moz-box-shadow: 1px 0px 10px 2px rgba(33, 33, 33, .5);
+	box-shadow: 1px 0px 10px 2px rgba(33, 33, 33, .5);
+	display: none;
+}
+
+.kendo-logo {
+	position: absolute;
+	left: 0;
+	top: 5px;
 }
 
 .caption {
@@ -81,8 +104,4 @@ h1 {
 
 #countdown {
 	clear: left;
-}
-
-#videoDrawer {
-	width: 940px;
 }
