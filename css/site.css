@@ -1,39 +1,55 @@
-@import url(http://fonts.googleapis.com/css?family=Vast+Shadow);
+html, body {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
 
 body {
-	background: url("images/squares.jpg");
-	background-attachment:fixed;
-}
-
-header {
-	position: fixed;
-	top: 0;
-	left: 0;
-	height: 60px;
-	width: 100%;
-	text-align: center;
-	opacity: .8;
-}
-
-h1 {
-	font-family: "Vast Shadow";
-	font-size: 3em;
+	background: transparent url("images/background.jpg") repeat 50% 50%;
+	color: #9f9082;
 }
 
 #main {
-	margin-top: 75px;
 	text-align: center;
-}
-
-.row {
+	width: 460px;
+	display: inline-block;
 	height: 100%;
+	margin: 0 20px 0 60px;
+	background: rgba(41,33,29,0.72);
 }
 
-@media screen{
-  body>div#header{
-   position: fixed;
-  }
- }
+#logo {
+	width: 195px;
+	height: 102px;
+}
+
+#video {
+	margin-top: 20px;
+}
+
+#controls button {
+	text-transform: uppercase;
+	color: #d8c7b8;
+	text-shadow: 1px 0 3px #000;
+	border: 0;
+	background: transparent url("images/button.png") no-repeat 50% 0;
+	width: 123px;
+	height: 57px;
+	vertical-align: middle;
+}
+
+#controls .separator {
+	vertical-align: middle;
+	margin: 0 15px;
+	color: #817871;
+	font: italic 18px/1.5 Georgia,sans-serif;
+}
+
+#container {
+	display: inline-block;
+	vertical-align: top;
+	margin-top: 33px;
+}
 
 #countdown {
 	margin-top: 30px;
@@ -41,27 +57,34 @@ h1 {
 
 #countdown span {
 	font-size: 5em;
+	color: #d8c7b8;
 	opacity: .1;
 	margin: 0px 50px 0px 50px;
-}
-
-#video {
-	margin-top: 10px;
-	margin-bottom: 10px;
 }
 
 #sorry {
 	text-align: center;
 }
 
-#snapshots {
+#snapshots,
+#photobooth {
+	float: left;
 	width: 200px;
+	margin-right: 1em;
 	text-align: center;
 }
 
-#photobooth {
-	width: 200px;
-	text-align: center;
+footer {
+	margin-top: 56px;
+	color: #817871;
+}
+
+footer p {
+	margin: 0 0 20px;
+}
+
+footer img {
+	vertical-align: middle;
 }
 
 .snapshot {
@@ -82,12 +105,6 @@ h1 {
 	-moz-box-shadow: 1px 0px 10px 2px rgba(33, 33, 33, .5);
 	box-shadow: 1px 0px 10px 2px rgba(33, 33, 33, .5);
 	display: none;
-}
-
-.kendo-logo {
-	position: absolute;
-	left: 0;
-	top: 5px;
 }
 
 .caption {
