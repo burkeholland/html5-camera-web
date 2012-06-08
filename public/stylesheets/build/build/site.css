@@ -1,0 +1,263 @@
+html, body {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+body {
+	background: transparent url("images/background.jpg") repeat 50% 50%;
+	color: #9f9082;
+}
+.container-fluid, .row-fluid {
+    height: 100%;
+}
+.left {
+    float:left;
+}
+.fixed-fixed {
+    margin-left: 500px;
+}
+.centered {
+    text-align: center;
+}
+#sidebar {
+    position: relative;
+    top: 0;
+    left:auto;
+    width: 460px;
+    margin-left: 40px;
+	text-align: center;
+	display: inline-block;
+	height: 100%;
+	background: rgba(41,33,29,0.72);
+	border-style: none dashed none dashed;
+	border-width: 1px;
+	border-color: #6F5D4D;
+}
+#logo {
+	width: 195px;
+	height: 102px;
+}
+#video {
+	margin-left: 0px;
+}
+.button {
+	text-transform: uppercase;
+	color: #d8c7b8;
+	text-shadow: 1px 0 3px #000;
+	border: 0;
+	background: transparent url("images/button.png") no-repeat 50% 0;
+	width: 123px;
+	height: 57px;
+	vertical-align: middle;
+}
+#controls .separator {
+	vertical-align: middle;
+	margin: 0 15px;
+	color: #817871;
+	font: italic 18px/1.5 Georgia,sans-serif;
+}
+#takePicture {
+	font-size: 1.2em;
+}
+#takePicturePB {
+	font-size: .9em;
+}
+#countdown {
+	margin: 30px 0;
+}
+#countdown span {
+	font-size: 5em;
+	color: #d8c7b8;
+	opacity: .1;
+	margin: 0px 50px 0px 50px;
+}
+#intro h1, p {
+    color: #D5C9B7;
+}
+#intro p {
+	font-size: 1.5em;
+	line-height: 1.2em;
+}
+#intro li {
+    font-size: 1.5em;
+    line-height: 1.2em;
+    list-style: none;
+}
+#intro img {
+    -webkit-box-reflect:
+	  below 1px 
+	-webkit-gradient(linear, left top, left bottom, from(transparent), 
+	  color-stop(0.5, transparent), 
+	  to(rgba(255, 255, 255, 0.1)));
+}
+#intro a {
+    color: #F2580C;
+}
+.chrome-flags {
+    width: 100%;
+    text-align: center;
+}
+footer {
+	margin-top: 56px;
+	color: #817871;
+}
+footer p {
+	margin: 0 0 20px;
+}
+footer img {
+	margin-top: -5px;
+	vertical-align: middle;
+}
+.box {
+    float: left;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    background: white;
+    border-style: dashed;
+	border-width: 1px;
+	border-color: rgba(41,33,29,0.72);
+	display: none;
+}
+.snapshot {
+	padding: 10px;
+	width: 180px;
+	height: 200px;
+	cursor: pointer;
+}
+.download {
+    margin-top: 5px;
+}
+.photostrip {
+	width: 202px;
+}
+.caption {
+	text-align: center;
+}
+#customize {
+	width: 900px;
+}
+#pictureButton {
+	font-size: 2em;
+}
+#countdown {
+	clear: left;
+}
+.polaroid-container {
+    width: 100%;
+    display: none;
+}
+.polaroid {
+    margin-left: auto;
+    margin-right: auto;
+    width: 175px;
+    margin-top: 40px;
+	color: #d8c7b8;
+	text-shadow: 1px 0 3px #000;
+	border-style: dashed none dashed none;
+ 	border-width: 1px 0px 1px 0px;
+	border-color: #6F5D4D;
+	padding: 6px 0px 6px 5px;
+}
+#cbPolaroid {
+    margin-left: 5px;
+}
+#screen {
+   margin-top: 20px;
+}
+#pictures {
+    margin: 40px 10px;
+}
+.k-dropdown {
+    width: 100%;
+}
+.k-list-container {
+    width: 100%;
+}
+.presets {
+    margin-top: 10px;
+}
+.yep-nope {
+    margin: 20px 0px 0px 20px;
+    font-size: 1.5em;
+}
+.twitter-sign-in {
+    margin-top: 20px;
+}
+.tweet {
+  
+}
+.arrow_box {
+	position: relative;
+	background: #fff;
+	border: 2px solid #9F9082;
+}
+.arrow_box:after, .arrow_box:before {
+	right: 100%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+}
+.arrow_box:after {
+	border-right-color: #fff;
+	border-width: 30px;
+	top: 50%;
+	margin-top: -30px;
+}
+.arrow_box:before {
+	border-right-color: #9F9082;
+	border-width: 33px;
+	top: 50%;
+	margin-top: -33px;
+}
+.tweet-img {
+    float: left;
+}
+.tweet-box {
+    float: left;
+    margin-left: 50px;
+    height: 340px;
+}
+#main {
+    
+    
+}
+#previews {
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    width: 440px;
+    overflow: hidden;
+    padding-left: 15px;
+}
+.preview { 
+    margin: 0px 0px 10px 10px;
+    float: left;
+}
+.absolute {
+	height: 650px;
+}
+#camera {
+    position: absolute;
+}
+#camera .header {
+	display: none;
+}
+#camera .body {
+	display: none;
+	margin-top: 10px;
+}
+#camera .footer {
+	display: none;
+}
+#effect {
+	margin-bottom: 10px;
+}
+.actions .share {
+	float: left;
+}
+.actions .delete {
+	float: right;
+	}

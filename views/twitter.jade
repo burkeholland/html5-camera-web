@@ -1,0 +1,15 @@
+html
+    head
+    body(onload="callback();")
+    
+        - var success = success;
+                
+        script
+
+            callback = function() {
+        
+                window.opener.sessionStorage.setItem("twitter", #{success});
+            
+                self.close();
+        
+            };

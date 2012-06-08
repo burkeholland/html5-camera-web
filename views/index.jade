@@ -1,0 +1,49 @@
+
+.container-fluid
+    .row-fluid
+        #sidebar.left
+            img#logo(src="#{path}images/logo.png")
+            .outer
+            #main
+                .absolute
+                    #previews
+                        h3 Select An Effect
+                        .pager
+                            button.button.more More
+                        .pages
+                            .current-page
+                            .next-page
+                    #camera
+                        .header
+                            a#effects
+                                button.button <-- Effects 
+                        .body
+                        .footer
+                            .row
+                                #countdown
+                                    span 3
+                                    span 2
+                                    span 1
+                    
+                            .row
+                                #controls
+                                    button#takePicture.button(data-event="/preview/snapshot") Snap
+                                    span.separator or
+                                    button#takePicturePB.button(data-event="/preview/photobooth") Photo Booth
+                                    .polaroid-container
+                                        .polaroid
+                                            span Sweet Polaroid Effect?
+                                            input#cbPolaroid(type="checkbox")
+                    
+                .row
+                    footer
+                        p Created with
+                            a(href="http://kendoui.com")
+                                img(src="#{path}images/kendo-logo.png", alt="Kendo UI")
+                        p &copy; 2012 HTML5camera.com
+        
+        .content.fixed-fixed
+            #pictures
+            
+
+                    

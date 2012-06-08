@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>HTML5 Camera</title>
+		<link rel="icon" type="image/png" href="favicon.ico">
+		<link rel="stylesheet" href="css/vintagejs.css">
+		<link rel="stylesheet" href="css/site.css">
+		<link rel="stylesheet" href="css/kendo.common.min.css">
+		<link rel="stylesheet" href="css/kendo.silver.min.css">
+		<link rel="stylesheet" href="css/bootstrap.css">
+	</head>
+	<body>
+		
+		<header class="k-header" id="header">
+			<h1>HTML5 Camera</h1>
+			<img class="kendo-logo" src="css/images/kendo.png">
+		</header>
+		
+		<div id="main">
+			<div class="row">
+				<div id="controls">
+					<button id="takePicture" data-event="/camera/snapshot" class="k-button" >Snap!</button>
+					<button id="takePicturePB" data-event="/camera/photobooth" class="k-button">Photo Booth</button>
+				</div>
+			</div>
+			<div class="container"
+				<div class="row">
+					<div id="snapshots" class="span2"><h2>Snapshots</h2><div class="polaroid"><span>Sweet Polaroid Effect?</span><input type="checkbox" /></div></div>
+					<div id="video" class="span6">
+						<canvas id="screen" width="460" height="340">
+							Sad panda does not have a canvas
+						</canvas>
+						<div class="row">
+							<div id="countdown">
+								<span>3</span> <span>2</span> <span>1</span>
+							</div>
+						</div>
+					</div>
+					<div id="photobooth" class="span2"><h2>Photobooth</h2></div>
+				</div>
+			</div>
+	    </div>
+
+		
+		<script data-main="js/main" src="js/libs/require/require.js"></script>
+		
+	</body>
+</html>

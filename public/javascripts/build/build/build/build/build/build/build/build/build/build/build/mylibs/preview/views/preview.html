@@ -1,0 +1,31 @@
+<a href="#" class="preview">
+    # var canvas = fx.canvas(); # 
+</a>
+
+
+<!--
+preview = {}
+                    $.extend(preview, value)
+
+                    preview.name = key
+                    preview.type = value.type
+
+                    preview.canvas = fx.canvas()
+
+                    preview.paramsArray = []
+                
+                    for effect, effectValue of value.params
+                        preview.paramsArray.push(effectValue)
+                                
+                    previews.push(preview)
+                
+                    $a = $("<a href='#' class='preview'></a>").append(preview.canvas).click(->
+                        paused = true
+                        $("footer").kendoStop(true).kendoAnimate({ effects: "fadeOut", hide: true, duration: 200 })
+                        $container.kendoStop(true).kendoAnimate({ effects: "zoomOut fadeOut", hide: true, duration: 500 })
+                        $.publish("/preview/show", [preview])
+                    )
+                
+                    $container.append($a)
+
+                    -->
