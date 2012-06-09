@@ -31,7 +31,7 @@ define([
             # previews
             for preview in previews
 
-                if frame == 200 then frame = 0 else frame = frame + 1
+                frame++
 
                 # texture = preview.canvas.texture(canvas)
 
@@ -93,7 +93,7 @@ define([
                     
                     data: effects
                     
-                    pageSize: 8
+                    pageSize: 6
                     
                     change: ->
 

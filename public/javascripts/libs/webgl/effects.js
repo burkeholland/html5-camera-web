@@ -52,7 +52,7 @@
         filter: function(canvas, element) {
           var effect;
           effect = function() {
-            return canvas.zoomBlur(canvas.width / 2, canvas.height / 2, 5);
+            return canvas.zoomBlur(canvas.width / 2, canvas.height / 2, 2, canvas.height / 5);
           };
           return draw(canvas, element, effect);
         }
@@ -183,11 +183,25 @@
           return draw(canvas, element, effect);
         }
       }, {
-        name: "wetTable",
+        name: "ghost",
         filter: function(canvas, element, frame) {
           var effect;
           effect = function() {
-            return canvas.wetTable();
+            var buffer, createBuffers;
+            buffer = [];
+            createBuffers = function(length) {
+              var _results;
+              _results = [];
+              while (buffer.length < length) {
+                _results.push(buffer.push(canvas.texture(element)));
+              }
+              return _results;
+            };
+            createBuffers(32);
+            buffer[frame++ % buffer.length].loadContentsOf(element);
+            canvas.matrixWarp([-1, 0, 0, 1], false, true);
+            canvas.blend(buffer[frame % 32], 0.5);
+            return canvas.matrixWarp([-1, 0, 0, 1], false, true);
           };
           return draw(canvas, element, effect);
         }

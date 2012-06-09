@@ -13,20 +13,20 @@
         return $.subscribe("/pictures/create", function(src, name, polaroid, save, animation, photoStrip) {
           var $div, $img, callback, opacity, presets;
           $div = $(picture);
-          name = name || new Date().getTime() + ".png";
           $img = $div.find(".picture").attr("src", src).css("opacity", 1);
+          if (save) {
+            name = name || new Date().getTime() + ".png";
+            if (photoStrip) name = "p_" + name;
+            file.save(name, src);
+          }
           callback = function() {
             $img.attr("src", arguments[0]);
             return file.save(name, arguments[0]);
           };
-          if (!photoStrip) {
-            $img.on("click", function() {
-              return $.publish("/customize", [this, callback]);
-            });
-            $img.addClass("pointer");
-          }
-          $container.append($div);
-          if (animation) $div.kendoStop(true).kendoAnimate(animation);
+          $img.on("click", function() {
+            return $.publish("/customize", [this, callback]);
+          });
+          $img.addClass("pointer");
           $img.load(function() {
             return $container.masonry("reload");
           });
@@ -53,7 +53,7 @@
             intent = new Intent("http://webintents.org/share", "image/*", $img.attr("src"));
             return window.navigator.startActivity(intent, function(data) {});
           });
-          return $div.on("click", ".trash", function() {
+          $div.on("click", ".trash", function() {
             $.subscribe("/file/deleted/" + name, function() {
               $div.kendoStop(true).kendoAnimate({
                 effects: "zoomOut fadeOut",
@@ -68,6 +68,7 @@
             });
             return file["delete"](name);
           });
+          return $container.append($div);
         });
       },
       reload: function() {

@@ -1,17 +1,18 @@
 (function() {
 
   define(['jQuery', 'Kendo', 'mylibs/utils/utils'], function(utils) {
-    var compare, dataURIToBlob, errorHandler, fileSystem, myPicturesDir, pub;
+    var blobBuiler, compare, dataURIToBlob, errorHandler, fileSystem, myPicturesDir, pub;
     window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
     fileSystem = {};
     myPicturesDir = {};
+    blobBuiler = {};
     compare = function(a, b) {
       if (a.name < b.name) return -1;
       if (a.name > b.name) return 1;
       return 0;
     };
     dataURIToBlob = function(dataURI) {
-      var ab, bb, blob, byteString, bytes, ia, mimeString, _i, _len;
+      var ab, blob, byteString, bytes, ia, mimeString, _i, _len;
       if (dataURI.split(',')[0].indexOf('base64') >= 0) {
         byteString = atob(dataURI.split(',')[1]);
       } else {
@@ -24,9 +25,9 @@
         bytes = byteString[_i];
         ia[_i] = byteString.charCodeAt(_i);
       }
-      bb = new BlobBuilder();
-      bb.append(ab);
-      return blob = bb.getBlob(mimeString);
+      blobBuiler = new BlobBuilder();
+      blobBuiler.append(ab);
+      return blob = blobBuiler.getBlob(mimeString);
     };
     errorHandler = function(e) {
       var msg;
@@ -68,7 +69,7 @@
             entries = [];
             dirReader = fs.root.createReader();
             animation = {
-              effects: "fadeIn",
+              effects: "zoomIn fadeIn",
               show: true,
               duration: 1000
             };
@@ -81,7 +82,7 @@
                   _results = [];
                   for (_i = 0, _len = entries.length; _i < _len; _i++) {
                     entry = entries[_i];
-                    _results.push($.publish("/pictures/create", [entry.toURL(), entry.name, false, false, animation]));
+                    _results.push($.publish("/pictures/create", [entry.toURL(), entry.name, false, false, null]));
                   }
                   return _results;
                 } else {
@@ -124,6 +125,17 @@
             return $.publish("/file/deleted/" + name);
           }, errorHandler);
         }, errorHandler);
+      },
+      download: function(img) {
+        var blob, canvas, ctx, dataURL;
+        canvas = document.createElement("canvas");
+        ctx = canvas.getContext("2d");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0, img.width, img.height);
+        dataURL = canvas.toDataURL();
+        blob = dataURIToBlob(dataURL);
+        return saveAs(blob);
       }
     };
   });

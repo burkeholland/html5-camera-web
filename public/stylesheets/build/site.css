@@ -7,6 +7,11 @@ body {
 	background: transparent url("images/background.jpg") repeat 50% 50%;
 	color: #9f9082;
 }
+#customize, .k-window-content {
+	background: transparent url("images/background.jpg") repeat 50% 50%;
+	color: #9f9082;
+	padding: 0px;
+}
 #extension {
 	width: 100%;
 	height: 100%;
@@ -25,14 +30,14 @@ body {
     text-align: center;
 }
 #sidebar {
-    position: relative;
+    position: absolute;
+    z-index: 100;
     top: 0;
     left:auto;
     width: 460px;
     margin-left: 40px;
 	text-align: center;
 	display: inline-block;
-	height: 100%;
 	background: rgba(41,33,29,0.72);
 	border-style: none dashed none dashed;
 	border-width: 1px;
@@ -121,12 +126,14 @@ footer img {
     border-style: dashed;
 	border-width: 1px;
 	border-color: rgba(41,33,29,0.72);
-	display: none;
 }
 .snapshot {
 	padding: 10px;
 	width: 180px;
-	cursor: pointer;
+}
+.wrap {
+	margin-bottom: 10px;
+	cursor: pointerc;
 }
 .download {
     margin-top: 5px;
@@ -181,7 +188,7 @@ footer img {
     margin-top: 10px;
 }
 .yep-nope {
-    margin: 20px 0px 0px 20px;
+    margin: 75px 0px 10px 20px;
     font-size: 1.5em;
 }
 .twitter-sign-in {
@@ -241,7 +248,7 @@ footer img {
     float: left;
 }
 .absolute {
-	height: 650px;
+	height: 700px;
 }
 #camera {
     position: absolute;
@@ -264,4 +271,41 @@ footer img {
 }
 .actions .delete {
 	float: right;
+}
+.pages {
+	position: relative;
+	height: 650px;
+}
+.current-page {
+	position: absolute;
+}
+.next-page {
+	position: absolute;
+}
+.slider {
+	width: 400px;
+}
+#customize .canvas {
+	margin: 10px 0px 0px 20px;
+}
+.reflection {
+	-webkit-box-reflect:
+	  below -5px 
+	-webkit-gradient(linear, left top, left bottom, from(transparent), 
+	  color-stop(0.8, transparent), 
+	  to(rgba(255, 255, 255, 0.7)));
+}
+.customize-left {
+	background: rgba(41, 33, 29, 0.72);
+}
+#customize hr {
+	width: 400px;
+}
+.pointer {
+	cursor: pointer;
+}
+.shadow {
+-moz-box-shadow: 10px 10px 5px #888;
+-webkit-box-shadow: 10px 10px 5px #888;
+box-shadow: 10px 10px 5px #888;
 }

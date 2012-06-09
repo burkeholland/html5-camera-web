@@ -20,6 +20,7 @@ mylibs/customize/customize.js
 text!mylibs/share/views/download.html
 text!mylibs/share/views/tweet.html
 mylibs/share/share.js
+mylibs/share/twitpic.js
 text!mylibs/pictures/views/picture.html
 mylibs/pictures/pictures.js
 mylibs/snapshot/snapshot.js
@@ -32,4 +33,8 @@ mylibs/camera/camera.js
 app.js
 order.js
 order!libs/webgl/glfx.min
+libs/jquery/jquery.min.js
+order!libs/jquery/jquery.min
+libs/kendo/kendo.all.min.js
+order!libs/kendo/kendo.all.min
 main.js

@@ -25,29 +25,26 @@ define([
 
 				# get the template
 				$div = $(picture)
-		
-				name = name || new Date().getTime() + ".png"
-
 
 				# get the image element from the template assigning the source
 				$img = $div.find(".picture")
 					.attr("src", src) # assign the source 
 					.css("opacity", 1)
 
+				if save
+					name = name || new Date().getTime() + ".png"
+					if photoStrip
+						name = "p_" + name
+					file.save name, src
+
 				# this callback is used to set the img source from the customize window
 				callback = ->
 					$img.attr "src", arguments[0] 
 					file.save name, arguments[0]
 
-				if not photoStrip
-					$img.on("click", -> $.publish("/customize", [ this, callback ]) ) # bind the click event
-					$img.addClass("pointer")
-
-				$container.append($div)
-
-				if animation
-
-					$div.kendoStop(true).kendoAnimate(animation)
+				#if not name.substring(0,1) == "p"
+				$img.on("click", -> $.publish("/customize", [ this, callback ]) ) # bind the click event
+				$img.addClass("pointer")
 
 				$img.load ->
 
@@ -75,9 +72,7 @@ define([
 		
 				# add the source to the download link
 				$div.on("click", ".download", ->
-		    
 		    		file.download $img[0]
-		    
 				)	
 		
 		
@@ -98,6 +93,8 @@ define([
 						$.unsubscribe("file/deleted/#{name}")
 
 					file.delete(name)
+
+				$container.append($div)
 
 		reload: ->
 

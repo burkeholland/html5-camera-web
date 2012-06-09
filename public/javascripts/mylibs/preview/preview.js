@@ -27,10 +27,11 @@
     };
     return pub = {
       init: function(container, v) {
-        var $footer, $header, $preview;
+        var $footer, $header, $mask, $preview;
         $container = $("#" + container);
         $header = $container.find(".header");
         $preview = $container.find(".body");
+        $mask = $container.find(".mask");
         $footer = $container.find(".footer");
         video = v;
         canvas = document.createElement("canvas");
@@ -92,7 +93,19 @@
         $.subscribe("/preview/snapshot", function() {
           var callback;
           callback = function() {
-            return $(webgl).kendoAnimate({
+            return $mask.fadeIn(50, function() {
+              $mask.fadeOut(900);
+              return $.publish("/snapshot/create", [webgl.toDataURL()]);
+            });
+          };
+          return $.publish("/camera/countdown", [3, callback]);
+        });
+        $.subscribe("/preview/photobooth", function() {
+          var callback, images, photoNumber;
+          images = [];
+          photoNumber = 2;
+          callback = function() {
+            $(webgl).kendoAnimate({
               effects: "zoomOut: fadeOut",
               duration: 300,
               show: false
@@ -105,14 +118,6 @@
                 return $.publish("/snapshot/create", [webgl.toDataURL()]);
               }
             });
-          };
-          return $.publish("/camera/countdown", [3, callback]);
-        });
-        $.subscribe("/preview/photobooth", function() {
-          var callback, images, photoNumber;
-          images = [];
-          photoNumber = 2;
-          callback = function() {
             --photoNumber;
             images.push(webgl.toDataURL());
             if (photoNumber > 0) {

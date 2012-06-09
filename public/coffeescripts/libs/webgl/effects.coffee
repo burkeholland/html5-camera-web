@@ -53,7 +53,7 @@ define([
             name: "zoomBlur"
             filter: (canvas, element) -> 
                 effect = ->
-                    canvas.zoomBlur canvas.width / 2,  canvas.height / 2, 5
+                    canvas.zoomBlur canvas.width / 2,  canvas.height / 2, 2, canvas.height / 5
                 draw(canvas, element, effect)
         }
 
@@ -171,10 +171,23 @@ define([
         }
 
         {
-            name: "wetTable"
+            name: "ghost"
             filter: (canvas, element, frame) ->
                 effect = ->
-                    canvas.wetTable()
+
+                    buffer = []
+
+                    createBuffers = (length) ->
+                        while buffer.length < length
+                            buffer.push canvas.texture(element)
+
+                    createBuffers(32)
+
+                    buffer[frame++ % buffer.length].loadContentsOf(element)
+                    canvas.matrixWarp([-1, 0, 0, 1], false, true)
+                    canvas.blend(buffer[frame % 32], 0.5)
+                    canvas.matrixWarp([-1, 0, 0, 1], false, true)
+
                 draw(canvas, element, effect)
 
         }

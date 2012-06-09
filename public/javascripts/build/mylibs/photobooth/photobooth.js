@@ -23,7 +23,7 @@
             show: true,
             duration: 1000
           };
-          return $.publish("/pictures/create", [src, null, false, true, animation]);
+          return $.publish("/pictures/create", [src, null, false, true, animation, true]);
         } else {
           return createStrip(++counter, images, ctx, width, height);
         }

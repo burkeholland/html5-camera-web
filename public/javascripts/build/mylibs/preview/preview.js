@@ -1,7 +1,7 @@
 (function() {
 
   define(['jQuery', 'Kendo', 'mylibs/utils/utils', 'libs/webgl/effects', 'libs/webgl/glfx.min'], function($, kendo, utils, effects) {
-    var $container, canvas, draw, height, paused, preview, pub, update, video, webgl, width;
+    var $container, canvas, draw, frame, height, paused, preview, pub, update, video, webgl, width;
     $container = {};
     canvas = {};
     webgl = {};
@@ -10,56 +10,36 @@
     preview = {};
     width = 460;
     height = 340;
+    frame = 0;
     draw = function() {
       utils.getAnimationFrame()(draw);
       return update();
     };
     update = function() {
-      var canvas2d, texture;
+      var canvas2d;
       if (!paused) {
         canvas2d = canvas.getContext('2d');
         canvas2d.clearRect();
         canvas2d.drawImage(video, 0, 0, video.width, video.height);
-        texture = webgl.texture(canvas);
-        if (preview.method !== "normal") {
-          if (preview.hasFrames) {
-            webgl.draw(texture)[preview.method].apply(webgl, [preview.params.frame]).update();
-            if (preview.params.frame < preview.range.max) {
-              ++preview.params.frame;
-            } else {
-              preview.params.frame = 0;
-            }
-          } else {
-            webgl.draw(texture)[preview.method].apply(webgl, preview.paramsArray).update();
-          }
-        } else {
-          webgl.draw(texture).update();
-        }
-        return texture.destroy();
+        frame = frame === 200 ? 0 : ++frame;
+        return preview.filter(preview.canvas, canvas, frame);
       }
     };
     return pub = {
       init: function(container, v) {
-        var $footer, $header, $preview, presets;
+        var $footer, $header, $preview;
         $container = $("#" + container);
         $header = $container.find(".header");
         $preview = $container.find(".body");
         $footer = $container.find(".footer");
         video = v;
-        presets = effects(width, height);
         canvas = document.createElement("canvas");
         webgl = fx.canvas();
         $preview.append(webgl);
         $.subscribe("/preview/show", function(e) {
-          var param, paramValue, _ref;
           $.extend(preview, e);
+          preview.canvas = webgl;
           paused = false;
-          preview.paramsArray = [];
-          _ref = presets[preview.name].params;
-          for (param in _ref) {
-            paramValue = _ref[param];
-            preview.paramsArray.push(paramValue);
-          }
           video.width = canvas.width = width;
           video.height = canvas.height = height;
           $header.kendoStop(true).kendoAnimate({

@@ -64,8 +64,8 @@
         utils = utilities;
         $counter = $("#" + counter);
         pub.video = document.createElement("video");
-        pub.video.crossOrigin = "";
-        turnOn(callback, true);
+        pub.video.src = "burke.mp4";
+        turnOn(callback, false);
         return $.subscribe("/camera/countdown", function(num, hollaback) {
           return countdown(num, hollaback);
         });

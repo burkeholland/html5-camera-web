@@ -150,6 +150,13 @@ define([
 
     download: (img) ->
 
+      # gotta blow the image back up to it's correct size
+      width = img.width
+      height = img.height
+
+      img.removeAttribute("width", 0) 
+      img.removeAttribute("height", 0)
+
       canvas = document.createElement("canvas")
       ctx = canvas.getContext("2d")
 
@@ -159,6 +166,9 @@ define([
       ctx.drawImage(img, 0, 0, img.width, img.height)
 
       dataURL = canvas.toDataURL();
+
+      img.width = width
+      img.height = height
 
       blob = dataURIToBlob(dataURL)
 

@@ -5,7 +5,6 @@
     return pub = {
       init: function() {
         utils.init();
-        share.init();
         $.subscribe('/camera/unsupported', function() {
           return $('#pictures').append(intro);
         });

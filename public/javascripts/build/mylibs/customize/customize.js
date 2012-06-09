@@ -1,49 +1,134 @@
 (function() {
+  var __hasProp = Object.prototype.hasOwnProperty;
 
   define(['jQuery', 'Kendo', 'text!mylibs/customize/views/customize.html'], function($, kendo, template) {
-    var $window, customizeEffect, pub;
+    var $window, callback, canvas, customizeEffect, oldImage, pub, texture, viewModel, webgl;
     $window = {};
-    customizeEffect = function(sender) {
-      var $image, content, vintage;
-      $image = $(sender);
-      content = kendo.template(template);
-      $window.element.empty().append(content($image.attr("src")));
-      vintage = $image.data("vintage");
-      $(content).find(".slider").each(function() {
-        var $preview, $slider, optionValue, options, _ref, _ref2;
-        $slider = $(this);
-        optionValue = vintage != null ? vintage : 0;
-        options = $slider.data("option").split(".");
-        if (optionValue) {
-          $.each(options, function() {
-            return optionValue = optionValue[this];
-          });
-        }
-        $preview = $("#preview");
-        return $slider.kendoSlider({
-          smallStep: (_ref = parseFloat($slider.data("smallstep"))) != null ? _ref : 1,
-          largeStep: (_ref2 = parseFloat($slider.data("largestep"))) != null ? _ref2 : 5,
-          value: optionValue,
-          tickPlacement: "none",
-          tooltip: {
-            format: "{0}"
+    webgl = fx.canvas();
+    oldImage = new Image();
+    canvas = {};
+    texture = {};
+    callback = {};
+    viewModel = kendo.observable({
+      effects: {
+        brightnessContrast: {
+          filter: "brightnessContrast",
+          brightness: {
+            isParam: true,
+            value: 0
           },
-          change: function(value) {
-            return $.publish("/image/update", [$preview, options, value.value]);
+          contrast: {
+            isParam: true,
+            value: 0
           }
-        });
-      });
-      return $window.open().center();
+        },
+        vignette: {
+          filter: "vignette",
+          size: {
+            isParam: true,
+            value: 0
+          },
+          amount: {
+            isParam: true,
+            value: 0
+          }
+        },
+        hueSaturation: {
+          filter: "hueSaturation",
+          hue: {
+            isParam: true,
+            value: 0
+          },
+          saturation: {
+            isParam: true,
+            value: 0
+          }
+        },
+        noise: {
+          filter: "noise",
+          noise: {
+            isParam: true,
+            value: 0
+          }
+        },
+        denoise: {
+          filter: "denoise",
+          denoise: {
+            isParam: true,
+            value: 100
+          }
+        }
+      },
+      change: function() {
+        var filter, filters, key, params, value, _i, _len, _ref;
+        webgl.draw(texture);
+        filters = [];
+        _ref = viewModel.effects;
+        for (key in _ref) {
+          if (!__hasProp.call(_ref, key)) continue;
+          value = _ref[key];
+          if (viewModel.effects[key].filter) {
+            filter = viewModel.effects[key];
+            params = [];
+            for (key in filter) {
+              if (!__hasProp.call(filter, key)) continue;
+              value = filter[key];
+              if (filter[key].isParam) params.push(filter[key].value);
+            }
+            filters.push({
+              name: filter.filter,
+              params: params
+            });
+          }
+        }
+        console.info(filters);
+        for (_i = 0, _len = filters.length; _i < _len; _i++) {
+          filter = filters[_i];
+          webgl[filter.name].apply(webgl, filter.params);
+        }
+        return webgl.update();
+      },
+      yep: function() {
+        callback(webgl.toDataURL());
+        return $window.close();
+      },
+      nope: function() {
+        return $window.close();
+      }
+    });
+    customizeEffect = function(image, saveFunction) {
+      oldImage.src = image.src;
+      callback = saveFunction;
+      return oldImage.onload = function() {
+        var ctx;
+        canvas.width = oldImage.width;
+        canvas.height = oldImage.height;
+        ctx = canvas.getContext("2d");
+        ctx.drawImage(oldImage, 0, 0, oldImage.width, oldImage.height);
+        texture = webgl.texture(canvas);
+        webgl.draw(texture).update();
+        return $window.open().center();
+      };
     };
     return pub = {
       init: function(containerId) {
-        $.subscribe('/customize', function(sender) {
-          return customizeEffect(sender);
+        var $content;
+        $.subscribe('/customize', function(sender, saveFunction) {
+          return customizeEffect(sender, saveFunction);
         });
-        return $window = $("<div id='customize'></div>").kendoWindow({
+        $content = $(template);
+        canvas = document.createElement("canvas");
+        $content.find(".canvas").append(webgl);
+        $window = $content.kendoWindow({
           visible: false,
           modal: true,
-          title: "Customize Your Image",
+          title: "",
+          open: function() {
+            return $.publish("/app/pause");
+          },
+          close: function() {
+            return $.publish("/app/resume");
+          },
           animation: {
             open: {
               effects: "slideIn:up fadeIn",
@@ -55,6 +140,7 @@
             }
           }
         }).data("kendoWindow").center();
+        return kendo.bind($content, viewModel);
       }
     };
   });

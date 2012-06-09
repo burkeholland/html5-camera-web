@@ -1,60 +1,57 @@
-<div class="row">
-	<div class="span6">
-		<div class="row centered">
-			<img src="${ data }" id="preview" data-vintageSource="${ data }"/>
-			<div class="yep-nope">
-				<button class="button">Yep</button>
-				<button class="button">Nope</button>
+<div id="customize">
+	<div class="row">
+		<div class="span6 customize-left">
+			<div class="row centered">
+				<div class="canvas reflection"></div>
+				<div class="yep-nope">
+					<button class="button" data-bind="events: { click: yep }">Yep</button>
+					<button class="button" data-bind="events: { click: nope }">Nope</button>
+				</div>
 			</div>
 		</div>
-	</div>
-	<div class="span4">
-		<h3>Adjust Edges</h3>
-		<div>
-			<div>Black<div>
-			<input class="slider" style="width: 400px;" id="sliderBlack" data-option="vignette.black" max="1" min="0" data-smallStep=".05" data-largeStep=".1"/>						
-		</div>
-		<div class="form-row">
-			<div class="form-left">White</div><div class="form-right">
-				<input class="slider" style="width: 400px;" id="sliderWhite" data-option="vignette.white" max="1" min="0" data-smallStep=".05" data-largeStep=".1"/>
+		<div class="span4">
+			<h3>Brightness / Contrast</h3>
+			<div>
+				<div>Brightness<div>
+				<input class="slider" data-role="slider" data-tick-placement="none" data-bind="value: effects.brightnessContrast.brightness.value, events: { slide: change, change: change }" data-small-step=".01" data-large-step=".01" min="0" max="1" />
 			</div>
-		</div>
-		<h3>Noise</h3>
-		<div class="form-row">
-			<input id="sliderNoise" style="width: 400px;" class="slider" max="1" min="0" data-smallStep=".05" data-largeStep=".1" data-option="noise" />
-		</div>
-		<h3>Screen</h3>
-		<div class="form-row">
-			<div class="form-left">
-				Red:
+			<div>
+				<div>Contrast</div>
+					<input class="slider" data-role="slider" data-tick-placement="none" data-bind="value: effects.brightnessContrast.contrast.value, events: { slide: change, change: change }" max="1" min="0" data-small-step=".01" data-large-step=".01"/>
+				</div>
 			</div>
-			<div class="form-right">
-				<input id="sliderBlue" style="width: 400px;" class="slider" max="255" data-smallStep="1" data-largeStep="10" min="0" data-option="screen.red" />
+			<br />
+			<h3>Vignette</h3>
+			<div>
+				<div>Corner Size</div>
+					<input data-role="slider" data-tick-placement="none" class="slider" data-large-step=".01" data-small-step=".01" max="1" min="0" data-bind="value: effects.vignette.size.value, events: { slide: change, change: change }" />
 			</div>
-		</div>
-		<div class="form-row">
-			<div class="form-left">
-				Green:
+			<div>	
+				<div>Corner Amount</div>
+				<input data-role="slider" data-tick-placement="none" class="slider" data-large-step=".01" data-small-step=".01" max="1" min="0" data-bind="value: effects.vignette.amount.value, events: { slide: change, change: change }" />
 			</div>
-			<div class="form-right">
-				<input id="sliderGreen" style="width: 400px;" class="slider" data-option="screen.green" max="255" data-smallStep="1" data-largeStep="10" min="0" />
+			<br />
+			<h3>Hue / Saturation</h3>
+			<div>
+				<div>Hue</div>
+					<input data-role="slider" data-tick-placement="none" class="slider" data-large-step=".01" data-small-step=".01" max="1" min="0" data-bind="value: effects.hueSaturation.hue.value, events: { slide: change, change: change }" />
 			</div>
-		</div>
-		<div class="form-row">
-			<div class="form-left">
-				Blue:
+			<div>	
+				<div>Saturation</div>
+				<input data-role="slider" data-tick-placement="none" class="slider" data-large-step=".01" data-small-step=".01" max="1" min="0" data-bind="value: effects.hueSaturation.saturation.value, events: { slide: change, change: change }" />
 			</div>
-			<div class="form-right">
-				<input id="sliderBlue" class="slider" style="width: 400px;" data-option="screen.blue" max="255" data-smallStep="1" data-largeStep="10" min="0"/>
+			<br />
+			<h3>Noise</h3>
+			<div>
+				<div>Noise</div>
+					<input data-role="slider" data-tick-placement="none" class="slider" data-large-step=".01" data-small-step=".01" max="1" min="0" data-bind="value: effects.noise.noise.value, events: { slide: change, change: change }" />
 			</div>
-		</div>
-		<div class="strength">
-			<div class="form-left">
-				Strength:
+			<!--
+			<div>
+				<div>Denoise</div>
+					<input data-role="slider" data-tick-placement="none" class="slider" data-large-step="1" data-small-step="1" max="50" min="0" data-bind="value: effects.denoise.denoise.value, events: { slide: change, change: change }" />
 			</div>
-			<div class="form-right">
-				<input class="slider" style="width: 400px;" id="sliderStrength" data-option="screen.strength" max="1" min="0" data-smallStep=".05" data-largeStep=".1" />
-			</div>
+		-->
 		</div>
 	</div>
 </div>

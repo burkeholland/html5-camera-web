@@ -38,6 +38,7 @@ body {
 }
 
 #sidebar {
+	height: 100%;
     position: absolute;
     z-index: 100;
     top: 0;
@@ -282,10 +283,7 @@ footer img {
     height: 340px;
 }
 
-#main {
-    
-    
-}
+
 
 #previews {
     position: absolute;
@@ -296,13 +294,13 @@ footer img {
     padding-left: 15px;
 }
 
-.preview { 
+#previews .preview { 
     margin: 0px 0px 10px 10px;
     float: left;
 }
 
 .absolute {
-	height: 700px;
+	height: 550px;
 }
 
 #camera {
@@ -314,8 +312,24 @@ footer img {
 }
 
 #camera .body {
-	display: none;
 	margin-top: 10px;
+	width: 460px;
+	height: 340px;
+	display: none;
+}
+
+#camera .preview {
+	position: absolute;
+	display: none;
+}
+
+#camera .mask {
+	position: absolute;
+	background-color: white;
+	width: 460px;
+	height: 340px;
+	opacity: .9;
+	display: none;
 }
 
 #camera .footer {
@@ -375,3 +389,10 @@ footer img {
 .pointer {
 	cursor: pointer;
 }
+
+.shadow {
+-moz-box-shadow: 10px 10px 5px #888;
+-webkit-box-shadow: 10px 10px 5px #888;
+box-shadow: 10px 10px 5px #888;
+}
+

@@ -42,9 +42,9 @@ define([
             
             $header = $container.find(".header")
             $preview = $container.find(".body")
+            $mask = $container.find(".mask")
             $footer = $container.find(".footer")
 
-            
             video = v
             
             canvas = document.createElement("canvas")
@@ -89,10 +89,9 @@ define([
                 
                 callback = ->
                     
-                    $(webgl).kendoAnimate( effects: "zoomOut: fadeOut", duration: 300, show: false ).kendoAnimate( effects: "zoomIn: fadeIn", duration: 300, show: true, complete:  -> 
-                        $(webgl).show()
+                    $mask.fadeIn 50, -> 
+                        $mask.fadeOut 900
                         $.publish("/snapshot/create", [webgl.toDataURL()])
-                    )
                     
                 $.publish("/camera/countdown", [3, callback])
 
@@ -102,6 +101,11 @@ define([
                 photoNumber = 2
 
                 callback = ->
+
+                    $(webgl).kendoAnimate( effects: "zoomOut: fadeOut", duration: 300, show: false ).kendoAnimate( effects: "zoomIn: fadeIn", duration: 300, show: true, complete:  -> 
+                        $(webgl).show()
+                        $.publish("/snapshot/create", [webgl.toDataURL()])
+                    )
 
                     --photoNumber
 
