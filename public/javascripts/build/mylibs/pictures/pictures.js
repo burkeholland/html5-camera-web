@@ -23,14 +23,10 @@
             $img.attr("src", arguments[0]);
             return file.save(name, arguments[0]);
           };
-          if (!name.substring(0, 1) === "p") {
-            $img.on("click", function() {
-              return $.publish("/customize", [this, callback]);
-            });
-            $img.addClass("pointer");
-          }
-          $container.append($div);
-          if (animation) $div.kendoStop(true).kendoAnimate(animation);
+          $img.on("click", function() {
+            return $.publish("/customize", [this, callback]);
+          });
+          $img.addClass("pointer");
           $img.load(function() {
             return $container.masonry("reload");
           });
@@ -57,7 +53,7 @@
             intent = new Intent("http://webintents.org/share", "image/*", $img.attr("src"));
             return window.navigator.startActivity(intent, function(data) {});
           });
-          return $div.on("click", ".trash", function() {
+          $div.on("click", ".trash", function() {
             $.subscribe("/file/deleted/" + name, function() {
               $div.kendoStop(true).kendoAnimate({
                 effects: "zoomOut fadeOut",
@@ -72,6 +68,7 @@
             });
             return file["delete"](name);
           });
+          return $container.append($div);
         });
       },
       reload: function() {

@@ -98,26 +98,24 @@ define([
             $.subscribe "/preview/photobooth", ->
 
                 images = []
-                photoNumber = 2
+                photoNumber = 4
 
                 callback = ->
 
-                    $(webgl).kendoAnimate( effects: "zoomOut: fadeOut", duration: 300, show: false ).kendoAnimate( effects: "zoomIn: fadeIn", duration: 300, show: true, complete:  -> 
-                        $(webgl).show()
-                        $.publish("/snapshot/create", [webgl.toDataURL()])
-                    )
-
                     --photoNumber
 
-                    images.push webgl.toDataURL()
+                    $mask.fadeIn 50, -> 
+                        $mask.fadeOut 900, ->
 
-                    if photoNumber > 0
+                            images.push webgl.toDataURL()
 
-                        $.publish "/camera/countdown", [3, callback]
+                            if photoNumber > 0
 
-                    else
+                                $.publish "/camera/countdown", [3, callback]
 
-                        $.publish("/photobooth/create", [images])
+                            else
+
+                                $.publish("/photobooth/create", [images])
 
                 $.publish "/camera/countdown", [3, callback]
                         

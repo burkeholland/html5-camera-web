@@ -31,7 +31,7 @@ define([
 
 	            animation = effects: "slideIn:down fadeIn", show: true, duration: 1000 
 
-	            $.publish "/pictures/create", [ src, null, false, true, animation, true]
+	            $.publish "/pictures/create", [ src, null, false, true, animation, true ]
 
 	        else
 

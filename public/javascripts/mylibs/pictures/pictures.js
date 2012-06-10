@@ -48,7 +48,7 @@
           $div.on("click", ".download", function() {
             return file.download($img[0]);
           });
-          $div.on("click", ".tweet", function() {
+          $div.on("click", ".intent", function() {
             var intent;
             intent = new Intent("http://webintents.org/share", "image/*", $img.attr("src"));
             return window.navigator.startActivity(intent, function(data) {});

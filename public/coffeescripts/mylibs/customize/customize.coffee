@@ -91,8 +91,19 @@ define([
 
 			$window.close()
 
+		reset: ->
+
+			this.set "effects.brightnessContrast.brightness.value", 0
+			this.set "effects.brightnessContrast.contrast.value", 0
+			this.set "effects.vignette.size.value", 0
+			this.set "effects.vignette.amount.value", 0
+			this.set "effects.hueSaturation.hue.value", 0
+			this.set "effects.hueSaturation.saturation.value", 0
+
 
 	customizeEffect = (image, saveFunction) ->
+
+		viewModel.reset()
 
 		oldImage.src = image.src
 

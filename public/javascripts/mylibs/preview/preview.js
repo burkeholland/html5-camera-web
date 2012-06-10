@@ -103,28 +103,19 @@
         $.subscribe("/preview/photobooth", function() {
           var callback, images, photoNumber;
           images = [];
-          photoNumber = 2;
+          photoNumber = 4;
           callback = function() {
-            $(webgl).kendoAnimate({
-              effects: "zoomOut: fadeOut",
-              duration: 300,
-              show: false
-            }).kendoAnimate({
-              effects: "zoomIn: fadeIn",
-              duration: 300,
-              show: true,
-              complete: function() {
-                $(webgl).show();
-                return $.publish("/snapshot/create", [webgl.toDataURL()]);
-              }
-            });
             --photoNumber;
-            images.push(webgl.toDataURL());
-            if (photoNumber > 0) {
-              return $.publish("/camera/countdown", [3, callback]);
-            } else {
-              return $.publish("/photobooth/create", [images]);
-            }
+            return $mask.fadeIn(50, function() {
+              return $mask.fadeOut(900, function() {
+                images.push(webgl.toDataURL());
+                if (photoNumber > 0) {
+                  return $.publish("/camera/countdown", [3, callback]);
+                } else {
+                  return $.publish("/photobooth/create", [images]);
+                }
+              });
+            });
           };
           return $.publish("/camera/countdown", [3, callback]);
         });

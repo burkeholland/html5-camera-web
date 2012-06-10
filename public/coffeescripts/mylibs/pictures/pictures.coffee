@@ -76,7 +76,7 @@ define([
 				)	
 		
 		
-				$div.on("click", ".tweet", ->
+				$div.on("click", ".intent", ->
 		    		intent = new Intent("http://webintents.org/share", "image/*", $img.attr("src"))
 		    		window.navigator.startActivity(intent, (data) ->)
 				)

@@ -3323,13 +3323,19 @@ define("mylibs/utils/rgbcolor", function(){});
         }, errorHandler);
       },
       download: function(img) {
-        var blob, canvas, ctx, dataURL;
+        var blob, canvas, ctx, dataURL, height, width;
+        width = img.width;
+        height = img.height;
+        img.removeAttribute("width", 0);
+        img.removeAttribute("height", 0);
         canvas = document.createElement("canvas");
         ctx = canvas.getContext("2d");
         canvas.width = img.width;
         canvas.height = img.height;
         ctx.drawImage(img, 0, 0, img.width, img.height);
         dataURL = canvas.toDataURL();
+        img.width = width;
+        img.height = height;
         blob = dataURIToBlob(dataURL);
         return saveAs(blob);
       }
@@ -3738,14 +3744,10 @@ define('text!mylibs/pictures/views/picture.html',[],function () { return '<div c
             $img.attr("src", arguments[0]);
             return file.save(name, arguments[0]);
           };
-          if (!name.substring(0, 1) === "p") {
-            $img.on("click", function() {
-              return $.publish("/customize", [this, callback]);
-            });
-            $img.addClass("pointer");
-          }
-          $container.append($div);
-          if (animation) $div.kendoStop(true).kendoAnimate(animation);
+          $img.on("click", function() {
+            return $.publish("/customize", [this, callback]);
+          });
+          $img.addClass("pointer");
           $img.load(function() {
             return $container.masonry("reload");
           });
@@ -3772,7 +3774,7 @@ define('text!mylibs/pictures/views/picture.html',[],function () { return '<div c
             intent = new Intent("http://webintents.org/share", "image/*", $img.attr("src"));
             return window.navigator.startActivity(intent, function(data) {});
           });
-          return $div.on("click", ".trash", function() {
+          $div.on("click", ".trash", function() {
             $.subscribe("/file/deleted/" + name, function() {
               $div.kendoStop(true).kendoAnimate({
                 effects: "zoomOut fadeOut",
@@ -3787,6 +3789,7 @@ define('text!mylibs/pictures/views/picture.html',[],function () { return '<div c
             });
             return file["delete"](name);
           });
+          return $container.append($div);
         });
       },
       reload: function() {
@@ -6650,10 +6653,11 @@ define("libs/webgl/glfx.min", function(){});
     };
     return pub = {
       init: function(container, v) {
-        var $footer, $header, $preview;
+        var $footer, $header, $mask, $preview;
         $container = $("#" + container);
         $header = $container.find(".header");
         $preview = $container.find(".body");
+        $mask = $container.find(".mask");
         $footer = $container.find(".footer");
         video = v;
         canvas = document.createElement("canvas");
@@ -6715,7 +6719,19 @@ define("libs/webgl/glfx.min", function(){});
         $.subscribe("/preview/snapshot", function() {
           var callback;
           callback = function() {
-            return $(webgl).kendoAnimate({
+            return $mask.fadeIn(50, function() {
+              $mask.fadeOut(900);
+              return $.publish("/snapshot/create", [webgl.toDataURL()]);
+            });
+          };
+          return $.publish("/camera/countdown", [3, callback]);
+        });
+        $.subscribe("/preview/photobooth", function() {
+          var callback, images, photoNumber;
+          images = [];
+          photoNumber = 2;
+          callback = function() {
+            $(webgl).kendoAnimate({
               effects: "zoomOut: fadeOut",
               duration: 300,
               show: false
@@ -6728,14 +6744,6 @@ define("libs/webgl/glfx.min", function(){});
                 return $.publish("/snapshot/create", [webgl.toDataURL()]);
               }
             });
-          };
-          return $.publish("/camera/countdown", [3, callback]);
-        });
-        $.subscribe("/preview/photobooth", function() {
-          var callback, images, photoNumber;
-          images = [];
-          photoNumber = 2;
-          callback = function() {
             --photoNumber;
             images.push(webgl.toDataURL());
             if (photoNumber > 0) {
@@ -6775,11 +6783,7 @@ define('text!mylibs/preview/views/preview.html',[],function () { return '<a href
         _results = [];
         for (_i = 0, _len = previews.length; _i < _len; _i++) {
           preview = previews[_i];
-          if (frame === 200) {
-            frame = 0;
-          } else {
-            frame = frame + 1;
-          }
+          frame++;
           _results.push(preview.filter(preview.canvas, canvas, frame));
         }
         return _results;

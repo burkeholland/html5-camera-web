@@ -26,7 +26,3 @@ kendo.default.min.css
 site.css
 ----------------
 site.css
-
-vintagejs.css
-----------------
-vintagejs.css

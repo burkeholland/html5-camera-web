@@ -18,11 +18,7 @@
         _results = [];
         for (_i = 0, _len = previews.length; _i < _len; _i++) {
           preview = previews[_i];
-          if (frame === 200) {
-            frame = 0;
-          } else {
-            frame = frame + 1;
-          }
+          frame++;
           _results.push(preview.filter(preview.canvas, canvas, frame));
         }
         return _results;
