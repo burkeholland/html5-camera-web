@@ -75,6 +75,7 @@
       data: [
         {
           name: "normal",
+          kind: "webgl",
           filter: function(canvas, element) {
             var effect;
             effect = function() {
@@ -84,6 +85,7 @@
           }
         }, {
           name: "bulge",
+          kind: "webgl",
           filter: function(canvas, element) {
             var effect;
             effect = function() {
@@ -93,6 +95,7 @@
           }
         }, {
           name: "pinch",
+          kind: "webgl",
           filter: function(canvas, element) {
             var effect;
             effect = function() {
@@ -102,6 +105,7 @@
           }
         }, {
           name: "swirl",
+          kind: "webgl",
           filter: function(canvas, element) {
             var effect;
             effect = function() {
@@ -111,6 +115,7 @@
           }
         }, {
           name: "zoomBlur",
+          kind: "webgl",
           filter: function(canvas, element) {
             var effect;
             effect = function() {
@@ -120,6 +125,7 @@
           }
         }, {
           name: "blockhead",
+          kind: "webgl",
           filter: function(canvas, element) {
             var effect;
             effect = function() {
@@ -129,6 +135,7 @@
           }
         }, {
           name: "mirrorLeft",
+          kind: "webgl",
           filter: function(canvas, element) {
             var effect;
             effect = function() {
@@ -138,6 +145,7 @@
           }
         }, {
           name: "mirrorPinch",
+          kind: "webgl",
           filter: function(canvas, element) {
             var effect;
             effect = function() {
@@ -148,6 +156,7 @@
           }
         }, {
           name: "mirrorTop",
+          kind: "webgl",
           filter: function(canvas, element) {
             var effect;
             effect = function() {
@@ -157,6 +166,7 @@
           }
         }, {
           name: "quadRotate",
+          kind: "webgl",
           filter: function(canvas, element) {
             var effect;
             effect = function() {
@@ -166,6 +176,7 @@
           }
         }, {
           name: "colorHalfTone",
+          kind: "webgl",
           filter: function(canvas, element) {
             var effect;
             effect = function() {
@@ -175,6 +186,7 @@
           }
         }, {
           name: "pixelate",
+          kind: "webgl",
           filter: function(canvas, element) {
             var effect;
             effect = function() {
@@ -184,6 +196,7 @@
           }
         }, {
           name: "hopePoster",
+          kind: "webgl",
           filter: function(canvas, element) {
             var effect;
             effect = function() {
@@ -193,6 +206,7 @@
           }
         }, {
           name: "photocopy",
+          kind: "webgl",
           filter: function(canvas, element, frame) {
             var effect;
             effect = function() {
@@ -202,6 +216,7 @@
           }
         }, {
           name: "oldFilm",
+          kind: "webgl",
           filter: function(canvas, element, frame) {
             var effect;
             effect = function() {
@@ -211,6 +226,7 @@
           }
         }, {
           name: "vhs",
+          kind: "webgl",
           filter: function(canvas, element, frame) {
             var effect;
             effect = function() {
@@ -220,6 +236,7 @@
           }
         }, {
           name: "quadColor",
+          kind: "webgl",
           filter: function(canvas, element) {
             var effect;
             effect = function() {
@@ -229,6 +246,7 @@
           }
         }, {
           name: "kaleidoscope",
+          kind: "webgl",
           filter: function(canvas, element) {
             var effect;
             effect = function() {
@@ -238,6 +256,7 @@
           }
         }, {
           name: "invert",
+          kind: "webgl",
           filter: function(canvas, element) {
             var effect;
             effect = function() {
@@ -247,6 +266,7 @@
           }
         }, {
           name: "chromeLogo",
+          kind: "webgl",
           filter: function(canvas, element, frame) {
             var effect;
             effect = function() {
@@ -256,7 +276,7 @@
           }
         }, {
           name: "glasses",
-          type: "face",
+          kind: "face",
           filter: function(canvas, video) {
             return trackFace(video, canvas, face.props.glasses);
           }

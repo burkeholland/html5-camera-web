@@ -32,7 +32,7 @@ define([
 
                 frame++
 
-                if preview.type
+                if preview.kind == "face"
 
                     preview.filter(preview.canvas, video)
 
@@ -113,7 +113,7 @@ define([
 
                             preview.name = item.name
 
-                            if item.type == "face"
+                            if item.kind == "face"
                                 preview.canvas = document.createElement "canvas"
                                 preview.canvas.width = 200
                                 preview.canvas.height = 150

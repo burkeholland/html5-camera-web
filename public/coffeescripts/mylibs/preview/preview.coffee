@@ -35,7 +35,7 @@ define([
             
             frame = if frame == 200 then 0 else ++frame
 
-            if preview.type == "face"
+            if preview.kind == "face"
                 preview.filter(canvas, video)
             else
                 preview.filter(webgl, video, frame)
@@ -65,7 +65,7 @@ define([
                 
                 $.extend(preview, e)
 
-                if preview.type == "face"
+                if preview.kind == "face"
                     $(webgl).hide()
                     $(canvas).show()
                     currentCanvas = canvas

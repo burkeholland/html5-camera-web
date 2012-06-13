@@ -88,6 +88,7 @@ define([
                 {
 
                     name: "normal"
+                    kind: "webgl"
                     filter: (canvas, element) ->
                         effect = ->
                             canvas
@@ -98,6 +99,7 @@ define([
 
                 {
                     name: "bulge"
+                    kind: "webgl"
                     filter: (canvas, element) ->
                         effect = -> 
                             canvas.bulgePinch canvas.width / 2,  canvas.height / 2, (canvas.width / 2) / 2, .65 
@@ -106,6 +108,7 @@ define([
 
                 {
                     name: "pinch"
+                    kind: "webgl"
                     filter: (canvas, element) -> 
                         effect = ->
                             canvas.bulgePinch canvas.width / 2,  canvas.height / 2, (canvas.width / 2) / 2, -.65
@@ -114,6 +117,7 @@ define([
 
                 {
                     name: "swirl"
+                    kind: "webgl"
                     filter: (canvas, element) -> 
                         effect = ->
                             canvas.swirl canvas.width / 2,  canvas.height / 2, (canvas.width / 2) / 2, 3
@@ -122,6 +126,7 @@ define([
 
                 {
                     name: "zoomBlur"
+                    kind: "webgl"
                     filter: (canvas, element) -> 
                         effect = ->
                             canvas.zoomBlur canvas.width / 2,  canvas.height / 2, 2, canvas.height / 5
@@ -130,6 +135,7 @@ define([
 
                 {
                     name: "blockhead"
+                    kind: "webgl"
                     filter: (canvas, element) -> 
                         effect = ->
                             canvas.blockhead canvas.width / 2,  canvas.height / 2, 200, 300, 1
@@ -138,6 +144,7 @@ define([
 
                 {
                     name: "mirrorLeft"
+                    kind: "webgl"
                     filter: (canvas, element) -> 
                         effect = ->
                             canvas.mirror 0
@@ -146,6 +153,7 @@ define([
 
                 {
                     name: "mirrorPinch"
+                    kind: "webgl"
                     filter: (canvas, element) ->
                         effect = -> 
                             canvas.bulgePinch canvas.width / 2,  canvas.height / 2, (canvas.width / 2) / 2, -.65 
@@ -155,6 +163,7 @@ define([
 
                 {
                     name: "mirrorTop"
+                    kind: "webgl"
                     filter: (canvas, element) -> 
                         effect = ->
                             canvas.mirror 1.57841
@@ -163,6 +172,7 @@ define([
 
                 {
                     name: "quadRotate"
+                    kind: "webgl"
                     filter: (canvas, element) -> 
                         effect = ->
                             canvas.quadRotate 0, 1, 2, 3
@@ -171,6 +181,7 @@ define([
 
                 {
                     name: "colorHalfTone"
+                    kind: "webgl"
                     filter: (canvas, element) -> 
                         effect = ->
                             canvas.colorHalftone canvas.width / 2,  canvas.height / 2, .30, 3
@@ -179,6 +190,7 @@ define([
 
                 {
                     name: "pixelate"
+                    kind: "webgl"
                     filter: (canvas, element) -> 
                         effect = ->
                             canvas.pixelate canvas.width / 2,  canvas.height / 2, 5
@@ -187,6 +199,7 @@ define([
 
                 {
                     name: "hopePoster"
+                    kind: "webgl"
                     filter: (canvas, element) -> 
                         effect = ->
                             canvas.hopePoster()
@@ -195,6 +208,7 @@ define([
 
                 {
                     name: "photocopy"
+                    kind: "webgl"
                     filter: (canvas, element, frame) -> 
                         effect = ->
                             canvas.photocopy .5, frame
@@ -203,6 +217,7 @@ define([
 
                 {
                     name: "oldFilm"
+                    kind: "webgl"
                     filter: (canvas, element, frame) -> 
                         effect = ->
                             canvas.oldFilm frame
@@ -211,6 +226,7 @@ define([
 
                 {
                     name: "vhs"
+                    kind: "webgl"
                     filter: (canvas, element, frame) -> 
                         effect = ->
                             canvas.vhs frame
@@ -219,6 +235,7 @@ define([
                  
                 {               
                     name: "quadColor"
+                    kind: "webgl"
                     filter: (canvas, element) -> 
                         effect = ->
                             canvas.quadColor [ 1, .2, .1 ], [ 0, .8, 0 ], [ .25, .5, 1 ], [ .8, .8, .8 ]
@@ -228,6 +245,7 @@ define([
 
                 {
                     name: "kaleidoscope"
+                    kind: "webgl"
                     filter: (canvas, element) -> 
                         effect = ->
                             canvas.kaleidoscope canvas.width / 2,  canvas.height / 2, 200, 0
@@ -236,6 +254,7 @@ define([
 
                 {
                     name: "invert"
+                    kind: "webgl"
                     filter: (canvas, element) -> 
                         effect = ->
                             canvas.invert()
@@ -244,6 +263,7 @@ define([
 
                 {
                     name: "chromeLogo"
+                    kind: "webgl"
                     filter: (canvas, element, frame) -> 
                         effect = ->
                             canvas.chromeLogo canvas.width / 2, canvas.height / 2, frame, canvas.height / 2.5
@@ -252,7 +272,7 @@ define([
 
                 {
                     name: "glasses"
-                    type: "face"
+                    kind: "face"
                     filter: (canvas, video) ->
 
                         trackFace video, canvas, face.props.glasses

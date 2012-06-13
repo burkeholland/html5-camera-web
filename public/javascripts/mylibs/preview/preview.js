@@ -24,7 +24,7 @@
                     canvas2d.drawImage(video, 0, 0, video.width, video.height)
         */
         frame = frame === 200 ? 0 : ++frame;
-        if (preview.type === "face") {
+        if (preview.kind === "face") {
           return preview.filter(canvas, video);
         } else {
           return preview.filter(webgl, video, frame);
@@ -46,7 +46,7 @@
         $preview.append(webgl);
         $.subscribe("/preview/show", function(e) {
           $.extend(preview, e);
-          if (preview.type === "face") {
+          if (preview.kind === "face") {
             $(webgl).hide();
             $(canvas).show();
             currentCanvas = canvas;

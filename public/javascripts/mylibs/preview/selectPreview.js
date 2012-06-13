@@ -18,7 +18,7 @@
         for (_i = 0, _len = previews.length; _i < _len; _i++) {
           preview = previews[_i];
           frame++;
-          if (preview.type) {
+          if (preview.kind === "face") {
             _results.push(preview.filter(preview.canvas, video));
           } else {
             _results.push(preview.filter(preview.canvas, video, frame));
@@ -81,7 +81,7 @@
                 preview = {};
                 $.extend(preview, item);
                 preview.name = item.name;
-                if (item.type === "face") {
+                if (item.kind === "face") {
                   preview.canvas = document.createElement("canvas");
                   preview.canvas.width = 200;
                   preview.canvas.height = 150;
