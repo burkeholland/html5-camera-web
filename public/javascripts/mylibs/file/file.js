@@ -59,7 +59,6 @@
               return dirReader.readEntries(function(results) {
                 var entry, _i, _j, _len, _len2, _results;
                 if (!results.length) {
-                  console.info(entries);
                   entries.sort(compare);
                   _results = [];
                   for (_i = 0, _len = entries.length; _i < _len; _i++) {
@@ -78,8 +77,7 @@
             };
             return read();
           }, errorHandler);
-          fileSystem = fs;
-          return console.info("Got Storage!");
+          return fileSystem = fs;
         };
       },
       save: function(name, dataURI) {

@@ -45,6 +45,7 @@
         $preview.append(canvas);
         $preview.append(webgl);
         $.subscribe("/preview/show", function(e) {
+          effects.clearBuffer();
           $.extend(preview, e);
           if (preview.kind === "face") {
             $(webgl).hide();

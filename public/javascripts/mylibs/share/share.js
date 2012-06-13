@@ -24,7 +24,7 @@
             contentType: false
           });
         };
-        return openCenteredWindow(callback);
+        return openCenteredWindow(null, callback);
       }
     });
     openCenteredWindow = function(url, callback) {

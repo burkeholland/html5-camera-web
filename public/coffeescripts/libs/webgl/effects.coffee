@@ -6,6 +6,7 @@ define([
 ], ($, kendo) ->
 
     face = {}
+    buffer =[]
 
     draw = (canvas, element, effect) ->
         texture = canvas.texture(element)
@@ -16,7 +17,7 @@ define([
         canvas.update()
         texture.destroy()
 
-    faceCore = (video, canvas, prop) ->
+    faceCore = (video, canvas, prop, callback) ->
 
         if face.lastCanvas != canvas                      
             face.ctx = canvas.getContext "2d"
@@ -32,33 +33,57 @@ define([
             min_neighbors: 1
         }
 
-    trackFace = (video, canvas, prop) ->
+    trackFace = (video, canvas, prop, xoffset, yoffset, xscaler, yscaler) ->
 
         aspectWidth = video.width / face.backCanvas.width
+        face.backCanvasheight = (video.height / video.width) * face.backCanvas.width
+        aspectHeight = video.height / face.backCanvas.height
+
+        w = 4
+        m = 4
+
+        comp = faceCore video, canvas, prop
+
+        if comp.length
+            face.comp = comp
+
+        for i in face.comp
+            face.ctx.drawImage prop, 
+                (i.x * aspectWidth) - (xoffset * aspectWidth), 
+                (i.y * aspectHeight) - (yoffset * aspectHeight) 
+                (i.width * aspectWidth) * xscaler, 
+                (i.height * aspectWidth) * yscaler
+
+    trackHead = (video, canvas, prop, xOffset, yOffset, width, height) ->
+
+        aspectWidth = video.width / face.backCanvas.width
+        face.backCanvasheight = (video.height / video.width) * face.backCanvas.width
         aspectHeight = video.height / face.backCanvas.height
 
         comp = faceCore video, canvas, prop
 
-        for i in comp
-            face.ctx.drawImage(prop, i.x * aspectWidth, i.y * aspectHeight, i.width * aspectWidth, i.height * aspectHeight)
+        if comp.length
+            face.comp = comp
 
-    trackHead = (video, canvas, prop) ->
-
-        aspectWidth = video.width / face.backCanvas.width
-        height = (video.height / video.width) * face.backCanvas.width
-        aspectHeight = height / face.backCanvas.height
-
-        comp = faceCore video, canvas, prop
-
-        for i in comp
-            face.ctx.drawImage(prop, i.x * aspectWidth, (i.y * aspectHeight) - ((i.height * aspectHeight) / 2), i.width * aspectWidth, i.height * aspectHeight)     
+        for i in face.comp
+            face.ctx.drawImage prop, 
+            i.x * aspectWidth - (xOffset * aspectWidth), 
+            (i.y * aspectHeight) - (yOffset * aspectHeight), 
+            (i.width * aspectWidth) + (width * aspectWidth), 
+            (i.height * aspectHeight) + (height * aspectHeight)     
 
     pub = 
+
+        clearBuffer: ->
+
+            buffer = []
 
         init: ->
 
             face.backCanvas = document.createElement "canvas"
             face.backCanvas.width = 200
+
+            face.comp = []
 
             face.lastCanvas = {}
 
@@ -69,25 +94,18 @@ define([
             face.props.glasses = new Image()
             face.props.glasses.src = "images/glasses.png"
 
-            face.props.sombraro = new Image()
-            face.props.sombraro.src = "images/sombraro.png"
-
             face.props.horns = new Image()
             face.props.horns.src = "images/horns.png"
 
-            ###
-            face.images.glasses = "images/glasses.png"
-            face.images.hipster = "images/hipster.png"
-            face.images.halo = "images/halo.png"
-            face.images.sombrero = "images/sombrero.png"
-            face.images.horns = "images/horns.png"
-            ###
+            face.props.hipster = new Image()
+            face.props.hipster.src = "images/hipster.png"
+
 
         data: [
 
                 {
 
-                    name: "normal"
+                    name: "Normal"
                     kind: "webgl"
                     filter: (canvas, element) ->
                         effect = ->
@@ -96,9 +114,8 @@ define([
 
                 }
 
-
                 {
-                    name: "bulge"
+                    name: "Bulge"
                     kind: "webgl"
                     filter: (canvas, element) ->
                         effect = -> 
@@ -107,7 +124,7 @@ define([
                 }
 
                 {
-                    name: "pinch"
+                    name: "Pinch"
                     kind: "webgl"
                     filter: (canvas, element) -> 
                         effect = ->
@@ -116,7 +133,7 @@ define([
                 }
 
                 {
-                    name: "swirl"
+                    name: "Swirl"
                     kind: "webgl"
                     filter: (canvas, element) -> 
                         effect = ->
@@ -125,7 +142,7 @@ define([
                 }
 
                 {
-                    name: "zoomBlur"
+                    name: "Zoom Blur"
                     kind: "webgl"
                     filter: (canvas, element) -> 
                         effect = ->
@@ -134,7 +151,7 @@ define([
                 }
 
                 {
-                    name: "blockhead"
+                    name: "Blockhead"
                     kind: "webgl"
                     filter: (canvas, element) -> 
                         effect = ->
@@ -143,7 +160,7 @@ define([
                 }
 
                 {
-                    name: "mirrorLeft"
+                    name: "Mirror Left"
                     kind: "webgl"
                     filter: (canvas, element) -> 
                         effect = ->
@@ -152,7 +169,7 @@ define([
                 }
 
                 {
-                    name: "mirrorPinch"
+                    name: "Mirror Pinch (Evil)"
                     kind: "webgl"
                     filter: (canvas, element) ->
                         effect = -> 
@@ -162,25 +179,75 @@ define([
                 }
 
                 {
-                    name: "mirrorTop"
+                    name: "Mirror Top"
                     kind: "webgl"
                     filter: (canvas, element) -> 
                         effect = ->
-                            canvas.mirror 1.57841
+                            canvas.mirror Math.PI * .5
                         draw(canvas, element, effect)
                 }
 
                 {
-                    name: "quadRotate"
+                    name: "Mirror Bottom"
                     kind: "webgl"
                     filter: (canvas, element) -> 
                         effect = ->
-                            canvas.quadRotate 0, 1, 2, 3
+                            canvas.mirror Math.PI * 1.5
+                        draw(canvas, element, effect)
+                }                
+
+                {
+                    name: "Mirror Tube"
+                    kind: "webgl"
+                    filter: (canvas, element) ->
+                        effect = ->
+                            canvas.mirrorTube canvas.width / 2, canvas.height / 2, canvas.height / 4
                         draw(canvas, element, effect)
                 }
 
                 {
-                    name: "colorHalfTone"
+                    name: "Quad"
+                    kind: "webgl"
+                    filter: (canvas, element) -> 
+                        effect = ->
+                            canvas.quadRotate 0, 0, 0, 0
+                        draw(canvas, element, effect)
+                }
+
+                {               
+                    name: "Quad Color"
+                    kind: "webgl"
+                    filter: (canvas, element) -> 
+                        effect = ->
+                            canvas.quadColor [ 1, .2, .1 ], [ 0, .8, 0 ], [ .25, .5, 1 ], [ .8, .8, .8 ]
+                        draw(canvas, element, effect)
+                }
+
+                {
+                    name: "Comix"
+                    kind: "webgl"
+                    filter: (canvas, element) -> 
+                        effect = ->
+                            canvas.quadRotate 0, 0, 0, 0
+                            canvas.denoise 50
+                            canvas.ink .5
+                        draw(canvas, element, effect)
+                }
+
+                {
+                    name: "I Dont' Know"
+                    kind: "webgl"
+                    filter: (canvas, element) -> 
+                        effect = ->
+                            canvas.quadRotate 0, 0, 0, 0
+                            canvas.denoise 50
+                            canvas.ink 1
+                            canvas.quadColor [ 1, .2, .1 ], [ 0, .8, 0 ], [ .25, .5, 1 ], [ .8, .8, .8 ]
+                        draw(canvas, element, effect) 
+                }
+
+                {
+                    name: "Color Half Tone"
                     kind: "webgl"
                     filter: (canvas, element) -> 
                         effect = ->
@@ -189,7 +256,7 @@ define([
                 }
 
                 {
-                    name: "pixelate"
+                    name: "Pixelate"
                     kind: "webgl"
                     filter: (canvas, element) -> 
                         effect = ->
@@ -198,7 +265,7 @@ define([
                 }    
 
                 {
-                    name: "hopePoster"
+                    name: "Hope Poster"
                     kind: "webgl"
                     filter: (canvas, element) -> 
                         effect = ->
@@ -207,7 +274,7 @@ define([
                 }
 
                 {
-                    name: "photocopy"
+                    name: "Photocopy"
                     kind: "webgl"
                     filter: (canvas, element, frame) -> 
                         effect = ->
@@ -216,7 +283,7 @@ define([
                 }
 
                 {
-                    name: "oldFilm"
+                    name: "Old Film"
                     kind: "webgl"
                     filter: (canvas, element, frame) -> 
                         effect = ->
@@ -225,44 +292,57 @@ define([
                 }
 
                 {
-                    name: "vhs"
+                    name: "VHS"
                     kind: "webgl"
                     filter: (canvas, element, frame) -> 
                         effect = ->
                             canvas.vhs frame
                         draw(canvas, element, effect)
                 }
-                 
-                {               
-                    name: "quadColor"
-                    kind: "webgl"
-                    filter: (canvas, element) -> 
-                        effect = ->
-                            canvas.quadColor [ 1, .2, .1 ], [ 0, .8, 0 ], [ .25, .5, 1 ], [ .8, .8, .8 ]
-                        draw(canvas, element, effect)
-                }
-
 
                 {
-                    name: "kaleidoscope"
+                    name: "Time Strips"
                     kind: "webgl"
-                    filter: (canvas, element) -> 
-                        effect = ->
-                            canvas.kaleidoscope canvas.width / 2,  canvas.height / 2, 200, 0
-                        draw(canvas, element, effect)
-                }
+                    filter: (canvas, element, frame) ->
 
-                {
-                    name: "invert"
-                    kind: "webgl"
-                    filter: (canvas, element) -> 
                         effect = ->
-                            canvas.invert()
+
+                            createBuffers = (length) ->
+                                while buffer.length < length
+                                    buffer.push canvas.texture(element)
+
+                            createBuffers(32)
+                            buffer[frame++ % buffer.length].loadContentsOf(element)
+                            canvas.timeStrips(buffer, frame)
+                            canvas.matrixWarp([-1, 0, 0, 1], false, true)
+
                         draw(canvas, element, effect)
+
                 }
 
                 {
-                    name: "chromeLogo"
+                    name: "Your Ghost"
+                    kind: "webgl"
+                    filter: (canvas, element, frame) ->
+
+                        effect = ->
+
+                            createBuffers = (length) ->
+                                while buffer.length < length
+                                    buffer.push canvas.texture(element)
+
+                            createBuffers(32)
+                            buffer[frame++ % buffer.length].loadContentsOf(element)
+                            canvas.matrixWarp([1, 0, 0, 1], false, true)
+                            canvas.blend buffer[frame % buffer.length], .5
+                            canvas.matrixWarp([-1, 0, 0, 1], false, true)
+
+                        draw(canvas, element, effect)
+
+                }
+
+                {
+                    name: "Chromed"
                     kind: "webgl"
                     filter: (canvas, element, frame) -> 
                         effect = ->
@@ -271,21 +351,50 @@ define([
                 }
 
                 {
-                    name: "glasses"
+                    name: "Kaleidoscope"
+                    kind: "webgl"
+                    filter: (canvas, element) -> 
+                        effect = ->
+                            canvas.kaleidoscope canvas.width / 2,  canvas.height / 2, 200, 0
+                        draw(canvas, element, effect)
+                }
+
+                {
+                    name: "Inverted"
+                    kind: "webgl"
+                    filter: (canvas, element) -> 
+                        effect = ->
+                            canvas.invert()
+                        draw(canvas, element, effect)
+                }
+
+                {
+                    name: "In Disguise"
                     kind: "face"
                     filter: (canvas, video) ->
 
-                        trackFace video, canvas, face.props.glasses
+                        trackFace video, canvas, face.props.glasses, 0, 0, 1, 1
                         
                 }
 
-                # {
-                #     name: "horns"
-                #     type: "face"
-                #     filter: (canvas, video) ->
-                        
-                #         trackHead video, canvas, face.props.horns
-                # }
+                {
+                    name: "Horns"
+                    kind: "face"
+                    filter: (canvas, video) ->
+
+                        trackHead video, canvas, face.props.horns, 0, 25, 0, 0
+                }
+
+                
+                {
+                    name: "Hipsterizer"
+                    kind: "face"
+                    filter: (canvas, video) ->
+
+                        trackFace video, canvas, face.props.hipster, 0, 0, 1, 2.2
+                }
+
+                
         ]
             
 )

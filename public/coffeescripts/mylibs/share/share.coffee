@@ -30,7 +30,7 @@ define([
                     contentType: false
                 })
 
-            openCenteredWindow(callback)
+            openCenteredWindow(null, callback)
     })
 
     openCenteredWindow = (url, callback) ->

@@ -95,7 +95,7 @@ exports.tweet = function(req, res){
             "oauth_token": req.session.oAuthVars.oauth_access_token,
             "oauth_secret": req.session.oAuthVars.oauth_access_token_secret,
             "message": "Test post From Node OAuth. Can you see me now?",
-            "media": req.file
+            "media": req.body.file
         },
         function(error, data) {
             if(error) console.log(error);

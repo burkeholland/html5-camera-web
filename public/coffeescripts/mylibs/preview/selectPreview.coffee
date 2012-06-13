@@ -3,7 +3,8 @@ define([
   'Kendo'
   'libs/webgl/effects'
   'mylibs/utils/utils'
-  'text!mylibs/preview/views/preview.html'
+
+  'text!mylibs/preview/views/selectPreview.html'
 ], ($, kendo, effects, utils, template) ->
     
     paused = false
@@ -97,6 +98,19 @@ define([
                 
                 change: ->
 
+                    viewModel = kendo.observable({
+
+                        name: ""
+
+                        click: ->
+
+                            paused = true
+                            $("footer").kendoStop(true).kendoAnimate({ effects: "fadeOut", hide: true, duration: 200 })
+                            $container.kendoStop(true).kendoAnimate({ effects: "zoomOut fadeOut", hide: true, duration: 500 })
+                            $.publish("/preview/show", [preview])
+
+                    })
+
                     $currentPage = $container.find(".current-page")
                     $nextPage = $container.find(".next-page")
 
@@ -108,10 +122,10 @@ define([
 
                         do ->
 
+                            $template = kendo.template(template)
+
                             preview = {}
                             $.extend(preview, item)
-
-                            preview.name = item.name
 
                             if item.kind == "face"
                                 preview.canvas = document.createElement "canvas"
@@ -120,21 +134,25 @@ define([
                             else
                                 preview.canvas = fx.canvas()               
 
+                            content = $template({ name: preview.name, width: width, height: height })
+
+                            $content = $(content)
+
                             previews.push(preview)
                         
-                            $a = $("<a href='#' class='preview'></a>").append(preview.canvas).click(->
+                            $content.find("a").append(preview.canvas).click(->
                                 paused = true
                                 $("footer").kendoStop(true).kendoAnimate({ effects: "fadeOut", hide: true, duration: 200 })
                                 $container.kendoStop(true).kendoAnimate({ effects: "zoomOut fadeOut", hide: true, duration: 500 })
                                 $.publish("/preview/show", [preview])
                             )
-
-                            $nextPage.append($a)
+                
+                            $nextPage.append($content)
 
                             $currentPage.kendoStop(true).kendoAnimate { effects: "slide:down fadeOut", duration: 500, hide: true, complete: ->
 
                                 $currentPage.removeClass("current-page").addClass("next-page")
-                                $currentPage.find("a").remove()
+                                $currentPage.find(".preview").remove()
 
                             }   
 

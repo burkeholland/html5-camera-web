@@ -1,6 +1,6 @@
 (function() {
 
-  define(['jQuery', 'Kendo', 'libs/webgl/effects', 'mylibs/utils/utils', 'text!mylibs/preview/views/preview.html'], function($, kendo, effects, utils, template) {
+  define(['jQuery', 'Kendo', 'libs/webgl/effects', 'mylibs/utils/utils', 'text!mylibs/preview/views/selectPreview.html'], function($, kendo, effects, utils, template) {
     var $container, canvas, draw, frame, height, paused, previews, pub, update, video, webgl, width;
     paused = false;
     canvas = {};
@@ -67,7 +67,24 @@
           data: effects.data,
           pageSize: 6,
           change: function() {
-            var item, _i, _len, _ref, _results;
+            var item, viewModel, _i, _len, _ref, _results;
+            viewModel = kendo.observable({
+              name: "",
+              click: function() {
+                paused = true;
+                $("footer").kendoStop(true).kendoAnimate({
+                  effects: "fadeOut",
+                  hide: true,
+                  duration: 200
+                });
+                $container.kendoStop(true).kendoAnimate({
+                  effects: "zoomOut fadeOut",
+                  hide: true,
+                  duration: 500
+                });
+                return $.publish("/preview/show", [preview]);
+              }
+            });
             $currentPage = $container.find(".current-page");
             $nextPage = $container.find(".next-page");
             paused = true;
@@ -77,10 +94,10 @@
             for (_i = 0, _len = _ref.length; _i < _len; _i++) {
               item = _ref[_i];
               _results.push((function() {
-                var $a, preview;
+                var $content, $template, content, preview;
+                $template = kendo.template(template);
                 preview = {};
                 $.extend(preview, item);
-                preview.name = item.name;
                 if (item.kind === "face") {
                   preview.canvas = document.createElement("canvas");
                   preview.canvas.width = 200;
@@ -88,8 +105,14 @@
                 } else {
                   preview.canvas = fx.canvas();
                 }
+                content = $template({
+                  name: preview.name,
+                  width: width,
+                  height: height
+                });
+                $content = $(content);
                 previews.push(preview);
-                $a = $("<a href='#' class='preview'></a>").append(preview.canvas).click(function() {
+                $content.find("a").append(preview.canvas).click(function() {
                   paused = true;
                   $("footer").kendoStop(true).kendoAnimate({
                     effects: "fadeOut",
@@ -103,14 +126,14 @@
                   });
                   return $.publish("/preview/show", [preview]);
                 });
-                $nextPage.append($a);
+                $nextPage.append($content);
                 $currentPage.kendoStop(true).kendoAnimate({
                   effects: "slide:down fadeOut",
                   duration: 500,
                   hide: true,
                   complete: function() {
                     $currentPage.removeClass("current-page").addClass("next-page");
-                    return $currentPage.find("a").remove();
+                    return $currentPage.find(".preview").remove();
                   }
                 });
                 return $nextPage.kendoStop(true).kendoAnimate({

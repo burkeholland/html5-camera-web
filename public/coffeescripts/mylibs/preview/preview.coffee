@@ -63,6 +63,8 @@ define([
             
             $.subscribe("/preview/show", (e) ->
                 
+                effects.clearBuffer()
+
                 $.extend(preview, e)
 
                 if preview.kind == "face"

@@ -69,7 +69,6 @@ define([
 
               if not results.length
 
-                console.info entries
                 entries.sort(compare)
 
                 for entry in entries
@@ -91,8 +90,6 @@ define([
         , errorHandler
 
         fileSystem = fs
-        
-        console.info("Got Storage!")
 
     save: (name, dataURI) ->
 

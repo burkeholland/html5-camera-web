@@ -1,8 +1,9 @@
 (function() {
 
   define(['jQuery', 'Kendo', 'libs/face/ccv', 'libs/face/face'], function($, kendo) {
-    var draw, face, faceCore, pub, trackFace, trackHead;
+    var buffer, draw, face, faceCore, pub, trackFace, trackHead;
     face = {};
+    buffer = [];
     draw = function(canvas, element, effect) {
       var texture;
       texture = canvas.texture(element);
@@ -11,7 +12,7 @@
       canvas.update();
       return texture.destroy();
     };
-    faceCore = function(video, canvas, prop) {
+    faceCore = function(video, canvas, prop, callback) {
       var comp;
       if (face.lastCanvas !== canvas) {
         face.ctx = canvas.getContext("2d");
@@ -26,55 +27,59 @@
         min_neighbors: 1
       });
     };
-    trackFace = function(video, canvas, prop) {
-      var aspectHeight, aspectWidth, comp, i, _i, _len, _results;
+    trackFace = function(video, canvas, prop, xoffset, yoffset, xscaler, yscaler) {
+      var aspectHeight, aspectWidth, comp, i, m, w, _i, _len, _ref, _results;
       aspectWidth = video.width / face.backCanvas.width;
+      face.backCanvasheight = (video.height / video.width) * face.backCanvas.width;
       aspectHeight = video.height / face.backCanvas.height;
+      w = 4;
+      m = 4;
       comp = faceCore(video, canvas, prop);
+      if (comp.length) face.comp = comp;
+      _ref = face.comp;
       _results = [];
-      for (_i = 0, _len = comp.length; _i < _len; _i++) {
-        i = comp[_i];
-        _results.push(face.ctx.drawImage(prop, i.x * aspectWidth, i.y * aspectHeight, i.width * aspectWidth, i.height * aspectHeight));
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        i = _ref[_i];
+        _results.push(face.ctx.drawImage(prop, (i.x * aspectWidth) - (xoffset * aspectWidth), (i.y * aspectHeight) - (yoffset * aspectHeight), (i.width * aspectWidth) * xscaler, (i.height * aspectWidth) * yscaler));
       }
       return _results;
     };
-    trackHead = function(video, canvas, prop) {
-      var aspectHeight, aspectWidth, comp, height, i, _i, _len, _results;
+    trackHead = function(video, canvas, prop, xOffset, yOffset, width, height) {
+      var aspectHeight, aspectWidth, comp, i, _i, _len, _ref, _results;
       aspectWidth = video.width / face.backCanvas.width;
-      height = (video.height / video.width) * face.backCanvas.width;
-      aspectHeight = height / face.backCanvas.height;
+      face.backCanvasheight = (video.height / video.width) * face.backCanvas.width;
+      aspectHeight = video.height / face.backCanvas.height;
       comp = faceCore(video, canvas, prop);
+      if (comp.length) face.comp = comp;
+      _ref = face.comp;
       _results = [];
-      for (_i = 0, _len = comp.length; _i < _len; _i++) {
-        i = comp[_i];
-        _results.push(face.ctx.drawImage(prop, i.x * aspectWidth, (i.y * aspectHeight) - ((i.height * aspectHeight) / 2), i.width * aspectWidth, i.height * aspectHeight));
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        i = _ref[_i];
+        _results.push(face.ctx.drawImage(prop, i.x * aspectWidth - (xOffset * aspectWidth), (i.y * aspectHeight) - (yOffset * aspectHeight), (i.width * aspectWidth) + (width * aspectWidth), (i.height * aspectHeight) + (height * aspectHeight)));
       }
       return _results;
     };
     return pub = {
+      clearBuffer: function() {
+        return buffer = [];
+      },
       init: function() {
         face.backCanvas = document.createElement("canvas");
         face.backCanvas.width = 200;
+        face.comp = [];
         face.lastCanvas = {};
         face.backCtx = face.backCanvas.getContext("2d");
         face.props = {};
         face.props.glasses = new Image();
         face.props.glasses.src = "images/glasses.png";
-        face.props.sombraro = new Image();
-        face.props.sombraro.src = "images/sombraro.png";
         face.props.horns = new Image();
-        return face.props.horns.src = "images/horns.png";
-        /*
-                    face.images.glasses = "images/glasses.png"
-                    face.images.hipster = "images/hipster.png"
-                    face.images.halo = "images/halo.png"
-                    face.images.sombrero = "images/sombrero.png"
-                    face.images.horns = "images/horns.png"
-        */
+        face.props.horns.src = "images/horns.png";
+        face.props.hipster = new Image();
+        return face.props.hipster.src = "images/hipster.png";
       },
       data: [
         {
-          name: "normal",
+          name: "Normal",
           kind: "webgl",
           filter: function(canvas, element) {
             var effect;
@@ -84,7 +89,7 @@
             return draw(canvas, element, effect);
           }
         }, {
-          name: "bulge",
+          name: "Bulge",
           kind: "webgl",
           filter: function(canvas, element) {
             var effect;
@@ -94,7 +99,7 @@
             return draw(canvas, element, effect);
           }
         }, {
-          name: "pinch",
+          name: "Pinch",
           kind: "webgl",
           filter: function(canvas, element) {
             var effect;
@@ -104,7 +109,7 @@
             return draw(canvas, element, effect);
           }
         }, {
-          name: "swirl",
+          name: "Swirl",
           kind: "webgl",
           filter: function(canvas, element) {
             var effect;
@@ -114,7 +119,7 @@
             return draw(canvas, element, effect);
           }
         }, {
-          name: "zoomBlur",
+          name: "Zoom Blur",
           kind: "webgl",
           filter: function(canvas, element) {
             var effect;
@@ -124,7 +129,7 @@
             return draw(canvas, element, effect);
           }
         }, {
-          name: "blockhead",
+          name: "Blockhead",
           kind: "webgl",
           filter: function(canvas, element) {
             var effect;
@@ -134,7 +139,7 @@
             return draw(canvas, element, effect);
           }
         }, {
-          name: "mirrorLeft",
+          name: "Mirror Left",
           kind: "webgl",
           filter: function(canvas, element) {
             var effect;
@@ -144,7 +149,7 @@
             return draw(canvas, element, effect);
           }
         }, {
-          name: "mirrorPinch",
+          name: "Mirror Pinch (Evil)",
           kind: "webgl",
           filter: function(canvas, element) {
             var effect;
@@ -155,87 +160,47 @@
             return draw(canvas, element, effect);
           }
         }, {
-          name: "mirrorTop",
+          name: "Mirror Top",
           kind: "webgl",
           filter: function(canvas, element) {
             var effect;
             effect = function() {
-              return canvas.mirror(1.57841);
+              return canvas.mirror(Math.PI * .5);
             };
             return draw(canvas, element, effect);
           }
         }, {
-          name: "quadRotate",
+          name: "Mirror Bottom",
           kind: "webgl",
           filter: function(canvas, element) {
             var effect;
             effect = function() {
-              return canvas.quadRotate(0, 1, 2, 3);
+              return canvas.mirror(Math.PI * 1.5);
             };
             return draw(canvas, element, effect);
           }
         }, {
-          name: "colorHalfTone",
+          name: "Mirror Tube",
           kind: "webgl",
           filter: function(canvas, element) {
             var effect;
             effect = function() {
-              return canvas.colorHalftone(canvas.width / 2, canvas.height / 2, .30, 3);
+              return canvas.mirrorTube(canvas.width / 2, canvas.height / 2, canvas.height / 4);
             };
             return draw(canvas, element, effect);
           }
         }, {
-          name: "pixelate",
+          name: "Quad",
           kind: "webgl",
           filter: function(canvas, element) {
             var effect;
             effect = function() {
-              return canvas.pixelate(canvas.width / 2, canvas.height / 2, 5);
+              return canvas.quadRotate(0, 0, 0, 0);
             };
             return draw(canvas, element, effect);
           }
         }, {
-          name: "hopePoster",
-          kind: "webgl",
-          filter: function(canvas, element) {
-            var effect;
-            effect = function() {
-              return canvas.hopePoster();
-            };
-            return draw(canvas, element, effect);
-          }
-        }, {
-          name: "photocopy",
-          kind: "webgl",
-          filter: function(canvas, element, frame) {
-            var effect;
-            effect = function() {
-              return canvas.photocopy(.5, frame);
-            };
-            return draw(canvas, element, effect);
-          }
-        }, {
-          name: "oldFilm",
-          kind: "webgl",
-          filter: function(canvas, element, frame) {
-            var effect;
-            effect = function() {
-              return canvas.oldFilm(frame);
-            };
-            return draw(canvas, element, effect);
-          }
-        }, {
-          name: "vhs",
-          kind: "webgl",
-          filter: function(canvas, element, frame) {
-            var effect;
-            effect = function() {
-              return canvas.vhs(frame);
-            };
-            return draw(canvas, element, effect);
-          }
-        }, {
-          name: "quadColor",
+          name: "Quad Color",
           kind: "webgl",
           filter: function(canvas, element) {
             var effect;
@@ -245,27 +210,137 @@
             return draw(canvas, element, effect);
           }
         }, {
-          name: "kaleidoscope",
+          name: "Comix",
           kind: "webgl",
           filter: function(canvas, element) {
             var effect;
             effect = function() {
-              return canvas.kaleidoscope(canvas.width / 2, canvas.height / 2, 200, 0);
+              canvas.quadRotate(0, 0, 0, 0);
+              canvas.denoise(50);
+              return canvas.ink(.5);
             };
             return draw(canvas, element, effect);
           }
         }, {
-          name: "invert",
+          name: "I Dont' Know",
           kind: "webgl",
           filter: function(canvas, element) {
             var effect;
             effect = function() {
-              return canvas.invert();
+              canvas.quadRotate(0, 0, 0, 0);
+              canvas.denoise(50);
+              canvas.ink(1);
+              return canvas.quadColor([1, .2, .1], [0, .8, 0], [.25, .5, 1], [.8, .8, .8]);
             };
             return draw(canvas, element, effect);
           }
         }, {
-          name: "chromeLogo",
+          name: "Color Half Tone",
+          kind: "webgl",
+          filter: function(canvas, element) {
+            var effect;
+            effect = function() {
+              return canvas.colorHalftone(canvas.width / 2, canvas.height / 2, .30, 3);
+            };
+            return draw(canvas, element, effect);
+          }
+        }, {
+          name: "Pixelate",
+          kind: "webgl",
+          filter: function(canvas, element) {
+            var effect;
+            effect = function() {
+              return canvas.pixelate(canvas.width / 2, canvas.height / 2, 5);
+            };
+            return draw(canvas, element, effect);
+          }
+        }, {
+          name: "Hope Poster",
+          kind: "webgl",
+          filter: function(canvas, element) {
+            var effect;
+            effect = function() {
+              return canvas.hopePoster();
+            };
+            return draw(canvas, element, effect);
+          }
+        }, {
+          name: "Photocopy",
+          kind: "webgl",
+          filter: function(canvas, element, frame) {
+            var effect;
+            effect = function() {
+              return canvas.photocopy(.5, frame);
+            };
+            return draw(canvas, element, effect);
+          }
+        }, {
+          name: "Old Film",
+          kind: "webgl",
+          filter: function(canvas, element, frame) {
+            var effect;
+            effect = function() {
+              return canvas.oldFilm(frame);
+            };
+            return draw(canvas, element, effect);
+          }
+        }, {
+          name: "VHS",
+          kind: "webgl",
+          filter: function(canvas, element, frame) {
+            var effect;
+            effect = function() {
+              return canvas.vhs(frame);
+            };
+            return draw(canvas, element, effect);
+          }
+        }, {
+          name: "Time Strips",
+          kind: "webgl",
+          filter: function(canvas, element, frame) {
+            var effect;
+            effect = function() {
+              var createBuffers;
+              createBuffers = function(length) {
+                var _results;
+                _results = [];
+                while (buffer.length < length) {
+                  _results.push(buffer.push(canvas.texture(element)));
+                }
+                return _results;
+              };
+              createBuffers(32);
+              buffer[frame++ % buffer.length].loadContentsOf(element);
+              canvas.timeStrips(buffer, frame);
+              return canvas.matrixWarp([-1, 0, 0, 1], false, true);
+            };
+            return draw(canvas, element, effect);
+          }
+        }, {
+          name: "Your Ghost",
+          kind: "webgl",
+          filter: function(canvas, element, frame) {
+            var effect;
+            effect = function() {
+              var createBuffers;
+              createBuffers = function(length) {
+                var _results;
+                _results = [];
+                while (buffer.length < length) {
+                  _results.push(buffer.push(canvas.texture(element)));
+                }
+                return _results;
+              };
+              createBuffers(32);
+              buffer[frame++ % buffer.length].loadContentsOf(element);
+              canvas.matrixWarp([1, 0, 0, 1], false, true);
+              canvas.blend(buffer[frame % buffer.length], .5);
+              return canvas.matrixWarp([-1, 0, 0, 1], false, true);
+            };
+            return draw(canvas, element, effect);
+          }
+        }, {
+          name: "Chromed",
           kind: "webgl",
           filter: function(canvas, element, frame) {
             var effect;
@@ -275,10 +350,42 @@
             return draw(canvas, element, effect);
           }
         }, {
-          name: "glasses",
+          name: "Kaleidoscope",
+          kind: "webgl",
+          filter: function(canvas, element) {
+            var effect;
+            effect = function() {
+              return canvas.kaleidoscope(canvas.width / 2, canvas.height / 2, 200, 0);
+            };
+            return draw(canvas, element, effect);
+          }
+        }, {
+          name: "Inverted",
+          kind: "webgl",
+          filter: function(canvas, element) {
+            var effect;
+            effect = function() {
+              return canvas.invert();
+            };
+            return draw(canvas, element, effect);
+          }
+        }, {
+          name: "In Disguise",
           kind: "face",
           filter: function(canvas, video) {
-            return trackFace(video, canvas, face.props.glasses);
+            return trackFace(video, canvas, face.props.glasses, 0, 0, 1, 1);
+          }
+        }, {
+          name: "Horns",
+          kind: "face",
+          filter: function(canvas, video) {
+            return trackHead(video, canvas, face.props.horns, 0, 25, 0, 0);
+          }
+        }, {
+          name: "Hipsterizer",
+          kind: "face",
+          filter: function(canvas, video) {
+            return trackFace(video, canvas, face.props.hipster, 0, 0, 1, 2.2);
           }
         }
       ]
