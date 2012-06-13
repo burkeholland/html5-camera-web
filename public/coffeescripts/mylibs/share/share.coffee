@@ -2,16 +2,38 @@ define([
   'jQuery'  # lib/jquery/jquery
   'Kendo'   # lib/underscore/underscore
   'mylibs/utils/utils'
-  'text!mylibs/share/views/download.html'
   'text!mylibs/share/views/tweet.html'
-], ($, kendo, utils, downloadView, tweet) ->
-    
-
-    ###
+], ($, kendo, utils, template) ->
+        
     shareWindow = {}
     twitter_token = ""
-    
-    openCenteredWindow = (url) ->
+    $window = {}
+    events = {}
+
+    viewModel = kendo.observable({
+        src: ""
+        twitter: false
+        tweet: ->
+            
+            callback = ->
+
+                blob = utils.blobFromImg($("#imageToShare")[0])
+            
+                fd = new FormData()
+                fd.append("file", blob)
+
+                $.ajax({ 
+                    url: "share/tweet", 
+                    data: fd, 
+                    type: "POST", 
+                    processData: false,
+                    contentType: false
+                })
+
+            openCenteredWindow(callback)
+    })
+
+    openCenteredWindow = (url, callback) ->
         y = 700 
         C = window.screenX or 0 
         B = if C then $(window).width() else screen.availWidth
@@ -27,24 +49,42 @@ define([
             if childWindow and childWindow.closed
                 window.clearInterval(intervalID)
                 
-                twitter = sessionStorage.getItem("twitter")
-                
-                if (twitter)
-                    $(".tweet").show()
+                window.APP.twitter = sessionStorage.getItem("twitter")
         
+                callback()
+
         intervalID = window.setInterval(checkWindow, 500)
-                
-  
-        
-    
+            
     pub =
         
         twitter_token: ""
-    
+
+        tweet: (src) ->
+
+            viewModel.set("src", src)
+            $window.open()
+
         init: ->
 
-            # create the download popup window but don't show it, just
-            # store a reference to it that we can use later
+            # check to see if we are logged in to twitter
+            window.APP.twitter = sessionStorage.getItem("twitter")
+
+            $content = $(template)
+
+            $window = $content.kendoWindow
+                visible: false
+                modal: true
+                title: ""
+                animation: 
+                    open:
+                        effects: "slideIn:up fadeIn"
+                        duration: 500
+                    close:
+                        effects: "slide:up fadeOut"
+                        duration: 500
+            .data("kendoWindow").center()
+
+            kendo.bind $content, viewModel
 
             $.subscribe("/share/download", ($img) ->    
                 img = new Image()
@@ -75,15 +115,6 @@ define([
                 e.preventDefault()
                 
             )
-
-            # the download goes via the HTML5 FileWorker spec so there's no prompt
-            # provide that prompt here and set the download name
-
-            shareWindow = $("<div id='share'></div>").kendoWindow({
-                                modal: true
-                                visible: false
-                             }).data("kendoWindow")
-                               
                                
             download: (el) ->
 
@@ -95,7 +126,6 @@ define([
 
                 # attach the dataURI to the data-uri attribute on the save button
                 $("#{downloadView} > button").data("uri", dataURI)
-    ###
             
             
 )

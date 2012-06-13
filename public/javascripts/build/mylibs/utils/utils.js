@@ -1,6 +1,6 @@
 (function() {
 
-  define(['jQuery', 'Kendo', 'mylibs/utils/BlobBuilder.min', 'mylibs/utils/FileSaver.min', 'mylibs/utils/canvg', 'mylibs/utils/rgbcolor'], function($, kendo) {
+  define(['jQuery', 'Kendo', 'mylibs/utils/BlobBuilder.min', 'mylibs/utils/canvg', 'mylibs/utils/rgbcolor'], function($, kendo) {
     var canvas, pub;
     canvas = {};
     return pub = {

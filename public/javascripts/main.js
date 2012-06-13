@@ -8,7 +8,7 @@
     }
   });
 
-  require(['app', 'order!libs/jquery/jquery.min', 'order!libs/kendo/kendo.all.min', 'order!libs/webgl/glfx.min'], function(app) {
+  require(['app'], function(app) {
     return app.init();
   });
 

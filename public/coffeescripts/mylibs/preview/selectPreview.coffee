@@ -13,18 +13,17 @@ define([
     $container = {}
     webgl = fx.canvas()
     frame = 0
+    width = 200
+    height = 150
 
     update = ->
 
-        
         if not paused
 
             # get the 2d canvas context and draw the image
             # this happens at the curent framerate
             
-            canvas2d = canvas.getContext('2d')
-            canvas2d.clearRect()
-            canvas2d.drawImage(video, 0, 0, video.width, video.height)
+            
             
             # for each of the preview objects, create a texture of the 
             # 2d canvas and then apply the webgl effect. these are live
@@ -33,15 +32,13 @@ define([
 
                 frame++
 
-                # texture = preview.canvas.texture(canvas)
+                if preview.type
 
-                #preview.canvas.draw(texture)
-                
-                preview.filter(preview.canvas, canvas, frame)
+                    preview.filter(preview.canvas, video)
 
-                #preview.canvas.update()
+                else
 
-                #texture.destroy()
+                    preview.filter(preview.canvas, video, frame)
                 
     draw = ->
 
@@ -58,9 +55,12 @@ define([
         
         init: (container, c, v) ->
             
+            # initialize effects
+            effects.init()
+
             $.subscribe("/previews/show", ->
-                video.width = canvas.width = 200   
-                video.height = canvas.height = 150
+                video.width = canvas.width = width
+                video.height = canvas.height = height
                 $container.kendoStop(true).kendoAnimate({ effects: "zoomIn fadeIn", show: true, duration: 500, complete: ->
                     $("footer").kendoStop(true).kendoAnimate({ effects: "fadeIn", show: true, duration: 200 })
                     paused = false
@@ -79,8 +79,8 @@ define([
             
             $container = $("##{container}")
             
-            video.width = canvas.width = 200   
-            video.height = canvas.height = 150
+            video.width = canvas.width = width   
+            video.height = canvas.height = height
             
             # get back the presets and create a custom object
             # that we can use to dynamically create canvas objects
@@ -91,53 +91,59 @@ define([
 
             ds = new kendo.data.DataSource
                     
-                    data: effects
-                    
-                    pageSize: 6
-                    
-                    change: ->
+                data: effects.data
+                
+                pageSize: 6
+                
+                change: ->
 
-                        $currentPage = $container.find(".current-page")
-                        $nextPage = $container.find(".next-page")
+                    $currentPage = $container.find(".current-page")
+                    $nextPage = $container.find(".next-page")
 
-                        paused = true
+                    paused = true
 
-                        previews = []
+                    previews = []
 
-                        for item in this.view()
+                    for item in this.view()
 
-                            do ->
+                        do ->
 
-                                preview = {}
-                                $.extend(preview, item)
+                            preview = {}
+                            $.extend(preview, item)
 
-                                preview.name = item.name
-                                preview.canvas = fx.canvas()
-                                            
-                                previews.push(preview)
-                            
-                                $a = $("<a href='#' class='preview'></a>").append(preview.canvas).click(->
-                                    paused = true
-                                    $("footer").kendoStop(true).kendoAnimate({ effects: "fadeOut", hide: true, duration: 200 })
-                                    $container.kendoStop(true).kendoAnimate({ effects: "zoomOut fadeOut", hide: true, duration: 500 })
-                                    $.publish("/preview/show", [preview])
-                                )
+                            preview.name = item.name
 
-                                $nextPage.append($a)
+                            if item.type == "face"
+                                preview.canvas = document.createElement "canvas"
+                                preview.canvas.width = 200
+                                preview.canvas.height = 150
+                            else
+                                preview.canvas = fx.canvas()               
 
-                                $currentPage.kendoStop(true).kendoAnimate { effects: "slide:down fadeOut", duration: 500, hide: true, complete: ->
+                            previews.push(preview)
+                        
+                            $a = $("<a href='#' class='preview'></a>").append(preview.canvas).click(->
+                                paused = true
+                                $("footer").kendoStop(true).kendoAnimate({ effects: "fadeOut", hide: true, duration: 200 })
+                                $container.kendoStop(true).kendoAnimate({ effects: "zoomOut fadeOut", hide: true, duration: 500 })
+                                $.publish("/preview/show", [preview])
+                            )
 
-                                    $currentPage.removeClass("current-page").addClass("next-page")
-                                    $currentPage.find("a").remove()
+                            $nextPage.append($a)
 
-                                }   
+                            $currentPage.kendoStop(true).kendoAnimate { effects: "slide:down fadeOut", duration: 500, hide: true, complete: ->
 
-                                $nextPage.kendoStop(true).kendoAnimate { effects: "fadeIn", duration: 500, show: true, complete: ->
+                                $currentPage.removeClass("current-page").addClass("next-page")
+                                $currentPage.find("a").remove()
 
-                                    $nextPage.removeClass("next-page").addClass("current-page")
-                                    paused = false
+                            }   
 
-                                }
+                            $nextPage.kendoStop(true).kendoAnimate { effects: "fadeIn", duration: 500, show: true, complete: ->
+
+                                $nextPage.removeClass("next-page").addClass("current-page")
+                                paused = false
+
+                            }
 
 
             $container.on "click", ".more", ->

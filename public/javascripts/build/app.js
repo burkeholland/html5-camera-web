@@ -1,14 +1,13 @@
 (function() {
 
-  define(['jQuery', 'Kendo', 'mylibs/camera/camera', 'mylibs/snapshot/snapshot', 'mylibs/photobooth/photobooth', 'mylibs/controls/controls', 'mylibs/customize/customize', 'mylibs/effects/effects', 'mylibs/utils/utils', 'mylibs/file/file', 'mylibs/share/share', 'text!intro.html', 'mylibs/pictures/pictures', 'mylibs/preview/preview', 'mylibs/preview/selectPreview'], function($, kendo, camera, snapshot, photobooth, controls, customize, effects, utils, file, share, intro, pictures, preview, selectPreview) {
+  define(['jQuery', 'Kendo', 'mylibs/camera/camera', 'mylibs/snapshot/snapshot', 'mylibs/photobooth/photobooth', 'mylibs/controls/controls', 'mylibs/customize/customize', 'mylibs/effects/effects', 'mylibs/file/file', 'mylibs/share/share', 'text!intro.html', 'mylibs/pictures/pictures', 'mylibs/preview/preview', 'mylibs/preview/selectPreview'], function($, kendo, camera, snapshot, photobooth, controls, customize, effects, file, share, intro, pictures, preview, selectPreview) {
     var pub;
     return pub = {
       init: function() {
-        utils.init();
         $.subscribe('/camera/unsupported', function() {
           return $('#pictures').append(intro);
         });
-        return camera.init(utils, "countdown", function() {
+        return camera.init("countdown", function() {
           var $canvas;
           pictures.init("pictures");
           preview.init("camera", camera.video);

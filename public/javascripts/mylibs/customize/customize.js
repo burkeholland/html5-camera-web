@@ -1,7 +1,7 @@
 (function() {
   var __hasProp = Object.prototype.hasOwnProperty;
 
-  define(['jQuery', 'Kendo', 'text!mylibs/customize/views/customize.html'], function($, kendo, template) {
+  define(['jQuery', 'Kendo', 'text!mylibs/customize/views/customize.html', 'libs/webgl/glfx.min'], function($, kendo, template) {
     var $window, callback, canvas, customizeEffect, oldImage, pub, texture, viewModel, webgl;
     $window = {};
     webgl = fx.canvas();
@@ -126,6 +126,7 @@
           return customizeEffect(sender, saveFunction);
         });
         $content = $(template);
+        webgl.className = "reflection";
         canvas = document.createElement("canvas");
         $content.find(".canvas").append(webgl);
         $window = $content.kendoWindow({

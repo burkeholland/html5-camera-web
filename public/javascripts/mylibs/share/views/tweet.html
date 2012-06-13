@@ -1,4 +1,19 @@
-<img class="tweet-img" src="#= src #" />
-<div class="arrow_box tweet-box">
-	<textarea col= placeholder="type something here...." />
+
+<div id="share">
+	<div class="row">
+		<div class="span6 brown">
+			<div class="row centered no-margin">
+				<div class="reflection">
+					<img id="imageToShare" data-bind="attr: { src: src }" />
+				</div>
+				<div class="arrow_box">
+					<textarea placeholder="Write Something Witty..." id="message" cols="60" rows="3"></textarea>
+				</div>
+			</div>
+		</div>
+		<div class="span4">
+			<h3>Sharing Is Good!</h3>
+			<button class="button" data-bind="events: { click: tweet }">Tweet</button>
+		</div>
+	</div>
 </div>

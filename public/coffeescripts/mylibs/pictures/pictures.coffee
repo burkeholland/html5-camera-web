@@ -1,11 +1,10 @@
 define([
   'jQuery',	# lib/jquery/jquery
-  'Kendo' 	# lib/underscore/underscore
-  'mylibs/effects/effects'
+  'Kendo'
   'mylibs/file/file'
-  'mylibs/share/twitpic'
+  'mylibs/share/share'
   'text!mylibs/pictures/views/picture.html'
-], ($, kendo, effects, file, twitpic, picture) ->
+], ($, kendo, file, share, picture) ->
 	
 	$container = {}
 
@@ -50,8 +49,6 @@ define([
 
 					$container.masonry("reload")
 
-				presets = effects.presets()
-
 				if polaroid
 
 					opacity = 0;
@@ -77,8 +74,11 @@ define([
 		
 		
 				$div.on("click", ".intent", ->
-		    		intent = new Intent("http://webintents.org/share", "image/*", $img.attr("src"))
-		    		window.navigator.startActivity(intent, (data) ->)
+
+		    		share.tweet($img.attr("src"))
+
+		    		# intent = new Intent("http://webintents.org/share", "image/*", $img.attr("src"))
+		    		# window.navigator.startActivity(intent, (data) ->)
 				)
 
 				$div.on "click", ".trash", ->

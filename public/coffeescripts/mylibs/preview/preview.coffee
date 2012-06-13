@@ -15,6 +15,7 @@ define([
     width = 460
     height = 340
     frame = 0
+    currentCanvas = {}
     
     draw = ->
         utils.getAnimationFrame()(draw)
@@ -26,14 +27,19 @@ define([
             
             # get the 2d canvas context and draw the image
             # this happens at the curent framerate
+            ###
             canvas2d = canvas.getContext('2d')
             canvas2d.clearRect()
             canvas2d.drawImage(video, 0, 0, video.width, video.height)
-
+            ###
+            
             frame = if frame == 200 then 0 else ++frame
 
-            preview.filter(preview.canvas, canvas, frame)
-    
+            if preview.type == "face"
+                preview.filter(canvas, video)
+            else
+                preview.filter(webgl, video, frame)
+
     pub =
         
         init: (container, v) ->
@@ -48,15 +54,28 @@ define([
             video = v
             
             canvas = document.createElement("canvas")
+
             webgl = fx.canvas()
-            
+
+            # $preview.append(webgl)
+            $preview.append(canvas)
             $preview.append(webgl)
             
             $.subscribe("/preview/show", (e) ->
                 
                 $.extend(preview, e)
 
-                preview.canvas = webgl
+                if preview.type == "face"
+                    $(webgl).hide()
+                    $(canvas).show()
+                    currentCanvas = canvas
+                else
+                    $(webgl).show()
+                    $(canvas).hide()
+                    currentCanvas = webgl
+
+                #$.preview.find("canvas").remove()
+                #$.preview.append(canvas)
 
                 paused = false
                 
@@ -91,7 +110,7 @@ define([
                     
                     $mask.fadeIn 50, -> 
                         $mask.fadeOut 900
-                        $.publish("/snapshot/create", [webgl.toDataURL()])
+                        $.publish("/snapshot/create", [currentCanvas.toDataURL()])
                     
                 $.publish("/camera/countdown", [3, callback])
 
@@ -107,7 +126,10 @@ define([
                     $mask.fadeIn 50, -> 
                         $mask.fadeOut 900, ->
 
-                            images.push webgl.toDataURL()
+                            if trackingFace
+                                images.push canvas.toDataURL()
+                            else
+                                images.push webgl.toDataURL()
 
                             if photoNumber > 0
 

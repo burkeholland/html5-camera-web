@@ -2,6 +2,7 @@ define([
   'jQuery'	# lib/jquery/jquery
   'Kendo' 	# lib/underscore/underscore
   'text!mylibs/customize/views/customize.html'
+  'libs/webgl/glfx.min'
 ], ($, kendo, template) ->
 	
 	$window = {}
@@ -136,6 +137,7 @@ define([
 
 			$content = $(template)
 
+			webgl.className = "reflection"
 
 			canvas = document.createElement("canvas")
 

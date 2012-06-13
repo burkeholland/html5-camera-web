@@ -140,8 +140,7 @@
         dataURL = canvas.toDataURL();
         img.width = width;
         img.height = height;
-        blob = dataURIToBlob(dataURL);
-        return saveAs(blob);
+        return blob = dataURIToBlob(dataURL);
       }
     };
   });

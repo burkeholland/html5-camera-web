@@ -1,7 +1,7 @@
 (function() {
 
   define(['jQuery', 'Kendo', 'libs/webgl/effects', 'mylibs/utils/utils', 'text!mylibs/preview/views/preview.html'], function($, kendo, effects, utils, template) {
-    var $container, canvas, draw, frame, paused, previews, pub, update, video, webgl;
+    var $container, canvas, draw, frame, height, paused, previews, pub, update, video, webgl, width;
     paused = false;
     canvas = {};
     video = {};
@@ -9,17 +9,20 @@
     $container = {};
     webgl = fx.canvas();
     frame = 0;
+    width = 200;
+    height = 150;
     update = function() {
-      var canvas2d, preview, _i, _len, _results;
+      var preview, _i, _len, _results;
       if (!paused) {
-        canvas2d = canvas.getContext('2d');
-        canvas2d.clearRect();
-        canvas2d.drawImage(video, 0, 0, video.width, video.height);
         _results = [];
         for (_i = 0, _len = previews.length; _i < _len; _i++) {
           preview = previews[_i];
           frame++;
-          _results.push(preview.filter(preview.canvas, canvas, frame));
+          if (preview.type) {
+            _results.push(preview.filter(preview.canvas, video));
+          } else {
+            _results.push(preview.filter(preview.canvas, video, frame));
+          }
         }
         return _results;
       }
@@ -34,9 +37,10 @@
       },
       init: function(container, c, v) {
         var $currentPage, $nextPage, ds;
+        effects.init();
         $.subscribe("/previews/show", function() {
-          video.width = canvas.width = 200;
-          video.height = canvas.height = 150;
+          video.width = canvas.width = width;
+          video.height = canvas.height = height;
           return $container.kendoStop(true).kendoAnimate({
             effects: "zoomIn fadeIn",
             show: true,
@@ -55,12 +59,12 @@
         canvas = document.createElement("canvas");
         video = v;
         $container = $("#" + container);
-        video.width = canvas.width = 200;
-        video.height = canvas.height = 150;
+        video.width = canvas.width = width;
+        video.height = canvas.height = height;
         $currentPage = {};
         $nextPage = {};
         ds = new kendo.data.DataSource({
-          data: effects,
+          data: effects.data,
           pageSize: 6,
           change: function() {
             var item, _i, _len, _ref, _results;
@@ -77,7 +81,13 @@
                 preview = {};
                 $.extend(preview, item);
                 preview.name = item.name;
-                preview.canvas = fx.canvas();
+                if (item.type === "face") {
+                  preview.canvas = document.createElement("canvas");
+                  preview.canvas.width = 200;
+                  preview.canvas.height = 150;
+                } else {
+                  preview.canvas = fx.canvas();
+                }
                 previews.push(preview);
                 $a = $("<a href='#' class='preview'></a>").append(preview.canvas).click(function() {
                   paused = true;

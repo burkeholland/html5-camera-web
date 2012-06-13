@@ -4,7 +4,7 @@ define([
   'Kendo'
   'mylibs/utils/utils'
 
-], (utils) ->
+], ($, kendo, utils) ->
 
   window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem
 
@@ -21,28 +21,6 @@ define([
       return 1
   
     return 0
-
-  dataURIToBlob = (dataURI) -> 
-            
-    if dataURI.split(',')[0].indexOf('base64') >= 0
-        byteString = atob(dataURI.split(',')[1])
-    else
-        byteString = unescape(dataURI.split(',')[1])
-    
-    mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
-    
-    ab = new ArrayBuffer(byteString.length, 'binary')
-    
-    ia = new Uint8Array(ab)
-    
-    for bytes in byteString
-        ia[_i] = byteString.charCodeAt(_i)
-    
-    blobBuiler = new BlobBuilder()
-     
-    blobBuiler.append(ab);
-    
-    blob = blobBuiler.getBlob(mimeString)
 
   errorHandler = (e) ->
 
@@ -130,7 +108,7 @@ define([
 
               console.error "Write failed: " + e.toString()
 
-          blob = dataURIToBlob(dataURI)
+          blob = utils.blobFromDataURI(dataURI)
 
           fileWriter.write blob
               
@@ -170,7 +148,7 @@ define([
       img.width = width
       img.height = height
 
-      blob = dataURIToBlob(dataURL)
+      blob = utils.blobFromDataURI(dataURL)
 
       saveAs(blob)
 

@@ -94,9 +94,18 @@
       },
       nope: function() {
         return $window.close();
+      },
+      reset: function() {
+        this.set("effects.brightnessContrast.brightness.value", 0);
+        this.set("effects.brightnessContrast.contrast.value", 0);
+        this.set("effects.vignette.size.value", 0);
+        this.set("effects.vignette.amount.value", 0);
+        this.set("effects.hueSaturation.hue.value", 0);
+        return this.set("effects.hueSaturation.saturation.value", 0);
       }
     });
     customizeEffect = function(image, saveFunction) {
+      viewModel.reset();
       oldImage.src = image.src;
       callback = saveFunction;
       return oldImage.onload = function() {

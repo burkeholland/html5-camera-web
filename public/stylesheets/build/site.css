@@ -195,42 +195,8 @@ footer img {
 .twitter-sign-in {
     margin-top: 20px;
 }
-.tweet {
-  
-}
-.arrow_box {
-	position: relative;
-	background: #fff;
-	border: 2px solid #9F9082;
-}
-.arrow_box:after, .arrow_box:before {
-	right: 100%;
-	border: solid transparent;
-	content: " ";
-	height: 0;
-	width: 0;
-	position: absolute;
-	pointer-events: none;
-}
-.arrow_box:after {
-	border-right-color: #fff;
-	border-width: 30px;
-	top: 50%;
-	margin-top: -30px;
-}
-.arrow_box:before {
-	border-right-color: #9F9082;
-	border-width: 33px;
-	top: 50%;
-	margin-top: -33px;
-}
-.tweet-img {
-    float: left;
-}
-.tweet-box {
-    float: left;
-    margin-left: 50px;
-    height: 340px;
+.share {
+  float: left
 }
 #previews {
     position: absolute;
@@ -277,10 +243,7 @@ footer img {
 #effect {
 	margin-bottom: 10px;
 }
-.actions .share {
-	float: left;
-}
-.actions .delete {
+.delete {
 	float: right;
 }
 .pages {

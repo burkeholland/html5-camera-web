@@ -1,6 +1,6 @@
 (function() {
 
-  define(['jQuery', 'Kendo', 'mylibs/effects/effects', 'mylibs/file/file', 'mylibs/share/twitpic', 'text!mylibs/pictures/views/picture.html'], function($, kendo, effects, file, twitpic, picture) {
+  define(['jQuery', 'Kendo', 'mylibs/file/file', 'mylibs/share/share', 'text!mylibs/pictures/views/picture.html'], function($, kendo, file, share, picture) {
     var $container, pub;
     $container = {};
     return pub = {
@@ -11,7 +11,7 @@
           return pub.reload();
         });
         return $.subscribe("/pictures/create", function(src, name, polaroid, save, animation, photoStrip) {
-          var $div, $img, callback, opacity, presets;
+          var $div, $img, callback, opacity;
           $div = $(picture);
           $img = $div.find(".picture").attr("src", src).css("opacity", 1);
           if (save) {
@@ -30,7 +30,6 @@
           $img.load(function() {
             return $container.masonry("reload");
           });
-          presets = effects.presets();
           if (polaroid) {
             opacity = 0;
             $.subscribe("/shake/beta", function() {
@@ -49,9 +48,7 @@
             return file.download($img[0]);
           });
           $div.on("click", ".intent", function() {
-            var intent;
-            intent = new Intent("http://webintents.org/share", "image/*", $img.attr("src"));
-            return window.navigator.startActivity(intent, function(data) {});
+            return share.tweet($img.attr("src"));
           });
           $div.on("click", ".trash", function() {
             $.subscribe("/file/deleted/" + name, function() {

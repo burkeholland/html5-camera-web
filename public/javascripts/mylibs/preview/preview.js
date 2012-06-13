@@ -1,7 +1,7 @@
 (function() {
 
   define(['jQuery', 'Kendo', 'mylibs/utils/utils', 'libs/webgl/effects', 'libs/webgl/glfx.min'], function($, kendo, utils, effects) {
-    var $container, canvas, draw, frame, height, paused, preview, pub, update, video, webgl, width;
+    var $container, canvas, currentCanvas, draw, frame, height, paused, preview, pub, update, video, webgl, width;
     $container = {};
     canvas = {};
     webgl = {};
@@ -11,18 +11,24 @@
     width = 460;
     height = 340;
     frame = 0;
+    currentCanvas = {};
     draw = function() {
       utils.getAnimationFrame()(draw);
       return update();
     };
     update = function() {
-      var canvas2d;
       if (!paused) {
-        canvas2d = canvas.getContext('2d');
-        canvas2d.clearRect();
-        canvas2d.drawImage(video, 0, 0, video.width, video.height);
+        /*
+                    canvas2d = canvas.getContext('2d')
+                    canvas2d.clearRect()
+                    canvas2d.drawImage(video, 0, 0, video.width, video.height)
+        */
         frame = frame === 200 ? 0 : ++frame;
-        return preview.filter(preview.canvas, canvas, frame);
+        if (preview.type === "face") {
+          return preview.filter(canvas, video);
+        } else {
+          return preview.filter(webgl, video, frame);
+        }
       }
     };
     return pub = {
@@ -36,10 +42,19 @@
         video = v;
         canvas = document.createElement("canvas");
         webgl = fx.canvas();
+        $preview.append(canvas);
         $preview.append(webgl);
         $.subscribe("/preview/show", function(e) {
           $.extend(preview, e);
-          preview.canvas = webgl;
+          if (preview.type === "face") {
+            $(webgl).hide();
+            $(canvas).show();
+            currentCanvas = canvas;
+          } else {
+            $(webgl).show();
+            $(canvas).hide();
+            currentCanvas = webgl;
+          }
           paused = false;
           video.width = canvas.width = width;
           video.height = canvas.height = height;
@@ -95,7 +110,7 @@
           callback = function() {
             return $mask.fadeIn(50, function() {
               $mask.fadeOut(900);
-              return $.publish("/snapshot/create", [webgl.toDataURL()]);
+              return $.publish("/snapshot/create", [currentCanvas.toDataURL()]);
             });
           };
           return $.publish("/camera/countdown", [3, callback]);
@@ -108,7 +123,11 @@
             --photoNumber;
             return $mask.fadeIn(50, function() {
               return $mask.fadeOut(900, function() {
-                images.push(webgl.toDataURL());
+                if (trackingFace) {
+                  images.push(canvas.toDataURL());
+                } else {
+                  images.push(webgl.toDataURL());
+                }
                 if (photoNumber > 0) {
                   return $.publish("/camera/countdown", [3, callback]);
                 } else {

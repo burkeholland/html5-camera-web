@@ -13,6 +13,7 @@ var app = module.exports = express.createServer();
 app.configure(function(){
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
+  app.set('view options', { layout: false });
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   app.use(express.cookieParser());
@@ -34,6 +35,7 @@ app.configure('production', function(){
 app.get('/', routes.index);
 app.get('/authenticate/twitter', routes.twitter);
 app.get('/authenticate/twitter/callback', routes.twitterCallback);
+app.post('/share/tweet', routes.tweet);
 
 var port = process.env.PORT || 3000;
 

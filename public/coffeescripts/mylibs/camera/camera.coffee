@@ -35,13 +35,14 @@ define([
         if testing
 
             pub.video.src = "burke.mp4"
+            pub.video.crossOrigin = ''
             pub.video.loop = "loop"
 
             setup(callback)
 
         else
 
-	    
+	     
     	    hollaback = (stream) ->
 
                 # create a video element and assign the WebRTC stream as its source
@@ -92,10 +93,7 @@ define([
 
     pub =
     	
-    	init: (utilities, counter, callback) ->
-    			
-    		# set the utils reference
-            utils = utilities
+    	init: (counter, callback) ->
 
             # set a reference to the countdown DOM object
             $counter = $("##{counter}")

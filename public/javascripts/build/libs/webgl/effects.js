@@ -30,6 +30,18 @@
           return draw(canvas, element, effect);
         }
       }, {
+        name: "quadPinch",
+        filter: function(canvas, element) {
+          var effect;
+          effect = function() {
+            canvas.bulgePinch(canvas.width / 4, canvas.height / 4, canvas.width / 2, -.65);
+            canvas.bulgePinch(canvas.width / 4, (canvas.height / 4) + (canvas.height / 2), canvas.width / 2, -.65);
+            canvas.bulgePinch((canvas.width / 4) + (canvas.width / 2), canvas.height / 4, canvas.width / 2, -.65);
+            return canvas.bulgePinch((canvas.width / 4) + (canvas.width / 2), (canvas.height / 4) + (canvas.height / 2), canvas.width / 2, -.65);
+          };
+          return draw(canvas, element, effect);
+        }
+      }, {
         name: "pinch",
         filter: function(canvas, element) {
           var effect;
@@ -70,6 +82,16 @@
         filter: function(canvas, element) {
           var effect;
           effect = function() {
+            return canvas.mirror(0);
+          };
+          return draw(canvas, element, effect);
+        }
+      }, {
+        name: "mirrorPinch",
+        filter: function(canvas, element) {
+          var effect;
+          effect = function() {
+            canvas.bulgePinch(canvas.width / 2, canvas.height / 2, (canvas.width / 2) / 2, -.65);
             return canvas.mirror(0);
           };
           return draw(canvas, element, effect);

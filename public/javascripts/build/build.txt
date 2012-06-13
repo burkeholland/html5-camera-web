@@ -6,7 +6,6 @@ mylibs/controls/controls.js
 mylibs/effects/presets.js
 mylibs/effects/effects.js
 mylibs/utils/BlobBuilder.min.js
-mylibs/utils/FileSaver.min.js
 mylibs/utils/canvg.js
 mylibs/utils/rgbcolor.js
 mylibs/utils/utils.js
@@ -31,10 +30,4 @@ text!mylibs/preview/views/preview.html
 mylibs/preview/selectPreview.js
 mylibs/camera/camera.js
 app.js
-order.js
-order!libs/webgl/glfx.min
-libs/jquery/jquery.min.js
-order!libs/jquery/jquery.min
-libs/kendo/kendo.all.min.js
-order!libs/kendo/kendo.all.min
 main.js

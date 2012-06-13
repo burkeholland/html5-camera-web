@@ -9,7 +9,7 @@
     modules: [
         {
             name: "main",
-            exclude: [ "jQuery", "Kendo" ]
+            excludeShallow: [ "jQuery", "Kendo" ]
         }
     ],
     optimize: "none"

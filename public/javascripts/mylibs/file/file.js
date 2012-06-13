@@ -1,7 +1,7 @@
 (function() {
 
-  define(['jQuery', 'Kendo', 'mylibs/utils/utils'], function(utils) {
-    var blobBuiler, compare, dataURIToBlob, errorHandler, fileSystem, myPicturesDir, pub;
+  define(['jQuery', 'Kendo', 'mylibs/utils/utils'], function($, kendo, utils) {
+    var blobBuiler, compare, errorHandler, fileSystem, myPicturesDir, pub;
     window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
     fileSystem = {};
     myPicturesDir = {};
@@ -10,24 +10,6 @@
       if (a.name < b.name) return -1;
       if (a.name > b.name) return 1;
       return 0;
-    };
-    dataURIToBlob = function(dataURI) {
-      var ab, blob, byteString, bytes, ia, mimeString, _i, _len;
-      if (dataURI.split(',')[0].indexOf('base64') >= 0) {
-        byteString = atob(dataURI.split(',')[1]);
-      } else {
-        byteString = unescape(dataURI.split(',')[1]);
-      }
-      mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-      ab = new ArrayBuffer(byteString.length, 'binary');
-      ia = new Uint8Array(ab);
-      for (_i = 0, _len = byteString.length; _i < _len; _i++) {
-        bytes = byteString[_i];
-        ia[_i] = byteString.charCodeAt(_i);
-      }
-      blobBuiler = new BlobBuilder();
-      blobBuiler.append(ab);
-      return blob = blobBuiler.getBlob(mimeString);
     };
     errorHandler = function(e) {
       var msg;
@@ -112,7 +94,7 @@
             fileWriter.onerror = function(e) {
               return console.error("Write failed: " + e.toString());
             };
-            blob = dataURIToBlob(dataURI);
+            blob = utils.blobFromDataURI(dataURI);
             return fileWriter.write(blob);
           });
         }, errorHandler);
@@ -140,7 +122,7 @@
         dataURL = canvas.toDataURL();
         img.width = width;
         img.height = height;
-        blob = dataURIToBlob(dataURL);
+        blob = utils.blobFromDataURI(dataURL);
         return saveAs(blob);
       }
     };

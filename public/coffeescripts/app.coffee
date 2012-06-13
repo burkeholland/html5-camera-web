@@ -6,20 +6,23 @@ define([
   'mylibs/photobooth/photobooth'
   'mylibs/controls/controls'
   'mylibs/customize/customize'
-  'mylibs/effects/effects'
-  'mylibs/utils/utils'
   'mylibs/file/file'
   'mylibs/share/share'
   'text!intro.html'
   'mylibs/pictures/pictures'
   'mylibs/preview/preview'
   'mylibs/preview/selectPreview'
-], ($, kendo, camera, snapshot, photobooth, controls, customize, effects, utils, file, share, intro, pictures, preview, selectPreview) ->
+  'mylibs/share/share'
+  'mylibs/utils/utils'
+], ($, kendo, camera, snapshot, photobooth, controls, customize, file, share, intro, pictures, preview, selectPreview, share, utils) ->
 	
 		pub = 
 		    
 			init: ->
 			    
+				# create a global object for this app
+				window.APP = {}
+
 			    # all UI elements as modules must be created as instances here
 			    # in the application main controller file
 
@@ -31,9 +34,7 @@ define([
 				)
 				
 				# initialize the camera
-				camera.init utils, "countdown", ->
-
-					pictures.init("pictures")
+				camera.init "countdown", ->
 
 					preview.init("camera", camera.video)
 
@@ -46,8 +47,6 @@ define([
 					# initialize snapshots 
 					snapshot.init(preview, "pictures")
 
-					$canvas = $('#screen')
-
 					# initialize photobooth
 					photobooth.init 460, 340
 
@@ -57,10 +56,13 @@ define([
 					# initialilize the customize window
 					customize.init("customize")
 
-					# initialize effects library
-					effects.init()
+					# initialize the pictures pane. we can show that safely without
+					# waiting on the rest of the UI or access to video
+					pictures.init "pictures"
 
-					# initialize the file system
-					file.init(50000)
+					# initialize the file system. this will read in any files that
+					# we have saved, or grant initial access for storage
+					file.init 5000
 
-)
+					share.init()
+	)

@@ -20,6 +20,7 @@
       var errback, hollaback;
       if (testing) {
         pub.video.src = "burke.mp4";
+        pub.video.crossOrigin = '';
         pub.video.loop = "loop";
         return setup(callback);
       } else {
@@ -60,8 +61,7 @@
       });
     };
     return pub = {
-      init: function(utilities, counter, callback) {
-        utils = utilities;
+      init: function(counter, callback) {
         $counter = $("#" + counter);
         pub.video = document.createElement("video");
         pub.video.src = "burke.mp4";
