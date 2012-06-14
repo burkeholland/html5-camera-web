@@ -45,6 +45,7 @@
         $preview.append(canvas);
         $preview.append(webgl);
         $.subscribe("/preview/show", function(e) {
+          effects.isPreview = false;
           effects.clearBuffer();
           $.extend(preview, e);
           if (preview.kind === "face") {
@@ -124,11 +125,7 @@
             --photoNumber;
             return $mask.fadeIn(50, function() {
               return $mask.fadeOut(900, function() {
-                if (trackingFace) {
-                  images.push(canvas.toDataURL());
-                } else {
-                  images.push(webgl.toDataURL());
-                }
+                currentCanvas.toDataURL();
                 if (photoNumber > 0) {
                   return $.publish("/camera/countdown", [3, callback]);
                 } else {

@@ -63,6 +63,8 @@ define([
             
             $.subscribe("/preview/show", (e) ->
                 
+                effects.isPreview = false
+
                 effects.clearBuffer()
 
                 $.extend(preview, e)
@@ -128,10 +130,7 @@ define([
                     $mask.fadeIn 50, -> 
                         $mask.fadeOut 900, ->
 
-                            if trackingFace
-                                images.push canvas.toDataURL()
-                            else
-                                images.push webgl.toDataURL()
+                            currentCanvas.toDataURL()
 
                             if photoNumber > 0
 

@@ -5,8 +5,27 @@ define([
   'libs/face/face'
 ], ($, kendo) ->
 
-    face = {}
-    buffer =[]
+    face = {
+        
+        props: 
+            glasses: new Image()
+            horns: new Image()
+            hipster: new Image()
+            sombraro: new Image()
+            backCanvas: {}
+            width: 200
+
+        backCanvas: document.createElement "canvas"
+
+        comp: []
+
+        lastCanvas: {}
+
+        backCtx: {}
+    }
+     
+    timeStripsBuffer = []
+    ghostBuffer = []
 
     draw = (canvas, element, effect) ->
         texture = canvas.texture(element)
@@ -25,22 +44,23 @@ define([
 
         face.ctx.drawImage(video, 0, 0, video.width, video.height)
         face.backCtx.drawImage(video, 0, 0, face.backCanvas.width, face.backCanvas.height)
-        
-        comp = ccv.detect_objects {
-            canvas: face.backCanvas,
-            cascade: cascade,
-            interval: 4,
-            min_neighbors: 1
-        }
+
+        if not pub.isPreview
+
+            comp = ccv.detect_objects {
+                canvas: face.backCanvas,
+                cascade: cascade,
+                interval: 4,
+                min_neighbors: 1
+            }
+
+        else [{ x: video.width * .375, y: video.height * .375, width: video.width / 4, height: video.height / 4 }]
 
     trackFace = (video, canvas, prop, xoffset, yoffset, xscaler, yscaler) ->
 
         aspectWidth = video.width / face.backCanvas.width
         face.backCanvasheight = (video.height / video.width) * face.backCanvas.width
         aspectHeight = video.height / face.backCanvas.height
-
-        w = 4
-        m = 4
 
         comp = faceCore video, canvas, prop
 
@@ -50,9 +70,10 @@ define([
         for i in face.comp
             face.ctx.drawImage prop, 
                 (i.x * aspectWidth) - (xoffset * aspectWidth), 
-                (i.y * aspectHeight) - (yoffset * aspectHeight) 
+                (i.y * aspectHeight) - (yoffset * aspectHeight),
                 (i.width * aspectWidth) * xscaler, 
                 (i.height * aspectWidth) * yscaler
+
 
     trackHead = (video, canvas, prop, xOffset, yOffset, width, height) ->
 
@@ -74,31 +95,21 @@ define([
 
     pub = 
 
+        isPreview: true
+
         clearBuffer: ->
 
-            buffer = []
+            timeStripsBuffer = []
+            ghostBuffer = []
 
         init: ->
 
-            face.backCanvas = document.createElement "canvas"
-            face.backCanvas.width = 200
-
-            face.comp = []
-
-            face.lastCanvas = {}
-
             face.backCtx = face.backCanvas.getContext "2d"
 
-            face.props = {}
-
-            face.props.glasses = new Image()
             face.props.glasses.src = "images/glasses.png"
-
-            face.props.horns = new Image()
             face.props.horns.src = "images/horns.png"
-
-            face.props.hipster = new Image()
             face.props.hipster.src = "images/hipster.png"
+            face.props.sombraro.src = "images/sombraro.png"
 
 
         data: [
@@ -308,12 +319,12 @@ define([
                         effect = ->
 
                             createBuffers = (length) ->
-                                while buffer.length < length
-                                    buffer.push canvas.texture(element)
+                                while timeStripsBuffer.length < length
+                                    timeStripsBuffer.push canvas.texture(element)
 
                             createBuffers(32)
-                            buffer[frame++ % buffer.length].loadContentsOf(element)
-                            canvas.timeStrips(buffer, frame)
+                            timeStripsBuffer[frame++ % timeStripsBuffer.length].loadContentsOf(element)
+                            canvas.timeStrips(timeStripsBuffer, frame)
                             canvas.matrixWarp([-1, 0, 0, 1], false, true)
 
                         draw(canvas, element, effect)
@@ -328,13 +339,13 @@ define([
                         effect = ->
 
                             createBuffers = (length) ->
-                                while buffer.length < length
-                                    buffer.push canvas.texture(element)
+                                while ghostBuffer.length < length
+                                    ghostBuffer.push canvas.texture(element)
 
                             createBuffers(32)
-                            buffer[frame++ % buffer.length].loadContentsOf(element)
+                            ghostBuffer[frame++ % ghostBuffer.length].loadContentsOf(element)
                             canvas.matrixWarp([1, 0, 0, 1], false, true)
-                            canvas.blend buffer[frame % buffer.length], .5
+                            canvas.blend ghostBuffer[frame % ghostBuffer.length], .5
                             canvas.matrixWarp([-1, 0, 0, 1], false, true)
 
                         draw(canvas, element, effect)
@@ -393,6 +404,14 @@ define([
 
                         trackFace video, canvas, face.props.hipster, 0, 0, 1, 2.2
                 }
+
+                # {
+                #     name: "Sombraro"
+                #     kind: "face"
+                #     filter: (canvas, video) ->
+
+                #         trackFace video, canvas, face.props.sombraro, 75, 25, 4, 2
+                # }
 
                 
         ]

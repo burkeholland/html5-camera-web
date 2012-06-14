@@ -51,7 +51,8 @@
                 show: true,
                 duration: 200
               });
-              return paused = false;
+              paused = false;
+              return effects.isPreview = true;
             }
           });
         });

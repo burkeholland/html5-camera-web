@@ -65,6 +65,7 @@ define([
                 $container.kendoStop(true).kendoAnimate({ effects: "zoomIn fadeIn", show: true, duration: 500, complete: ->
                     $("footer").kendoStop(true).kendoAnimate({ effects: "fadeIn", show: true, duration: 200 })
                     paused = false
+                    effects.isPreview = true
                 })
             )
             

@@ -1,9 +1,23 @@
 (function() {
 
   define(['jQuery', 'Kendo', 'libs/face/ccv', 'libs/face/face'], function($, kendo) {
-    var buffer, draw, face, faceCore, pub, trackFace, trackHead;
-    face = {};
-    buffer = [];
+    var draw, face, faceCore, ghostBuffer, pub, timeStripsBuffer, trackFace, trackHead;
+    face = {
+      props: {
+        glasses: new Image(),
+        horns: new Image(),
+        hipster: new Image(),
+        sombraro: new Image(),
+        backCanvas: {},
+        width: 200
+      },
+      backCanvas: document.createElement("canvas"),
+      comp: [],
+      lastCanvas: {},
+      backCtx: {}
+    };
+    timeStripsBuffer = [];
+    ghostBuffer = [];
     draw = function(canvas, element, effect) {
       var texture;
       texture = canvas.texture(element);
@@ -20,20 +34,29 @@
       }
       face.ctx.drawImage(video, 0, 0, video.width, video.height);
       face.backCtx.drawImage(video, 0, 0, face.backCanvas.width, face.backCanvas.height);
-      return comp = ccv.detect_objects({
-        canvas: face.backCanvas,
-        cascade: cascade,
-        interval: 4,
-        min_neighbors: 1
-      });
+      if (!pub.isPreview) {
+        return comp = ccv.detect_objects({
+          canvas: face.backCanvas,
+          cascade: cascade,
+          interval: 4,
+          min_neighbors: 1
+        });
+      } else {
+        return [
+          {
+            x: video.width * .375,
+            y: video.height * .375,
+            width: video.width / 4,
+            height: video.height / 4
+          }
+        ];
+      }
     };
     trackFace = function(video, canvas, prop, xoffset, yoffset, xscaler, yscaler) {
-      var aspectHeight, aspectWidth, comp, i, m, w, _i, _len, _ref, _results;
+      var aspectHeight, aspectWidth, comp, i, _i, _len, _ref, _results;
       aspectWidth = video.width / face.backCanvas.width;
       face.backCanvasheight = (video.height / video.width) * face.backCanvas.width;
       aspectHeight = video.height / face.backCanvas.height;
-      w = 4;
-      m = 4;
       comp = faceCore(video, canvas, prop);
       if (comp.length) face.comp = comp;
       _ref = face.comp;
@@ -60,22 +83,17 @@
       return _results;
     };
     return pub = {
+      isPreview: true,
       clearBuffer: function() {
-        return buffer = [];
+        timeStripsBuffer = [];
+        return ghostBuffer = [];
       },
       init: function() {
-        face.backCanvas = document.createElement("canvas");
-        face.backCanvas.width = 200;
-        face.comp = [];
-        face.lastCanvas = {};
         face.backCtx = face.backCanvas.getContext("2d");
-        face.props = {};
-        face.props.glasses = new Image();
         face.props.glasses.src = "images/glasses.png";
-        face.props.horns = new Image();
         face.props.horns.src = "images/horns.png";
-        face.props.hipster = new Image();
-        return face.props.hipster.src = "images/hipster.png";
+        face.props.hipster.src = "images/hipster.png";
+        return face.props.sombraro.src = "images/sombraro.png";
       },
       data: [
         {
@@ -304,14 +322,14 @@
               createBuffers = function(length) {
                 var _results;
                 _results = [];
-                while (buffer.length < length) {
-                  _results.push(buffer.push(canvas.texture(element)));
+                while (timeStripsBuffer.length < length) {
+                  _results.push(timeStripsBuffer.push(canvas.texture(element)));
                 }
                 return _results;
               };
               createBuffers(32);
-              buffer[frame++ % buffer.length].loadContentsOf(element);
-              canvas.timeStrips(buffer, frame);
+              timeStripsBuffer[frame++ % timeStripsBuffer.length].loadContentsOf(element);
+              canvas.timeStrips(timeStripsBuffer, frame);
               return canvas.matrixWarp([-1, 0, 0, 1], false, true);
             };
             return draw(canvas, element, effect);
@@ -326,15 +344,15 @@
               createBuffers = function(length) {
                 var _results;
                 _results = [];
-                while (buffer.length < length) {
-                  _results.push(buffer.push(canvas.texture(element)));
+                while (ghostBuffer.length < length) {
+                  _results.push(ghostBuffer.push(canvas.texture(element)));
                 }
                 return _results;
               };
               createBuffers(32);
-              buffer[frame++ % buffer.length].loadContentsOf(element);
+              ghostBuffer[frame++ % ghostBuffer.length].loadContentsOf(element);
               canvas.matrixWarp([1, 0, 0, 1], false, true);
-              canvas.blend(buffer[frame % buffer.length], .5);
+              canvas.blend(ghostBuffer[frame % ghostBuffer.length], .5);
               return canvas.matrixWarp([-1, 0, 0, 1], false, true);
             };
             return draw(canvas, element, effect);
